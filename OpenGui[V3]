@@ -1,0 +1,124 @@
+local plrgui = game.Players.LocalPlayer.PlayerGui
+
+local Gui = Instance.new("ScreenGui")
+Gui.Name = "OpenGui[V3]"
+Gui.Enabled = true
+Gui.Parent = plrgui
+local OpenClose = Instance.new("Frame")
+OpenClose.Parent = Gui
+OpenClose.Name = "Open/Close"
+OpenClose.Size = UDim2.new(0, 38,0, 39)
+OpenClose.Position = UDim2.new(0.933, 0,0.895, 0)
+OpenClose.BackgroundTransparency = 1
+local LabelOpenClose = Instance.new("TextLabel")
+LabelOpenClose.Parent = OpenClose
+LabelOpenClose.Text = "Close"
+LabelOpenClose.Font = Enum.Font.Cartoon
+LabelOpenClose.TextScaled = true
+LabelOpenClose.BackgroundTransparency = 1
+LabelOpenClose.TextColor3 = Color3.fromRGB(255, 255, 255)
+LabelOpenClose.Size = UDim2.new(1,0,1,0)
+local TextButton = Instance.new("TextButton")
+TextButton.Parent = LabelOpenClose
+TextButton.Text = ""
+TextButton.Size = UDim2.new(1,0,1,0)
+TextButton.BackgroundTransparency = 1
+local OpenGuiFrame = Instance.new("Frame")
+OpenGuiFrame.Parent = Gui
+OpenGuiFrame.Position = UDim2.new(0.432, 0,0.478, 0)
+OpenGuiFrame.Size = UDim2.new(0, 621,0, 266)
+OpenGuiFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+OpenGuiFrame.AnchorPoint = Vector2.new(0.5,0.5)
+OpenGuiFrame.Transparency = 0.5
+local UiCorner = Instance.new("UICorner")
+UiCorner.Parent = OpenGuiFrame
+local GuisList = Instance.new("ScrollingFrame")
+GuisList.Parent = OpenGuiFrame
+GuisList.Name = "GuisList"
+GuisList.Size = UDim2.new(0, 100,0, 186)
+GuisList.Position = UDim2.new(0.366, 0,0.391, 0)
+GuisList.BackgroundTransparency = 0.5
+local parentFrame = GuisList -- Dove vuoi inserire le TextLabel
+
+local yOffset = 0 -- posizione iniziale verticale
+
+for _, child in pairs(plrgui:GetChildren()) do
+	if child:IsA("ScreenGui") then
+		local labelGui = Instance.new("TextLabel")
+		labelGui.Parent = parentFrame
+		labelGui.Text = child.Name
+		labelGui.Size = UDim2.new(1, 0, 0, 30) -- larghezza piena, altezza 30
+		labelGui.Position = UDim2.new(0, 0, 0, yOffset) -- posizione verticale progressiva
+		labelGui.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- sfondo grigio scuro
+		labelGui.TextColor3 = Color3.fromRGB(255, 255, 255) -- testo bianco
+		labelGui.Font = Enum.Font.SourceSans
+		labelGui.TextSize = 20
+		labelGui.TextXAlignment = Enum.TextXAlignment.Left
+		labelGui.BackgroundTransparency = 0.3
+
+		yOffset = yOffset + 35 -- aumenta la posizione per il prossimo Label
+	end
+end
+local Close = Instance.new("TextButton")
+Close.Parent = OpenGuiFrame
+Close.Position = UDim2.new(0.038, 0,0.371, 0)
+Close.Size = UDim2.new(0, 200,0, 50)
+Close.Text = "Close"
+Close.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+Close.TextColor3 = Color3.fromRGB(255,255,255)
+Close.TextScaled = true
+local Open = Instance.new("TextButton")
+Open.Parent = OpenGuiFrame
+Open.Size = UDim2.new(0, 200,0, 50)
+Open.Position = UDim2.new(0.038, 0,0.593, 0)
+Open.Text = "Open"
+Open.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+Open.TextColor3 = Color3.fromRGB(255,255,255)
+Open.TextScaled = true
+local NameUi = Instance.new("TextLabel")
+NameUi.Parent = OpenGuiFrame
+NameUi.Size = UDim2.new(0, 233,0, 50)
+NameUi.Position = UDim2.new(0.278, 0,0.064, 0)
+NameUi.BackgroundTransparency = 1
+NameUi.TextScaled = true
+NameUi.Text = "OpenGui[V3]"
+NameUi.TextColor3 = Color3.fromRGB(255,255,255)
+local TextBox = Instance.new("TextBox")
+TextBox.Parent = OpenGuiFrame
+TextBox.Size = UDim2.new(0, 200,0, 50)
+TextBox.Position = UDim2.new(0.576, 0,0.593, 0)
+TextBox.BackgroundTransparency = 1
+TextBox.TextColor3 = Color3.fromRGB(255,255,255)
+local plr = game.Players.LocalPlayer
+local Button = Open
+local Button2 = Close
+
+Button.MouseButton1Click:Connect(function()
+	local Text = TextBox.Text
+	local GuitoOpen = plr.PlayerGui:FindFirstChild(Text)
+	if not GuitoOpen then
+		warn("Gui not found")
+	else
+		GuitoOpen.Enabled = true
+	end
+end)
+
+Button2.MouseButton1Click:Connect(function()
+	local Text = TextBox.Text
+	local GuitoOpen = plr.PlayerGui:FindFirstChild(Text)
+	if not GuitoOpen then
+		warn("Gui not found")
+	else
+		GuitoOpen.Enabled = false
+	end
+end)
+
+TextButton.MouseButton1Click:Connect(function()
+	if LabelOpenClose.Text == "Open" then
+		OpenGuiFrame.Visible = true
+		LabelOpenClose.Text = "Close"
+	else
+		OpenGuiFrame.Visible = false
+		LabelOpenClose.Text = "Open"
+	end
+end)
