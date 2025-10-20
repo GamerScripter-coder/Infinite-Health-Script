@@ -108,7 +108,7 @@ CreatePartButton.MouseButton1Click:Connect(function()
 		end
 		stealPart = Instance.new("Part")
 		stealPart.Size = Vector3.new(6,1,6)
-		stealPart.CFrame = char.HumanoidRootPart.CFrame
+		stealPart.CFrame = char.RightFoot.CFrame
 		stealPart.Anchored = true
 		stealPart.CanCollide = false
 		stealPart.Color = Color3.fromRGB(255,100,100)
