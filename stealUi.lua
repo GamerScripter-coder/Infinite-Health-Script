@@ -108,7 +108,11 @@ CreatePartButton.MouseButton1Click:Connect(function()
 		end
 		stealPart = Instance.new("Part")
 		stealPart.Size = Vector3.new(6,1,6)
-		stealPart.CFrame = char.RightFoot.CFrame
+		
+		-- 🔹 Spawna un po' più sotto i piedi del player (es. 3 stud sotto)
+		local footCFrame = char.RightFoot.CFrame
+		stealPart.CFrame = footCFrame * CFrame.new(0, -3, 0)
+		
 		stealPart.Anchored = true
 		stealPart.CanCollide = false
 		stealPart.Color = Color3.fromRGB(255,100,100)
@@ -116,22 +120,6 @@ CreatePartButton.MouseButton1Click:Connect(function()
 		stealPart.Name = "StealPart"
 		stealPart.Parent = workspace
 	end
-end)
-
-TeleportPartButton.MouseButton1Click:Connect(function()
-	if not stealPart then return end
-	if char and char:FindFirstChild("HumanoidRootPart") then
-		savedPos = char.HumanoidRootPart.CFrame
-	end
-	running = true
-	task.spawn(function()
-		while running do
-			task.wait(0.05)
-			if char and char:FindFirstChild("HumanoidRootPart") then
-				char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0,3,0)
-			end
-		end
-	end)
 end)
 
 StopButton.MouseButton1Click:Connect(function()
