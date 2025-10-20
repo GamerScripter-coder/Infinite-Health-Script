@@ -1,122 +1,134 @@
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 
-local Gui = Instance.new("ScreenGui")
-Gui.Name = "StealUi"
-Gui.Parent = player:WaitForChild("PlayerGui")
+-- 🔹 GUI principale
+local gui = Instance.new("ScreenGui")
+gui.Name = "StealUi"
+gui.Parent = player:WaitForChild("PlayerGui")
 
-local StealFrame = Instance.new("Frame")
-StealFrame.Parent = Gui
-StealFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-StealFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-StealFrame.Size = UDim2.new(0, 381, 0, 248)
-StealFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-StealFrame.BorderSizePixel = 0
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 260)
+frame.Position = UDim2.new(0.5,0,0.5,0)
+frame.AnchorPoint = Vector2.new(0.5,0.5)
+frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+frame.BackgroundTransparency = 0.15
+frame.BorderSizePixel = 0
+frame.Parent = gui
 
-local NameUILabel = Instance.new("TextLabel")
-NameUILabel.Parent = StealFrame
-NameUILabel.Position = UDim2.new(0.236, 0, 0.034, 0)
-NameUILabel.Size = UDim2.new(0, 200, 0, 50)
-NameUILabel.BackgroundTransparency = 1
-NameUILabel.Font = Enum.Font.Arimo
-NameUILabel.Text = "👤💰 StealUi 👤💰"
-NameUILabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-NameUILabel.TextScaled = true
+local corner = Instance.new("UICorner", frame)
+corner.CornerRadius = UDim.new(0,12)
 
--- Create Part
-local CreatePartLabel = Instance.new("TextLabel")
-CreatePartLabel.Parent = StealFrame
-CreatePartLabel.Text = "PlacePartToPlayerPosition"
-CreatePartLabel.Position = UDim2.new(0.026, 0, 0.315, 0)
-CreatePartLabel.Size = UDim2.new(0, 168, 0, 50)
-CreatePartLabel.BackgroundTransparency = 1
-CreatePartLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+local stroke = Instance.new("UIStroke", frame)
+stroke.Color = Color3.fromRGB(80,80,80)
+stroke.Thickness = 1.2
 
-local CreatePartButton = Instance.new("TextButton")
-CreatePartButton.Parent = CreatePartLabel
-CreatePartButton.Position = UDim2.new(1.089, 0, 0, 0)
-CreatePartButton.Size = UDim2.new(0, 123, 0, 50)
-CreatePartButton.Text = "Execute"
-CreatePartButton.TextColor3 = Color3.fromRGB(0, 255, 0)
+local title = Instance.new("TextLabel")
+title.Parent = frame
+title.Position = UDim2.new(0,0,0,10)
+title.Size = UDim2.new(1,0,0,40)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.GothamBold
+title.Text = "👤💰 Steal UI Panel 💰👤"
+title.TextColor3 = Color3.fromRGB(255,255,255)
+title.TextScaled = true
 
--- Teleport Part
-local TeleportPartLabel = Instance.new("TextLabel")
-TeleportPartLabel.Parent = StealFrame
-TeleportPartLabel.Position = UDim2.new(0.026, 0, 0.516, 0)
-TeleportPartLabel.Size = UDim2.new(0, 168, 0, 50)
-TeleportPartLabel.Text = "TeleportToPlayerPosition"
-TeleportPartLabel.BackgroundTransparency = 1
-TeleportPartLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+local underline = Instance.new("Frame", frame)
+underline.AnchorPoint = Vector2.new(0.5,0)
+underline.Position = UDim2.new(0.5,0,0,50)
+underline.Size = UDim2.new(0.8,0,0,1)
+underline.BackgroundColor3 = Color3.fromRGB(100,100,100)
+underline.BorderSizePixel = 0
 
-local TeleportPartButton = Instance.new("TextButton")
-TeleportPartButton.Parent = TeleportPartLabel
-TeleportPartButton.Position = UDim2.new(1.089, 0, 0, 0)
-TeleportPartButton.Size = UDim2.new(0, 123, 0, 50)
-TeleportPartButton.Text = "Execute"
-TeleportPartButton.TextColor3 = Color3.fromRGB(0, 255, 0)
+-- 🔹 Funzione per creare pulsanti
+local function CreateOption(yPos,labelText,color)
+	local Row = Instance.new("Frame")
+	Row.Parent = frame
+	Row.Position = UDim2.new(0.05,0,yPos,0)
+	Row.Size = UDim2.new(0.9,0,0,50)
+	Row.BackgroundTransparency = 1
 
--- Stop
-local StopLabel = Instance.new("TextLabel")
-StopLabel.Parent = StealFrame
-StopLabel.Position = UDim2.new(0.026, 0, 0.718, 0)
-StopLabel.Size = UDim2.new(0, 168, 0, 50)
-StopLabel.Text = "Stop"
-StopLabel.BackgroundTransparency = 1
-StopLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	local Label = Instance.new("TextLabel")
+	Label.Parent = Row
+	Label.Size = UDim2.new(0.6,0,1,0)
+	Label.BackgroundTransparency = 1
+	Label.Text = labelText
+	Label.Font = Enum.Font.Gotham
+	Label.TextScaled = true
+	Label.TextXAlignment = Enum.TextXAlignment.Left
+	Label.TextColor3 = Color3.fromRGB(255,255,255)
 
-local StopButton = Instance.new("TextButton")
-StopButton.Parent = StopLabel
-StopButton.Position = UDim2.new(1.089, 0, 0, 0)
-StopButton.Size = UDim2.new(0, 123, 0, 50)
-StopButton.Text = "Execute"
-StopButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+	local Button = Instance.new("TextButton")
+	Button.Parent = Row
+	Button.AnchorPoint = Vector2.new(1,0.5)
+	Button.Position = UDim2.new(1,0,0.5,0)
+	Button.Size = UDim2.new(0,120,0,35)
+	Button.Text = "Execute"
+	Button.Font = Enum.Font.GothamBold
+	Button.TextScaled = true
+	Button.TextColor3 = Color3.fromRGB(255,255,255)
+	Button.BackgroundColor3 = color
+	Button.AutoButtonColor = false
 
-local OpenClose = Instance.new("Frame")
-OpenClose.Parent = Gui
-OpenClose.Name = "Open/Close"
-OpenClose.Position = UDim2.new(0.933, 0,0.895, 0)
-OpenClose.Size = UDim2.new(0, 38,0, 39)
-OpenClose.Visible = true
-OpenClose.Transparency = 0
-local OpenCloseLabel = Instance.new("TextLabel")
-OpenCloseLabel.Parent = OpenClose
-OpenCloseLabel.Position = UDim2.new(0, 0, -0.026, 0)
-OpenCloseLabel.Size = UDim2.new(1, 0, 1, 0)
-OpenCloseLabel.Transparency = 1
-OpenCloseLabel.Text = "Open"
-OpenCloseLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-OpenCloseLabel.Font = Enum.Font.Arimo
-OpenCloseLabel.TextScaled = true
-local OpenCloseButton = Instance.new("TextButton")
-OpenCloseButton.Parent = OpenCloseLabel
-OpenCloseButton.Position = UDim2.new(0, 0, 0, 0)
-OpenCloseButton.Size = UDim2.new(1, 0, 1, 0)
-OpenCloseButton.Text = ""
-OpenCloseButton.Transparency = 1
--- 🔹 Variabile di controllo
+	local bCorner = Instance.new("UICorner", Button)
+	bCorner.CornerRadius = UDim.new(0,8)
+	local bStroke = Instance.new("UIStroke", Button)
+	bStroke.Color = Color3.fromRGB(255,255,255)
+	bStroke.Thickness = 0.5
+
+	-- Hover effect
+	Button.MouseEnter:Connect(function()
+		Button.BackgroundColor3 = Color3.new(
+			math.clamp(color.R+0.1,0,1),
+			math.clamp(color.G+0.1,0,1),
+			math.clamp(color.B+0.1,0,1)
+		)
+	end)
+	Button.MouseLeave:Connect(function()
+		Button.BackgroundColor3 = color
+	end)
+
+	return Button
+end
+
+-- 🔹 Pulsanti
+local CreatePartButton = CreateOption(0.3,"Place Part To Player",Color3.fromRGB(0,200,0))
+local TeleportPartButton = CreateOption(0.52,"Teleport To Part",Color3.fromRGB(0,150,255))
+local StopButton = CreateOption(0.74,"Stop Teleport",Color3.fromRGB(200,0,0))
+
+-- 🔹 Logica teletrasporto
 local running = false
+local savedPos = nil
+local stealPart = nil -- NON esiste finché non clicchi il pulsante
 
 CreatePartButton.MouseButton1Click:Connect(function()
 	if char and char:FindFirstChild("HumanoidRootPart") then
-		local PartTeleport = Instance.new("Part")
-		PartTeleport.Size = Vector3.new(4, 1, 4)
-		PartTeleport.Anchored = true
-		PartTeleport.Position = char.HumanoidRootPart.Position
-		PartTeleport.CanCollide = false
-		PartTeleport.Transparency = 1
-		PartTeleport.Name = "StealPart"
-		PartTeleport.Parent = workspace
+		-- Se la StealPart esiste già, la rimuove prima
+		if stealPart then
+			stealPart:Destroy()
+		end
+		stealPart = Instance.new("Part")
+		stealPart.Size = Vector3.new(6,1,6)
+		stealPart.CFrame = char.HumanoidRootPart.CFrame
+		stealPart.Anchored = true
+		stealPart.CanCollide = false
+		stealPart.Color = Color3.fromRGB(255,100,100)
+		stealPart.Transparency = 1
+		stealPart.Name = "StealPart"
+		stealPart.Parent = workspace
 	end
 end)
 
 TeleportPartButton.MouseButton1Click:Connect(function()
-	if not workspace:FindFirstChild("StealPart") then return end
+	if not stealPart then return end
+	if char and char:FindFirstChild("HumanoidRootPart") then
+		savedPos = char.HumanoidRootPart.CFrame
+	end
 	running = true
 	task.spawn(function()
 		while running do
-			task.wait(0.01)
+			task.wait(0.05)
 			if char and char:FindFirstChild("HumanoidRootPart") then
-				char.HumanoidRootPart.CFrame = workspace.StealPart.CFrame
+				char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0,3,0)
 			end
 		end
 	end)
@@ -124,14 +136,27 @@ end)
 
 StopButton.MouseButton1Click:Connect(function()
 	running = false
+	if savedPos and char and char:FindFirstChild("HumanoidRootPart") then
+		char.HumanoidRootPart.CFrame = savedPos
+	end
 end)
 
-OpenCloseButton.MouseButton1Click:Connect(function()
-	if OpenCloseLabel.Text == "Open" then
-		OpenCloseLabel.Text = "Close"
-		StealFrame.Visible = true
-	elseif OpenCloseLabel.Text == "Close" then
-		OpenCloseLabel.Text = "Open"
-		StealFrame.Visible = false
+-- 🔹 Open/Close Button
+local OpenClose = Instance.new("TextButton")
+OpenClose.Parent = gui
+OpenClose.Size = UDim2.new(0,50,0,50)
+OpenClose.Position = UDim2.new(0.95,0,0.9,0)
+OpenClose.BackgroundColor3 = Color3.fromRGB(25,25,25)
+OpenClose.Text = "Close"
+OpenClose.Font = Enum.Font.GothamBold
+OpenClose.TextColor3 = Color3.fromRGB(255,255,255)
+
+OpenClose.MouseButton1Click:Connect(function()
+	if frame.Visible then
+		frame.Visible = false
+		OpenClose.Text = "Open"
+	else
+		frame.Visible = true
+		OpenClose.Text = "Close"
 	end
 end)
