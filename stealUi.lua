@@ -1,11 +1,22 @@
-local player = game.Players.LocalPlayer
-local char = player.Character or player.CharacterAdded:Wait()
+-- LocalScript (StarterPlayerScripts)
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local guiParent = player:WaitForChild("PlayerGui")
 
--- 🔹 GUI principale
+-- tieni sempre aggiornato 'char' se il player respawna
+local char = player.Character
+if not char then
+	char = player.CharacterAdded:Wait()
+end
+player.CharacterAdded:Connect(function(c)
+	char = c
+end)
+
+-- GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "StealUi"
 gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+gui.Parent = guiParent
 
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 400, 0, 260)
@@ -18,7 +29,6 @@ frame.Parent = gui
 
 local corner = Instance.new("UICorner", frame)
 corner.CornerRadius = UDim.new(0, 12)
-
 local stroke = Instance.new("UIStroke", frame)
 stroke.Color = Color3.fromRGB(80, 80, 80)
 stroke.Thickness = 1.2
@@ -40,7 +50,6 @@ underline.Size = UDim2.new(0.8, 0, 0, 1)
 underline.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 underline.BorderSizePixel = 0
 
--- 🔹 Funzione per creare pulsanti
 local function CreateOption(yPos, labelText, color)
 	local Row = Instance.new("Frame")
 	Row.Parent = frame
@@ -83,7 +92,6 @@ local function CreateOption(yPos, labelText, color)
 			math.clamp(color.B + 0.1, 0, 1)
 		)
 	end)
-
 	Button.MouseLeave:Connect(function()
 		Button.BackgroundColor3 = color
 	end)
@@ -91,62 +99,106 @@ local function CreateOption(yPos, labelText, color)
 	return Button
 end
 
--- 🔹 Pulsanti
 local CreatePartButton = CreateOption(0.3, "Place Part To Player", Color3.fromRGB(0, 200, 0))
 local TeleportPartButton = CreateOption(0.52, "Teleport To Part", Color3.fromRGB(0, 150, 255))
 local StopButton = CreateOption(0.74, "Stop Teleport", Color3.fromRGB(200, 0, 0))
 
--- 🔹 Logica teletrasporto
+-- variabili di stato
 local running = false
 local savedPos = nil
 local stealPart = nil
 
+-- crea la part sotto i piedi (usa HumanoidRootPart per robustezza)
 CreatePartButton.MouseButton1Click:Connect(function()
-	if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("RightFoot") then
-		if stealPart then
-			stealPart:Destroy()
-		end
-		stealPart = Instance.new("Part")
-		stealPart.Size = Vector3.new(6, 1, 6)
-
-		-- 🔹 Spawn 3 stud sotto i piedi
-		local footCFrame = char.RightFoot.CFrame
-		stealPart.CFrame = footCFrame * CFrame.new(0, -3, 0)
-
-		stealPart.Anchored = true
-		stealPart.CanCollide = false
-		stealPart.Color = Color3.fromRGB(255, 100, 100)
-		stealPart.Transparency = 0.4
-		stealPart.Material = Enum.Material.Neon
-		stealPart.Name = "StealPart"
-		stealPart.Parent = workspace
+	-- assicurati che il char e HumanoidRootPart esistano
+	if not char or not char.Parent then
+		print("[StealUI] character not ready")
+		return
 	end
+	local hrp = char:FindFirstChild("HumanoidRootPart")
+	if not hrp then
+		print("[StealUI] HumanoidRootPart missing")
+		return
+	end
+
+	-- rimuovi part precedente se esiste
+	if stealPart and stealPart.Parent then
+		stealPart:Destroy()
+	end
+
+	stealPart = Instance.new("Part")
+	stealPart.Size = Vector3.new(6, 1, 6)
+
+	-- spawn 3 stud sotto i piedi (HumanoidRootPart)
+	stealPart.CFrame = hrp.CFrame * CFrame.new(0, -3, 0)
+
+	stealPart.Anchored = true
+	stealPart.CanCollide = false
+	stealPart.Color = Color3.fromRGB(255, 100, 100)
+	stealPart.Transparency = 0.4
+	stealPart.Material = Enum.Material.Neon
+	stealPart.Name = "StealPart"
+	stealPart.Parent = workspace
+
+	print("[StealUI] StealPart spawned at:", tostring(stealPart.Position))
 end)
 
+-- teletrasporto (loop)
 TeleportPartButton.MouseButton1Click:Connect(function()
-	if not stealPart then return end
-	if char and char:FindFirstChild("HumanoidRootPart") then
-		savedPos = char.HumanoidRootPart.CFrame
+	if not stealPart or not stealPart.Parent then
+		print("[StealUI] No StealPart to teleport to.")
+		return
 	end
+
+	if not char or not char.Parent then
+		print("[StealUI] character not ready for teleport.")
+		return
+	end
+
+	local hrp = char:FindFirstChild("HumanoidRootPart")
+	if not hrp then
+		print("[StealUI] HumanoidRootPart missing; cannot teleport.")
+		return
+	end
+
+	-- salva posizione iniziale
+	savedPos = hrp.CFrame:Clone()
 	running = true
+	print("[StealUI] Teleport started.")
+
+	-- avvia loop in task.spawn
 	task.spawn(function()
 		while running do
 			task.wait(0.05)
-			if char and char:FindFirstChild("HumanoidRootPart") then
-				char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0, 3, 0)
+			-- conferma che i riferimenti esistono ancora
+			if not stealPart or not stealPart.Parent then
+				print("[StealUI] StealPart è stato rimosso, stop teleport.")
+				running = false
+				break
+			end
+			if char and char.Parent and char:FindFirstChild("HumanoidRootPart") then
+				local targetCFrame = stealPart.CFrame * CFrame.new(0, 3, 0) -- 3 stud sopra la part
+				-- applica il teletrasporto al HumanoidRootPart
+				char.HumanoidRootPart.CFrame = targetCFrame
+			else
+				print("[StealUI] character non valido nel loop.")
 			end
 		end
 	end)
 end)
 
 StopButton.MouseButton1Click:Connect(function()
-	running = false
-	if savedPos and char and char:FindFirstChild("HumanoidRootPart") then
-		char.HumanoidRootPart.CFrame = savedPos
+	if running then
+		running = false
+		print("[StealUI] Teleport stopped.")
+		-- ripristina posizione iniziale se valida
+		if savedPos and char and char.Parent and char:FindFirstChild("HumanoidRootPart") then
+			char.HumanoidRootPart.CFrame = savedPos
+		end
 	end
 end)
 
--- 🔹 Open/Close Button
+-- Open/Close Button
 local OpenClose = Instance.new("TextButton")
 OpenClose.Parent = gui
 OpenClose.Size = UDim2.new(0, 50, 0, 50)
@@ -155,7 +207,6 @@ OpenClose.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 OpenClose.Text = "Close"
 OpenClose.Font = Enum.Font.GothamBold
 OpenClose.TextColor3 = Color3.fromRGB(255, 255, 255)
-
 local ocCorner = Instance.new("UICorner", OpenClose)
 ocCorner.CornerRadius = UDim.new(0, 8)
 
