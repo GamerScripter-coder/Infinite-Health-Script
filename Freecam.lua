@@ -18,10 +18,12 @@ local camRot = Vector2.new()
 local function enableFreecam()
 	freecam = true
 	camPos = camera.CFrame.Position
+	player.character.HumanoidRootPart.Anchored = true
 end
 
 local function disableFreecam()
 	freecam = false
+	player.character.HumanoidRootPart.Anchored = false
 end
 
 UserInputService.InputBegan:Connect(function(input, gpe)
