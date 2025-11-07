@@ -23,7 +23,7 @@ end
 
 local function disableFreecam()
 	freecam = false
-	player.character.HumanoidRootPart.Anchored = false
+	player.Character.HumanoidRootPart.Anchored = false
 end
 
 UserInputService.InputBegan:Connect(function(input, gpe)
