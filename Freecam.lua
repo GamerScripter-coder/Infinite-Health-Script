@@ -1,5 +1,5 @@
--- The Free Cam is For Pc
--- FREECAM VELOCITÀ RIDOTTA (TOGGLE CON "L")
+-- ✅ FREECAM VELOCITÀ RIDOTTA (TOGGLE CON "L")
+-- ✅ Versione più stabile e corretta
 
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -8,22 +8,36 @@ local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
 
 local freecam = false
-local speed = 2      -- 🔹 VELOCITÀ NORMALE (prima era 5)
-local boost = 6      -- 🔹 SHIFT VELOCE (prima era 15)
+local speed = 2
+local boost = 6
 local moveSpeed = 0
 
 local camPos
 local camRot = Vector2.new()
 
+-- ✅ Funzione per ottenere l'HRP anche dopo respawn
+local function getHRP()
+	local char = player.Character or player.CharacterAdded:Wait()
+	return char:WaitForChild("HumanoidRootPart", 5)
+end
+
 local function enableFreecam()
 	freecam = true
 	camPos = camera.CFrame.Position
-	player.character.HumanoidRootPart.Anchored = true
+	
+	local HRP = getHRP()
+	if HRP then
+		HRP.Anchored = true
+	end
 end
 
 local function disableFreecam()
 	freecam = false
-	player.Character.HumanoidRootPart.Anchored = false
+
+	local HRP = getHRP()
+	if HRP then
+		HRP.Anchored = false
+	end
 end
 
 UserInputService.InputBegan:Connect(function(input, gpe)
