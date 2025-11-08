@@ -129,6 +129,9 @@ TeleportPartButton.MouseButton1Click:Connect(function()
 			task.wait(0.05)
 			if char and char:FindFirstChild("HumanoidRootPart") then
 				char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0,3,0)
+				char.HumanoidRootPart.Anchored = true
+				wait(1)
+				char.HumanoidRootPart.Anchored = false
 			end
 		end
 	end)
