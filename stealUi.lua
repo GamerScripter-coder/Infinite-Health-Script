@@ -121,11 +121,9 @@ end)
 TeleportPartButton.MouseButton1Click:Connect(function()
 	if not stealPart then return end
 	if char and char:FindFirstChild("HumanoidRootPart") then
-		savedPos = char.HumanoidRootPart.CFrame
+		print("Ok")
 	end
 	running = true
-	task.spawn(function()
-		while running do
 			task.wait(0.05)
 			if char and char:FindFirstChild("HumanoidRootPart") then
 				char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0,3,0)
