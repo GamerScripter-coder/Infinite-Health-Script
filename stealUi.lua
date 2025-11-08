@@ -107,7 +107,7 @@ CreatePartButton.MouseButton1Click:Connect(function()
 			stealPart:Destroy()
 		end
 		stealPart = Instance.new("Part")
-		stealPart.Size = Vector3.new(6,1,6)
+		stealPart.Size = Vector3.new(1,1,1)
 		stealPart.CFrame = char.RightFoot.CFrame
 		stealPart.Anchored = true
 		stealPart.CanCollide = false
