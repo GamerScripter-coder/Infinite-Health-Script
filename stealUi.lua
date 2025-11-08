@@ -131,8 +131,6 @@ TeleportPartButton.MouseButton1Click:Connect(function()
 				wait(1)
 				char.HumanoidRootPart.Anchored = false
 			end
-		end
-	end)
 end)
 
 StopButton.MouseButton1Click:Connect(function()
