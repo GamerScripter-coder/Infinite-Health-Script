@@ -75,7 +75,6 @@ local function CreateOption(yPos,labelText,color)
 	bStroke.Color = Color3.fromRGB(255,255,255)
 	bStroke.Thickness = 0.5
 
-	-- Hover effect
 	Button.MouseEnter:Connect(function()
 		Button.BackgroundColor3 = Color3.new(
 			math.clamp(color.R+0.1,0,1),
@@ -97,15 +96,12 @@ local StopButton = CreateOption(0.74,"Stop Teleport",Color3.fromRGB(200,0,0))
 
 -- 🔹 Logica teletrasporto
 local running = false
-local savedPos = nil
-local stealPart = nil -- NON esiste finché non clicchi il pulsante
+local stealPart = nil
 
 CreatePartButton.MouseButton1Click:Connect(function()
 	if char and char:FindFirstChild("HumanoidRootPart") then
-		-- Se la StealPart esiste già, la rimuove prima
-		if stealPart then
-			stealPart:Destroy()
-		end
+		if stealPart then stealPart:Destroy() end
+
 		stealPart = Instance.new("Part")
 		stealPart.Size = Vector3.new(1,1,1)
 		stealPart.CFrame = char.RightFoot.CFrame
@@ -120,27 +116,22 @@ end)
 
 TeleportPartButton.MouseButton1Click:Connect(function()
 	if not stealPart then return end
-	if char and char:FindFirstChild("HumanoidRootPart") then
-		print("Ok")
-	end
+	if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+
 	running = true
-			task.wait(0.05)
-			if char and char:FindFirstChild("HumanoidRootPart") then
-				char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0,3,0)
-				char.HumanoidRootPart.Anchored = true
-				wait(1)
-				char.HumanoidRootPart.Anchored = false
-			end
+	task.wait(0.05)
+
+	char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0,3,0)
+	char.HumanoidRootPart.Anchored = true
+	wait(1)
+	char.HumanoidRootPart.Anchored = false
 end)
 
 StopButton.MouseButton1Click:Connect(function()
 	running = false
-	if savedPos and char and char:FindFirstChild("HumanoidRootPart") then
-		char.HumanoidRootPart.CFrame = savedPos
-	end
 end)
 
--- 🔹 Open/Close Button
+-- 🔹 Open/Close UI
 local OpenClose = Instance.new("TextButton")
 OpenClose.Parent = gui
 OpenClose.Size = UDim2.new(0,50,0,50)
@@ -151,11 +142,6 @@ OpenClose.Font = Enum.Font.GothamBold
 OpenClose.TextColor3 = Color3.fromRGB(255,255,255)
 
 OpenClose.MouseButton1Click:Connect(function()
-	if frame.Visible then
-		frame.Visible = false
-		OpenClose.Text = "Open"
-	else
-		frame.Visible = true
-		OpenClose.Text = "Close"
-	end
+	frame.Visible = not frame.Visible
+	OpenClose.Text = frame.Visible and "Close" or "Open"
 end)
