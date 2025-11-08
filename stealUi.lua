@@ -71,6 +71,7 @@ local function CreateOption(yPos,labelText,color)
 
 	local bCorner = Instance.new("UICorner", Button)
 	bCorner.CornerRadius = UDim.new(0,8)
+
 	local bStroke = Instance.new("UIStroke", Button)
 	bStroke.Color = Color3.fromRGB(255,255,255)
 	bStroke.Thickness = 0.5
@@ -92,10 +93,9 @@ end
 -- 🔹 Pulsanti
 local CreatePartButton = CreateOption(0.3,"Place Part To Player",Color3.fromRGB(0,200,0))
 local TeleportPartButton = CreateOption(0.52,"Teleport To Part",Color3.fromRGB(0,150,255))
-local StopButton = CreateOption(0.74,"Stop Teleport",Color3.fromRGB(200,0,0))
+local StopButton = CreateOption(0.74,"Remove Part",Color3.fromRGB(200,0,0))
 
--- 🔹 Logica teletrasporto
-local running = false
+-- 🔹 Teleport
 local stealPart = nil
 
 CreatePartButton.MouseButton1Click:Connect(function()
@@ -104,7 +104,7 @@ CreatePartButton.MouseButton1Click:Connect(function()
 
 		stealPart = Instance.new("Part")
 		stealPart.Size = Vector3.new(1,1,1)
-		stealPart.CFrame = char.RightFoot.CFrame
+		stealPart.CFrame = char.HumanoidRootPart.CFrame
 		stealPart.Anchored = true
 		stealPart.CanCollide = false
 		stealPart.Color = Color3.fromRGB(255,100,100)
@@ -118,17 +118,18 @@ TeleportPartButton.MouseButton1Click:Connect(function()
 	if not stealPart then return end
 	if not char or not char:FindFirstChild("HumanoidRootPart") then return end
 
-	running = true
-	task.wait(0.05)
-
+	-- Tp + piccolo delay anti-fall
 	char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0,3,0)
 	char.HumanoidRootPart.Anchored = true
-	wait(1)
+	task.wait(1)
 	char.HumanoidRootPart.Anchored = false
 end)
 
 StopButton.MouseButton1Click:Connect(function()
-	running = false
+	if stealPart then
+		stealPart:Destroy()
+		stealPart = nil
+	end
 end)
 
 -- 🔹 Open/Close UI
