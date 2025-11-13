@@ -1,10 +1,14 @@
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 
-local servercode = [[char.HumanoidRootPart.CFrame = stealPart.CFrame
+local RemoteEvent = Instance.new("RemoteEvent")
+RemoteEvent.Parent = replicatedstorage
+local servercode = [[RemoteEvent.OnFireServer:Connect(function()
+		char.HumanoidRootPart.CFrame = stealPart.CFrame
 	char.HumanoidRootPart.Anchored = true
 	task.wait(1)
-	char.HumanoidRootPart.Anchored = false]]
+	char.HumanoidRootPart.Anchored = false
+			end)]]
 
 -- 🔹 GUI principale
 local gui = Instance.new("ScreenGui")
