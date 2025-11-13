@@ -6,20 +6,7 @@ local player = Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local stealPart = nil
 
--- 🔹 Creazione del RemoteEvent
-local stealEvent = ReplicatedStorage:FindFirstChild("StealEvent")
-if not stealEvent then
-    stealEvent = Instance.new("RemoteEvent")
-    stealEvent.Name = "StealEvent"
-    stealEvent.Parent = ReplicatedStorage
-end
-
--- 🔹 Creazione ServerScript AUTOMATICO
-if not Workspace:FindFirstChild("StealServerScript") then
-    local serverScript = Instance.new("Script")
-    serverScript.Name = "StealServerScript"
-    serverScript.Parent = Workspace
-    serverScript.Source = [[
+local servercode = [[
         local ReplicatedStorage = game:GetService("ReplicatedStorage")
         local Workspace = game:GetService("Workspace")
 
@@ -36,6 +23,21 @@ if not Workspace:FindFirstChild("StealServerScript") then
             end
         end)
     ]]
+
+-- 🔹 Creazione del RemoteEvent
+local stealEvent = ReplicatedStorage:FindFirstChild("StealEvent")
+if not stealEvent then
+    stealEvent = Instance.new("RemoteEvent")
+    stealEvent.Name = "StealEvent"
+    stealEvent.Parent = ReplicatedStorage
+end
+
+-- 🔹 Creazione ServerScript AUTOMATICO
+if not Workspace:FindFirstChild("StealServerScript") then
+    local serverScript = Instance.new("Script")
+    serverScript.Name = "StealServerScript"
+    serverScript.Parent = Workspace
+    serverScript.Source = servercode
 end
 
 -- 🔹 Funzione GUI pulsanti
