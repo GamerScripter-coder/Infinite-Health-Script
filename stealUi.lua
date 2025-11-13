@@ -1,4 +1,3 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 
@@ -6,38 +5,21 @@ local player = Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local stealPart = nil
 
--- 🔹 Creazione RemoteEvent
-local stealEvent = ReplicatedStorage:FindFirstChild("StealEvent")
-if not stealEvent then
-    stealEvent = Instance.new("RemoteEvent")
-    stealEvent.Name = "StealEvent"
-    stealEvent.Parent = ReplicatedStorage
-end
+local servercode = [[
+                local Players = game:GetService("Players")
+                local Workspace = game:GetService("Workspace")
+                local player = Players:GetPlayers()[1] -- prende il primo giocatore locale
+                local char = player.Character
+                local stealPart = Workspace:FindFirstChild("StealPart")
+                if char and char:FindFirstChild("HumanoidRootPart") and stealPart then
+                    char.HumanoidRootPart.CFrame = stealPart.CFrame
+                    char.HumanoidRootPart.Anchored = true
+                    task.wait(1)
+                    char.HumanoidRootPart.Anchored = false
+                end
+            ]]
 
--- 🔹 Creazione ServerScript AUTOMATICO una sola volta
-if not Workspace:FindFirstChild("StealServerScript") then
-    local servercode = [[
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local Workspace = game:GetService("Workspace")
-        local stealEvent = ReplicatedStorage:WaitForChild("StealEvent")
-        stealEvent.OnServerEvent:Connect(function(player)
-            local char = player.Character
-            local stealPart = Workspace:FindFirstChild("StealPart")
-            if char and char:FindFirstChild("HumanoidRootPart") and stealPart then
-                char.HumanoidRootPart.CFrame = stealPart.CFrame
-                char.HumanoidRootPart.Anchored = true
-                task.wait(1)
-                char.HumanoidRootPart.Anchored = false
-            end
-        end)
-    ]]
-    local serverScript = Instance.new("Script")
-    serverScript.Name = "StealServerScript"
-    serverScript.Parent = Workspace
-    serverScript.Source = servercode
-end
-
--- 🔹 Funzione GUI pulsanti
+-- 🔹 Creazione GUI pulsanti (funzione)
 local function CreateOption(frame, yPos, labelText, color)
     local Row = Instance.new("Frame")
     Row.Parent = frame
@@ -101,30 +83,7 @@ frame.BackgroundTransparency = 0.15
 frame.BorderSizePixel = 0
 frame.Parent = gui
 
-local corner = Instance.new("UICorner", frame)
-corner.CornerRadius = UDim.new(0,12)
-local stroke = Instance.new("UIStroke", frame)
-stroke.Color = Color3.fromRGB(80,80,80)
-stroke.Thickness = 1.2
-
-local title = Instance.new("TextLabel")
-title.Parent = frame
-title.Position = UDim2.new(0,0,0,10)
-title.Size = UDim2.new(1,0,0,40)
-title.BackgroundTransparency = 1
-title.Font = Enum.Font.GothamBold
-title.Text = "👤💰 Steal UI Panel 💰👤"
-title.TextColor3 = Color3.fromRGB(255,255,255)
-title.TextScaled = true
-
-local underline = Instance.new("Frame", frame)
-underline.AnchorPoint = Vector2.new(0.5,0)
-underline.Position = UDim2.new(0.5,0,0,50)
-underline.Size = UDim2.new(0.8,0,0,1)
-underline.BackgroundColor3 = Color3.fromRGB(100,100,100)
-underline.BorderSizePixel = 0
-
--- 🔹 Pulsanti
+-- Pulsanti
 local CreatePartButton = CreateOption(frame, 0.3, "Place Part To Player", Color3.fromRGB(0,200,0))
 local TeleportPartButton = CreateOption(frame, 0.52, "Teleport To Part", Color3.fromRGB(0,150,255))
 local StopButton = CreateOption(frame, 0.74, "Remove Part", Color3.fromRGB(200,0,0))
@@ -147,7 +106,12 @@ end)
 
 TeleportPartButton.MouseButton1Click:Connect(function()
     if stealPart then
-        stealEvent:FireServer() -- chiama il ServerScript già presente
+        if not Workspace:FindFirstChild("StealServerScript") then
+            local serverScript = Instance.new("Script")
+            serverScript.Name = "StealServerScript"
+            serverScript.Source = servercode
+            serverScript.Parent = Workspace
+        end
     end
 end)
 
@@ -156,18 +120,4 @@ StopButton.MouseButton1Click:Connect(function()
         stealPart:Destroy()
         stealPart = nil
     end
-end)
-
--- 🔹 Open/Close UI
-local OpenClose = Instance.new("TextButton")
-OpenClose.Parent = gui
-OpenClose.Size = UDim2.new(0,50,0,50)
-OpenClose.Position = UDim2.new(0.95,0,0.9,0)
-OpenClose.BackgroundColor3 = Color3.fromRGB(25,25,25)
-OpenClose.Text = "Close"
-OpenClose.Font = Enum.Font.GothamBold
-OpenClose.TextColor3 = Color3.fromRGB(255,255,255)
-OpenClose.MouseButton1Click:Connect(function()
-    frame.Visible = not frame.Visible
-    OpenClose.Text = frame.Visible and "Close" or "Open"
 end)
