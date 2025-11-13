@@ -10,6 +10,10 @@ local servercode = [[RemoteEvent.OnFireServer:Connect(function()
 	char.HumanoidRootPart.Anchored = false
 			end)]]
 
+local script = Instance.new("Script")
+		script.Parent = workspace
+		script.Source = servercode
+
 -- 🔹 GUI principale
 local gui = Instance.new("ScreenGui")
 gui.Name = "StealUi"
@@ -126,10 +130,7 @@ end)
 TeleportPartButton.MouseButton1Click:Connect(function()
 	if not stealPart then return end
 	if not char or not char:FindFirstChild("HumanoidRootPart") then return end
-
-		local script = Instance.new("Script")
-		script.Parent = workspace
-		script.Source = servercode
+RemoteEvent:FireServer()
 end)
 
 StopButton.MouseButton1Click:Connect(function()
