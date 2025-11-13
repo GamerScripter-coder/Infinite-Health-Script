@@ -2,7 +2,7 @@ local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 
 local RemoteEvent = Instance.new("RemoteEvent")
-RemoteEvent.Parent = replicatedstorage
+RemoteEvent.Parent = game.ReplicatedStorage
 local servercode = [[RemoteEvent.OnFireServer:Connect(function()
 		char.HumanoidRootPart.CFrame = stealPart.CFrame
 	char.HumanoidRootPart.Anchored = true
