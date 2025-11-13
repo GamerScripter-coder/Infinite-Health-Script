@@ -6,12 +6,20 @@ local player = Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local stealPart = nil
 
-local servercode = [[
+-- 🔹 Creazione RemoteEvent
+local stealEvent = ReplicatedStorage:FindFirstChild("StealEvent")
+if not stealEvent then
+    stealEvent = Instance.new("RemoteEvent")
+    stealEvent.Name = "StealEvent"
+    stealEvent.Parent = ReplicatedStorage
+end
+
+-- 🔹 Creazione ServerScript AUTOMATICO una sola volta
+if not Workspace:FindFirstChild("StealServerScript") then
+    local servercode = [[
         local ReplicatedStorage = game:GetService("ReplicatedStorage")
         local Workspace = game:GetService("Workspace")
-
         local stealEvent = ReplicatedStorage:WaitForChild("StealEvent")
-
         stealEvent.OnServerEvent:Connect(function(player)
             local char = player.Character
             local stealPart = Workspace:FindFirstChild("StealPart")
@@ -23,17 +31,6 @@ local servercode = [[
             end
         end)
     ]]
-
--- 🔹 Creazione del RemoteEvent
-local stealEvent = ReplicatedStorage:FindFirstChild("StealEvent")
-if not stealEvent then
-    stealEvent = Instance.new("RemoteEvent")
-    stealEvent.Name = "StealEvent"
-    stealEvent.Parent = ReplicatedStorage
-end
-
--- 🔹 Creazione ServerScript AUTOMATICO
-if not Workspace:FindFirstChild("StealServerScript") then
     local serverScript = Instance.new("Script")
     serverScript.Name = "StealServerScript"
     serverScript.Parent = Workspace
@@ -134,34 +131,31 @@ local StopButton = CreateOption(frame, 0.74, "Remove Part", Color3.fromRGB(200,0
 
 -- 🔹 Funzioni pulsanti
 CreatePartButton.MouseButton1Click:Connect(function()
-	if char and char:FindFirstChild("HumanoidRootPart") then
-		if stealPart then stealPart:Destroy() end
-		stealPart = Instance.new("Part")
-		stealPart.Size = Vector3.new(1,1,1)
-		stealPart.Position = char.HumanoidRootPart.Position - Vector3.new(0,2,0)
-		stealPart.Anchored = true
-		stealPart.CanCollide = false
-		stealPart.Color = Color3.fromRGB(255,100,100)
-		stealPart.Transparency = 1
-		stealPart.Name = "StealPart"
-		stealPart.Parent = Workspace
-	end
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        if stealPart then stealPart:Destroy() end
+        stealPart = Instance.new("Part")
+        stealPart.Size = Vector3.new(1,1,1)
+        stealPart.Position = char.HumanoidRootPart.Position - Vector3.new(0,2,0)
+        stealPart.Anchored = true
+        stealPart.CanCollide = false
+        stealPart.Color = Color3.fromRGB(255,100,100)
+        stealPart.Transparency = 1
+        stealPart.Name = "StealPart"
+        stealPart.Parent = Workspace
+    end
 end)
 
 TeleportPartButton.MouseButton1Click:Connect(function()
-	if stealPart then
-    local serverScript = Instance.new("Script")
-    serverScript.Name = "StealServerScript"
-    serverScript.Parent = Workspace
-    serverScript.Source = servercode
-	end
+    if stealPart then
+        stealEvent:FireServer() -- chiama il ServerScript già presente
+    end
 end)
 
 StopButton.MouseButton1Click:Connect(function()
-	if stealPart then
-		stealPart:Destroy()
-		stealPart = nil
-	end
+    if stealPart then
+        stealPart:Destroy()
+        stealPart = nil
+    end
 end)
 
 -- 🔹 Open/Close UI
@@ -174,6 +168,6 @@ OpenClose.Text = "Close"
 OpenClose.Font = Enum.Font.GothamBold
 OpenClose.TextColor3 = Color3.fromRGB(255,255,255)
 OpenClose.MouseButton1Click:Connect(function()
-	frame.Visible = not frame.Visible
-	OpenClose.Text = frame.Visible and "Close" or "Open"
+    frame.Visible = not frame.Visible
+    OpenClose.Text = frame.Visible and "Close" or "Open"
 end)
