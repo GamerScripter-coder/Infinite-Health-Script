@@ -1,9 +1,94 @@
-local player = game.Players.LocalPlayer
-local char = player.Character or player.CharacterAdded:Wait()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
 
+local player = Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
 local stealPart = nil
 
--- 🔹 GUI principale
+-- 🔹 Creazione del RemoteEvent
+local stealEvent = ReplicatedStorage:FindFirstChild("StealEvent")
+if not stealEvent then
+    stealEvent = Instance.new("RemoteEvent")
+    stealEvent.Name = "StealEvent"
+    stealEvent.Parent = ReplicatedStorage
+end
+
+-- 🔹 Creazione ServerScript AUTOMATICO
+if not Workspace:FindFirstChild("StealServerScript") then
+    local serverScript = Instance.new("Script")
+    serverScript.Name = "StealServerScript"
+    serverScript.Parent = Workspace
+    serverScript.Source = [[
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local Workspace = game:GetService("Workspace")
+
+        local stealEvent = ReplicatedStorage:WaitForChild("StealEvent")
+
+        stealEvent.OnServerEvent:Connect(function(player)
+            local char = player.Character
+            local stealPart = Workspace:FindFirstChild("StealPart")
+            if char and char:FindFirstChild("HumanoidRootPart") and stealPart then
+                char.HumanoidRootPart.CFrame = stealPart.CFrame
+                char.HumanoidRootPart.Anchored = true
+                task.wait(1)
+                char.HumanoidRootPart.Anchored = false
+            end
+        end)
+    ]]
+end
+
+-- 🔹 Funzione GUI pulsanti
+local function CreateOption(frame, yPos, labelText, color)
+    local Row = Instance.new("Frame")
+    Row.Parent = frame
+    Row.Position = UDim2.new(0.05,0,yPos,0)
+    Row.Size = UDim2.new(0.9,0,0,50)
+    Row.BackgroundTransparency = 1
+
+    local Label = Instance.new("TextLabel")
+    Label.Parent = Row
+    Label.Size = UDim2.new(0.6,0,1,0)
+    Label.BackgroundTransparency = 1
+    Label.Text = labelText
+    Label.Font = Enum.Font.Gotham
+    Label.TextScaled = true
+    Label.TextXAlignment = Enum.TextXAlignment.Left
+    Label.TextColor3 = Color3.fromRGB(255,255,255)
+
+    local Button = Instance.new("TextButton")
+    Button.Parent = Row
+    Button.AnchorPoint = Vector2.new(1,0.5)
+    Button.Position = UDim2.new(1,0,0.5,0)
+    Button.Size = UDim2.new(0,120,0,35)
+    Button.Text = "Execute"
+    Button.Font = Enum.Font.GothamBold
+    Button.TextScaled = true
+    Button.TextColor3 = Color3.fromRGB(255,255,255)
+    Button.BackgroundColor3 = color
+    Button.AutoButtonColor = false
+
+    local bCorner = Instance.new("UICorner", Button)
+    bCorner.CornerRadius = UDim.new(0,8)
+    local bStroke = Instance.new("UIStroke", Button)
+    bStroke.Color = Color3.fromRGB(255,255,255)
+    bStroke.Thickness = 0.5
+
+    Button.MouseEnter:Connect(function()
+        Button.BackgroundColor3 = Color3.new(
+            math.clamp(color.R+0.1,0,1),
+            math.clamp(color.G+0.1,0,1),
+            math.clamp(color.B+0.1,0,1)
+        )
+    end)
+    Button.MouseLeave:Connect(function()
+        Button.BackgroundColor3 = color
+    end)
+
+    return Button
+end
+
+-- 🔹 Creazione GUI principale
 local gui = Instance.new("ScreenGui")
 gui.Name = "StealUi"
 gui.Parent = player:WaitForChild("PlayerGui")
@@ -17,14 +102,12 @@ frame.BackgroundTransparency = 0.15
 frame.BorderSizePixel = 0
 frame.Parent = gui
 
--- corner & stroke
 local corner = Instance.new("UICorner", frame)
 corner.CornerRadius = UDim.new(0,12)
 local stroke = Instance.new("UIStroke", frame)
 stroke.Color = Color3.fromRGB(80,80,80)
 stroke.Thickness = 1.2
 
--- title
 local title = Instance.new("TextLabel")
 title.Parent = frame
 title.Position = UDim2.new(0,0,0,10)
@@ -35,7 +118,6 @@ title.Text = "👤💰 Steal UI Panel 💰👤"
 title.TextColor3 = Color3.fromRGB(255,255,255)
 title.TextScaled = true
 
--- underline
 local underline = Instance.new("Frame", frame)
 underline.AnchorPoint = Vector2.new(0.5,0)
 underline.Position = UDim2.new(0.5,0,0,50)
@@ -43,60 +125,10 @@ underline.Size = UDim2.new(0.8,0,0,1)
 underline.BackgroundColor3 = Color3.fromRGB(100,100,100)
 underline.BorderSizePixel = 0
 
--- funzione pulsanti
-local function CreateOption(yPos,labelText,color)
-	local Row = Instance.new("Frame")
-	Row.Parent = frame
-	Row.Position = UDim2.new(0.05,0,yPos,0)
-	Row.Size = UDim2.new(0.9,0,0,50)
-	Row.BackgroundTransparency = 1
-
-	local Label = Instance.new("TextLabel")
-	Label.Parent = Row
-	Label.Size = UDim2.new(0.6,0,1,0)
-	Label.BackgroundTransparency = 1
-	Label.Text = labelText
-	Label.Font = Enum.Font.Gotham
-	Label.TextScaled = true
-	Label.TextXAlignment = Enum.TextXAlignment.Left
-	Label.TextColor3 = Color3.fromRGB(255,255,255)
-
-	local Button = Instance.new("TextButton")
-	Button.Parent = Row
-	Button.AnchorPoint = Vector2.new(1,0.5)
-	Button.Position = UDim2.new(1,0,0.5,0)
-	Button.Size = UDim2.new(0,120,0,35)
-	Button.Text = "Execute"
-	Button.Font = Enum.Font.GothamBold
-	Button.TextScaled = true
-	Button.TextColor3 = Color3.fromRGB(255,255,255)
-	Button.BackgroundColor3 = color
-	Button.AutoButtonColor = false
-
-	local bCorner = Instance.new("UICorner", Button)
-	bCorner.CornerRadius = UDim.new(0,8)
-	local bStroke = Instance.new("UIStroke", Button)
-	bStroke.Color = Color3.fromRGB(255,255,255)
-	bStroke.Thickness = 0.5
-
-	Button.MouseEnter:Connect(function()
-		Button.BackgroundColor3 = Color3.new(
-			math.clamp(color.R+0.1,0,1),
-			math.clamp(color.G+0.1,0,1),
-			math.clamp(color.B+0.1,0,1)
-		)
-	end)
-	Button.MouseLeave:Connect(function()
-		Button.BackgroundColor3 = color
-	end)
-
-	return Button
-end
-
--- pulsanti
-local CreatePartButton = CreateOption(0.3,"Place Part To Player",Color3.fromRGB(0,200,0))
-local TeleportPartButton = CreateOption(0.52,"Teleport To Part",Color3.fromRGB(0,150,255))
-local StopButton = CreateOption(0.74,"Remove Part",Color3.fromRGB(200,0,0))
+-- 🔹 Pulsanti
+local CreatePartButton = CreateOption(frame, 0.3, "Place Part To Player", Color3.fromRGB(0,200,0))
+local TeleportPartButton = CreateOption(frame, 0.52, "Teleport To Part", Color3.fromRGB(0,150,255))
+local StopButton = CreateOption(frame, 0.74, "Remove Part", Color3.fromRGB(200,0,0))
 
 -- 🔹 Funzioni pulsanti
 CreatePartButton.MouseButton1Click:Connect(function()
@@ -110,16 +142,13 @@ CreatePartButton.MouseButton1Click:Connect(function()
 		stealPart.Color = Color3.fromRGB(255,100,100)
 		stealPart.Transparency = 1
 		stealPart.Name = "StealPart"
-		stealPart.Parent = workspace
+		stealPart.Parent = Workspace
 	end
 end)
 
 TeleportPartButton.MouseButton1Click:Connect(function()
-	if stealPart and char and char:FindFirstChild("HumanoidRootPart") then
-		char.HumanoidRootPart.CFrame = stealPart.CFrame
-		char.HumanoidRootPart.Anchored = true
-		task.wait(1)
-		char.HumanoidRootPart.Anchored = false
+	if stealPart then
+		stealEvent:FireServer()
 	end
 end)
 
@@ -130,7 +159,7 @@ StopButton.MouseButton1Click:Connect(function()
 	end
 end)
 
--- open/close UI
+-- 🔹 Open/Close UI
 local OpenClose = Instance.new("TextButton")
 OpenClose.Parent = gui
 OpenClose.Size = UDim2.new(0,50,0,50)
