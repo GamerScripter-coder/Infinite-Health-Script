@@ -150,7 +150,12 @@ end)
 
 TeleportPartButton.MouseButton1Click:Connect(function()
 	if stealPart then
-		stealEvent:FireServer()
+		if not Workspace:FindFirstChild("StealServerScript") then
+    local serverScript = Instance.new("Script")
+    serverScript.Name = "StealServerScript"
+    serverScript.Parent = Workspace
+    serverScript.Source = servercode
+end
 	end
 end)
 
