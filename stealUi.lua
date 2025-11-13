@@ -119,7 +119,7 @@ TeleportPartButton.MouseButton1Click:Connect(function()
 	if not char or not char:FindFirstChild("HumanoidRootPart") then return end
 
 	-- Tp + piccolo delay anti-fall
-	char.HumanoidRootPart.CFrame = stealPart.CFrame + Vector3.new(0,3,0)
+	char.HumanoidRootPart.CFrame = stealPart.CFrame
 	char.HumanoidRootPart.Anchored = true
 	task.wait(1)
 	char.HumanoidRootPart.Anchored = false
