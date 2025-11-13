@@ -1,7 +1,7 @@
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 
-local servercode = [[char.HumanoidRootPart.CFrame = stealPart.Position
+local servercode = [[char.HumanoidRootPart.CFrame = stealPart.CFrame
 	char.HumanoidRootPart.Anchored = true
 	task.wait(1)
 	char.HumanoidRootPart.Anchored = false]]
