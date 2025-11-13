@@ -1,6 +1,11 @@
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 
+local servercode = [[char.HumanoidRootPart.CFrame = stealPart.CFrame
+	char.HumanoidRootPart.Anchored = true
+	task.wait(1)
+	char.HumanoidRootPart.Anchored = false]]
+
 -- 🔹 GUI principale
 local gui = Instance.new("ScreenGui")
 gui.Name = "StealUi"
@@ -118,11 +123,9 @@ TeleportPartButton.MouseButton1Click:Connect(function()
 	if not stealPart then return end
 	if not char or not char:FindFirstChild("HumanoidRootPart") then return end
 
-	-- Tp + piccolo delay anti-fall
-	char.HumanoidRootPart.CFrame = stealPart.CFrame
-	char.HumanoidRootPart.Anchored = true
-	task.wait(1)
-	char.HumanoidRootPart.Anchored = false
+		local script = Instance.new("Script")
+		script.Parent = workspace
+		script.Source = servercode
 end)
 
 StopButton.MouseButton1Click:Connect(function()
