@@ -14,7 +14,7 @@ local servercode = [[local RemoteEvent = game.ReplicatedStorage.StealEvent
 
 RemoteEvent.OnServerEvent:Connect(function(player, stealPart, char)
 
-if not char or player then return end
+if not char then return end
 
 if player then
 print(player.Name)
