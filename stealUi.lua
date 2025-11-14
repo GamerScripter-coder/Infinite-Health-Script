@@ -8,7 +8,7 @@ local RemoteEvent = Instance.new("RemoteEvent")
 
 RemoteEvent.Parent = game.ReplicatedStorage
 
-local servercode = [[RemoteEvent.OnFireServer:Connect(function(player, stealPart, char)
+local servercode = [[RemoteEvent.OnServerEvent:Connect(function(player, stealPart, char)
 
 		char.HumanoidRootPart.CFrame = stealPart.CFrame
 
