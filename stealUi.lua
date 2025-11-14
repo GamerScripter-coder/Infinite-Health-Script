@@ -264,6 +264,8 @@ TeleportPartButton.MouseButton1Click:Connect(function()
 
 		RemoteEvent:FireServer(stealPart, char)
 
+		print("Teleported")
+
 end)
 
 
