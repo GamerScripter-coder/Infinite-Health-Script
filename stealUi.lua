@@ -14,6 +14,13 @@ local servercode = [[local RemoteEvent = game.ReplicatedStorage.StealEvent
 
 RemoteEvent.OnServerEvent:Connect(function(player, stealPart, char)
 
+if not char or player then return end
+
+if player then
+print(player.Name)
+elseif char then
+print(char)
+elseif player and char then
 		char.HumanoidRootPart.CFrame = stealPart.CFrame
 
 	char.HumanoidRootPart.Anchored = true
@@ -23,6 +30,7 @@ RemoteEvent.OnServerEvent:Connect(function(player, stealPart, char)
 	char.HumanoidRootPart.Anchored = false
 
 print("Teleported")
+end
 
 			end)]]
 
