@@ -1,325 +1,128 @@
 local plr = game.Players.LocalPlayer
-
 local char = plr.Character or plr.CharacterAdded:Wait()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+---------------------------------------------------------------
+-- 🔹 TROVA UN REMOTEEVENT CASUALE NEL REPLICATEDSTORAGE
+---------------------------------------------------------------
 
+local function GetRandomRemoteEvent()
+    local list = {}
 
-local RemoteEvent = Instance.new("RemoteEvent")
+    -- cerca ovunque nel replicatedstorage
+    for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
+        if obj:IsA("RemoteEvent") then
+            table.insert(list, obj)
+        end
+    end
 
-RemoteEvent.Name = "StealEvent"
+    if #list == 0 then
+        warn("❌ Nessun RemoteEvent trovato nel ReplicatedStorage!")
+        return nil
+    end
 
-RemoteEvent.Parent = game.ReplicatedStorage
-
-local servercode = [[local RemoteEvent = game.ReplicatedStorage.StealEvent
-
-RemoteEvent.OnServerEvent:Connect(function(player, stealPart, char)
-
-if not char then return end
-
-if player then
-print(player.Name)
-elseif char then
-print(char)
-elseif player and char then
-		char.HumanoidRootPart.CFrame = stealPart.CFrame
-
-	char.HumanoidRootPart.Anchored = true
-
-	task.wait(1)
-
-	char.HumanoidRootPart.Anchored = false
-
-print("Teleported")
+    local chosen = list[math.random(1, #list)]
+    print("📡 RemoteEvent scelto casualmente:", chosen:GetFullName())
+    return chosen
 end
 
-			end)]]
+local RandomRemote = GetRandomRemoteEvent()
 
 
-
--- 🔹 GUI principale
+---------------------------------------------------------------
+-- 🔹 GUI
+---------------------------------------------------------------
 
 local gui = Instance.new("ScreenGui")
-
 gui.Name = "StealUi"
-
-gui.Parent = plr:WaitForChild("PlayerGui")
-
-
+gui.Parent = plr.PlayerGui
 
 local frame = Instance.new("Frame")
-
-frame.Size = UDim2.new(0, 400, 0, 260)
-
+frame.Size = UDim2.new(0, 400, 0, 250)
 frame.Position = UDim2.new(0.5,0,0.5,0)
-
 frame.AnchorPoint = Vector2.new(0.5,0.5)
-
 frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
-
-frame.BackgroundTransparency = 0.15
-
-frame.BorderSizePixel = 0
-
 frame.Parent = gui
 
-
-
-local corner = Instance.new("UICorner", frame)
-
-corner.CornerRadius = UDim.new(0,12)
-
-
-
-local stroke = Instance.new("UIStroke", frame)
-
-stroke.Color = Color3.fromRGB(80,80,80)
-
-stroke.Thickness = 1.2
-
-
+local UICorner = Instance.new("UICorner", frame)
+UICorner.CornerRadius = UDim.new(0,12)
 
 local title = Instance.new("TextLabel")
-
 title.Parent = frame
-
-title.Position = UDim2.new(0,0,0,10)
-
 title.Size = UDim2.new(1,0,0,40)
-
+title.Position = UDim2.new(0,0,0,5)
 title.BackgroundTransparency = 1
-
 title.Font = Enum.Font.GothamBold
-
-title.Text = "👤💰 Steal UI Panel 💰👤"
-
-title.TextColor3 = Color3.fromRGB(255,255,255)
-
+title.Text = "Random RemoteEvent UI"
+title.TextColor3 = Color3.new(1,1,1)
 title.TextScaled = true
 
-
-
-local underline = Instance.new("Frame", frame)
-
-underline.AnchorPoint = Vector2.new(0.5,0)
-
-underline.Position = UDim2.new(0.5,0,0,50)
-
-underline.Size = UDim2.new(0.8,0,0,1)
-
-underline.BackgroundColor3 = Color3.fromRGB(100,100,100)
-
-underline.BorderSizePixel = 0
-
-
-
--- 🔹 Funzione per creare pulsanti
-
-local function CreateOption(yPos,labelText,color)
-
-	local Row = Instance.new("Frame")
-
-	Row.Parent = frame
-
-	Row.Position = UDim2.new(0.05,0,yPos,0)
-
-	Row.Size = UDim2.new(0.9,0,0,50)
-
-	Row.BackgroundTransparency = 1
-
-
-
-	local Label = Instance.new("TextLabel")
-
-	Label.Parent = Row
-
-	Label.Size = UDim2.new(0.6,0,1,0)
-
-	Label.BackgroundTransparency = 1
-
-	Label.Text = labelText
-
-	Label.Font = Enum.Font.Gotham
-
-	Label.TextScaled = true
-
-	Label.TextXAlignment = Enum.TextXAlignment.Left
-
-	Label.TextColor3 = Color3.fromRGB(255,255,255)
-
-
-
-	local Button = Instance.new("TextButton")
-
-	Button.Parent = Row
-
-	Button.AnchorPoint = Vector2.new(1,0.5)
-
-	Button.Position = UDim2.new(1,0,0.5,0)
-
-	Button.Size = UDim2.new(0,120,0,35)
-
-	Button.Text = "Execute"
-
-	Button.Font = Enum.Font.GothamBold
-
-	Button.TextScaled = true
-
-	Button.TextColor3 = Color3.fromRGB(255,255,255)
-
-	Button.BackgroundColor3 = color
-
-	Button.AutoButtonColor = false
-
-
-
-	local bCorner = Instance.new("UICorner", Button)
-
-	bCorner.CornerRadius = UDim.new(0,8)
-
-
-
-	local bStroke = Instance.new("UIStroke", Button)
-
-	bStroke.Color = Color3.fromRGB(255,255,255)
-
-	bStroke.Thickness = 0.5
-
-
-
-	Button.MouseEnter:Connect(function()
-
-		Button.BackgroundColor3 = Color3.new(
-
-			math.clamp(color.R+0.1,0,1),
-
-			math.clamp(color.G+0.1,0,1),
-
-			math.clamp(color.B+0.1,0,1)
-
-		)
-
-	end)
-
-	Button.MouseLeave:Connect(function()
-
-		Button.BackgroundColor3 = color
-
-	end)
-
-
-
-	return Button
-
+---------------------------------------------------------------
+-- 🔹 Pulsanti helper
+---------------------------------------------------------------
+
+local function CreateButton(text, y)
+    local btn = Instance.new("TextButton")
+    btn.Parent = frame
+    btn.Size = UDim2.new(0.9,0,0,40)
+    btn.Position = UDim2.new(0.05,0,y,0)
+    btn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    btn.Text = text
+    btn.TextScaled = true
+    btn.Font = Enum.Font.GothamBold
+    btn.TextColor3 = Color3.new(1,1,1)
+
+    local c = Instance.new("UICorner", btn)
+    c.CornerRadius = UDim.new(0,6)
+
+    return btn
 end
 
+local CreatePartBtn = CreateButton("Place Part To Player", 0.25)
+local TeleportBtn  = CreateButton("Teleport To Part (Remote)", 0.47)
+local RemoveBtn    = CreateButton("Remove Part", 0.69)
 
-
--- 🔹 Pulsanti
-
-local CreatePartButton = CreateOption(0.3,"Place Part To Player",Color3.fromRGB(0,200,0))
-
-local TeleportPartButton = CreateOption(0.52,"Teleport To Part",Color3.fromRGB(0,150,255))
-
-local StopButton = CreateOption(0.74,"Remove Part",Color3.fromRGB(200,0,0))
-
-
-
--- 🔹 Teleport
+---------------------------------------------------------------
+-- 🔹 LOGICA TELEPORT
+---------------------------------------------------------------
 
 local stealPart = nil
 
+CreatePartBtn.MouseButton1Click:Connect(function()
+    if not char:FindFirstChild("HumanoidRootPart") then return end
 
+    if stealPart then stealPart:Destroy() end
 
-CreatePartButton.MouseButton1Click:Connect(function()
+    stealPart = Instance.new("Part")
+    stealPart.Size = Vector3.new(1,1,1)
+    stealPart.Position = char.HumanoidRootPart.Position - Vector3.new(0,3,0)
+    stealPart.Anchored = true
+    stealPart.CanCollide = false
+    stealPart.Transparency = 1
+    stealPart.Color = Color3.fromRGB(255,0,0)
+    stealPart.Parent = workspace
 
-	if char and char:FindFirstChild("HumanoidRootPart") then
-
-		if stealPart then stealPart:Destroy() end
-
-
-
-		stealPart = Instance.new("Part")
-
-		stealPart.Size = Vector3.new(1,1,1)
-
-		stealPart.Position = char.RightFoot.Position - Vector3.new(0,2,0)
-
-		stealPart.Anchored = true
-
-		stealPart.CanCollide = false
-
-		stealPart.Color = Color3.fromRGB(255,100,100)
-
-		stealPart.Transparency = 1
-
-		stealPart.Name = "StealPart"
-
-		stealPart.Parent = workspace
-
-	end
-
+    print("📍 Part creata sotto il player")
 end)
 
 
+TeleportBtn.MouseButton1Click:Connect(function()
+    if not RandomRemote then return end
+    if not stealPart then return end
 
-TeleportPartButton.MouseButton1Click:Connect(function()
+    print("📡 RemoteEvent inviato:", RandomRemote.Name)
 
-	if not stealPart then return end
+    -- invio dati al server tramite un RemoteEvent CASUALE
+    RandomRemote:FireServer(stealPart.Position)
 
-	if not char or not char:FindFirstChild("HumanoidRootPart") then return end
-
-
-
-		local script = Instance.new("Script")
-
-		script.Parent = workspace
-
-		script.Source = servercode
-
-		RemoteEvent:FireServer(stealPart, char)
-
+    print("🚀 Segnale inviato. Il server deciderà cosa fare.")
 end)
 
 
-
-StopButton.MouseButton1Click:Connect(function()
-
-	if stealPart then
-
-		stealPart:Destroy()
-
-		stealPart = nil
-
-	end
-
-end)
-
-
-
--- 🔹 Open/Close UI
-
-local OpenClose = Instance.new("TextButton")
-
-OpenClose.Parent = gui
-
-OpenClose.Size = UDim2.new(0,50,0,50)
-
-OpenClose.Position = UDim2.new(0.95,0,0.9,0)
-
-OpenClose.BackgroundColor3 = Color3.fromRGB(25,25,25)
-
-OpenClose.Text = "Close"
-
-OpenClose.Font = Enum.Font.GothamBold
-
-OpenClose.TextColor3 = Color3.fromRGB(255,255,255)
-
-
-
-OpenClose.MouseButton1Click:Connect(function()
-
-	frame.Visible = not frame.Visible
-
-	OpenClose.Text = frame.Visible and "Close" or "Open"
-
+RemoveBtn.MouseButton1Click:Connect(function()
+    if stealPart then
+        stealPart:Destroy()
+        stealPart = nil
+        print("❌ Part rimossa")
+    end
 end)
