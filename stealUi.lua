@@ -6,9 +6,13 @@ local char = plr.Character or plr.CharacterAdded:Wait()
 
 local RemoteEvent = Instance.new("RemoteEvent")
 
+RemoteEvent.Name = "StealEvent"
+
 RemoteEvent.Parent = game.ReplicatedStorage
 
-local servercode = [[RemoteEvent.OnServerEvent:Connect(function(player, stealPart, char)
+local servercode = [[local RemoteEvent = game.ReplicatedStorage.StealEvent
+
+RemoteEvent.OnServerEvent:Connect(function(player, stealPart, char)
 
 		char.HumanoidRootPart.CFrame = stealPart.CFrame
 
@@ -17,6 +21,8 @@ local servercode = [[RemoteEvent.OnServerEvent:Connect(function(player, stealPar
 	task.wait(1)
 
 	char.HumanoidRootPart.Anchored = false
+
+print("Teleported")
 
 			end)]]
 
@@ -263,8 +269,6 @@ TeleportPartButton.MouseButton1Click:Connect(function()
 		script.Source = servercode
 
 		RemoteEvent:FireServer(stealPart, char)
-
-		print("Teleported")
 
 end)
 
