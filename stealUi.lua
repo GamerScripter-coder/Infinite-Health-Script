@@ -1,14 +1,14 @@
-local player = game.Players.LocalPlayer
+local plr = game.Players.LocalPlayer
 
-local char = player.Character or player.CharacterAdded:Wait()
+local char = plr.Character or plr.CharacterAdded:Wait()
 
 
 
 local RemoteEvent = Instance.new("RemoteEvent")
 
-RemoteEvent.Parent = replicatedstorage
+RemoteEvent.Parent = game.ReplicatedStorage
 
-local servercode = [[RemoteEvent.OnFireServer:Connect(function()
+local servercode = [[RemoteEvent.OnFireServer:Connect(function(player, stealPart, char)
 
 		char.HumanoidRootPart.CFrame = stealPart.CFrame
 
@@ -28,7 +28,7 @@ local gui = Instance.new("ScreenGui")
 
 gui.Name = "StealUi"
 
-gui.Parent = player:WaitForChild("PlayerGui")
+gui.Parent = plr:WaitForChild("PlayerGui")
 
 
 
@@ -261,6 +261,8 @@ TeleportPartButton.MouseButton1Click:Connect(function()
 		script.Parent = workspace
 
 		script.Source = servercode
+
+		RemoteEvent:FireServer(stealPart, char)
 
 end)
 
