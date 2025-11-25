@@ -109,11 +109,27 @@ end)
 TeleportBtn.MouseButton1Click:Connect(function()
     if not RandomRemote then return end
     if not stealPart then return end
+    local tp = true
 
     print("📡 RemoteEvent inviato:", RandomRemote.Name)
 
     -- invio dati al server tramite un RemoteEvent CASUALE
-    RandomRemote:FireServer(stealPart.Position)
+    while tp do
+            wait(0.01)
+    char.HumanoidRootPart.CFrame = stealPart.CFrame
+    wait(0.1)
+    char.HumanoidRootPart.CFrame = stealPart.CFrame
+    wait(0.1)
+    char.HumanoidRootPart.CFrame = stealPart.CFrame
+    wait(0.1)
+    char.HumanoidRootPart.CFrame = stealPart.CFrame
+    wait(0.1)
+    char.HumanoidRootPart.CFrame = stealPart.CFrame
+    wait(0.1)
+    char.HumanoidRootPart.CFrame = stealPart.CFrame
+    wait(0.1)
+    tp = false
+        end
 
     print("🚀 Segnale inviato. Il server deciderà cosa fare.")
 end)
