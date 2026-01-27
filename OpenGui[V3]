@@ -42,6 +42,7 @@ GuisList.Parent = OpenGuiFrame
 GuisList.Name = "GuisList"
 GuisList.Size = UDim2.new(0, 100,0, 186)
 GuisList.Position = UDim2.new(0.366, 0,0.391, 0)
+GuisList.CanvasSize = {0,0}, {100,0}
 GuisList.BackgroundTransparency = 0.5
 local parentFrame = GuisList -- Dove vuoi inserire le TextLabel
 
@@ -82,6 +83,9 @@ local Button = Open
 local Button2 = Close
 
 local function createButtons()
+for _,child2 in pairs(parentFrame:GetChildren()) do
+child2:Destroy()
+end
 for _, child in pairs(plrgui:GetChildren()) do
 	if child:IsA("ScreenGui") then
 		local labelGui = Instance.new("TextButton")
