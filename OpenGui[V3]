@@ -81,6 +81,7 @@ local plr = game.Players.LocalPlayer
 local Button = Open
 local Button2 = Close
 
+local function createButtons()
 for _, child in pairs(plrgui:GetChildren()) do
 	if child:IsA("ScreenGui") then
 		local labelGui = Instance.new("TextButton")
@@ -102,6 +103,11 @@ for _, child in pairs(plrgui:GetChildren()) do
         end)
 	end
 end
+end
+
+plrgui.ChildAdded:Connect(function()
+createButtons()
+end)
 
 Button.MouseButton1Click:Connect(function()
 	local Text = TextBox.Text
