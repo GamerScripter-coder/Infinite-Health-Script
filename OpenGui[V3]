@@ -1,8 +1,13 @@
 local plrgui = game.Players.LocalPlayer.PlayerGui
 
+if plrgui:FindFirstChild("OpenGui[V3]") then
+plrgui:FindFirstChild("OpenGui[V3]"):Destroy()
+end
+
 local Gui = Instance.new("ScreenGui")
 Gui.Name = "OpenGui[V3]"
 Gui.Enabled = true
+Gui.DisplayOrder = 1000000000
 Gui.Parent = plrgui
 local OpenClose = Instance.new("Frame")
 OpenClose.Parent = Gui
