@@ -12,6 +12,7 @@ local stealingEnabled = true
 if CoreGui:FindFirstChild("StealGui") then
 CoreGui:FindFirstChild("StealGui"):Destroy()
 end
+
 -- GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "StealGui"
@@ -25,7 +26,6 @@ frame.Position = UDim2.fromScale(0.4, 0.35)
 frame.BackgroundColor3 = Color3.fromRGB(35,35,35)
 frame.BorderSizePixel = 0
 frame.Parent = gui
-
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0,12)
 
 -- TITLE (DRAG)
@@ -47,6 +47,7 @@ stealingBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
 stealingBtn.TextColor3 = Color3.new(1,1,1)
 stealingBtn.TextScaled = true
 stealingBtn.Font = Enum.Font.Gotham
+stealingBtn.AutoButtonColor = true
 stealingBtn.Parent = frame
 Instance.new("UICorner", stealingBtn)
 
@@ -96,33 +97,40 @@ notStealingBtn.MouseButton1Click:Connect(function()
 		notStealingBtn.Text = "Not Stealing"
 		notStealingBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
 		stealingBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+		stealingBtn.Text = "Stealing"
+		stealingBtn.AutoButtonColor = true
 	else
+		stealingClicked = false
 		notStealingBtn.Text = "Stealing Disabled"
 		notStealingBtn.BackgroundColor3 = Color3.fromRGB(120,0,0)
 		stealingBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+		stealingBtn.Text = "Stealing"
+		stealingBtn.AutoButtonColor = false
 	end
 end)
 
--- DRAG
-local dragging, dragStart, startPos
+-- DRAG LOGIC
+local dragging = false
+local dragStart
+local startPos
 
-title.InputBegan:Connect(function(i)
-	if i.UserInputType == Enum.UserInputType.MouseButton1 then
+title.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = true
-		dragStart = i.Position
+		dragStart = input.Position
 		startPos = frame.Position
 	end
 end)
 
-title.InputEnded:Connect(function(i)
-	if i.UserInputType == Enum.UserInputType.MouseButton1 then
+title.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = false
 	end
 end)
 
-UserInputService.InputChanged:Connect(function(i)
-	if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = i.Position - dragStart
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+		local delta = input.Position - dragStart
 		frame.Position = UDim2.new(
 			startPos.X.Scale,
 			startPos.X.Offset + delta.X,
