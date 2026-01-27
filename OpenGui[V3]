@@ -1,9 +1,3 @@
---[[
-LocalScript: OpenGui[V3] Manager
-Crea una UI draggable che mostra tutte le ScreenGui del Player
-Permette di aprire/chiudere le GUI selezionate
-]]
-
 local player = game.Players.LocalPlayer
 local plrGui = player:WaitForChild("PlayerGui")
 
@@ -13,200 +7,151 @@ if plrGui:FindFirstChild("OpenGui[V3]") then
 end
 
 -- ===============================
--- Crea la GUI principale
+-- GUI principale
 -- ===============================
 local Gui = Instance.new("ScreenGui")
 Gui.Name = "OpenGui[V3]"
-Gui.DisplayOrder = 1000000000
+Gui.DisplayOrder = 100000
 Gui.Parent = plrGui
 
--- ===============================
--- Frame per apri/chiudi rapido
--- ===============================
-local OpenClose = Instance.new("Frame")
-OpenClose.Name = "Open/Close"
-OpenClose.Size = UDim2.new(0, 38,0, 39)
-OpenClose.Position = UDim2.new(0.933, 0,0.895, 0)
-OpenClose.BackgroundTransparency = 1
+-- Toggle button per apri/chiudi rapido
+local OpenClose = Instance.new("TextButton")
+OpenClose.Size = UDim2.new(0, 50, 0, 30)
+OpenClose.Position = UDim2.new(0.9, 0, 0.9, 0)
+OpenClose.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+OpenClose.TextColor3 = Color3.fromRGB(255, 255, 255)
+OpenClose.Text = "Close"
 OpenClose.Parent = Gui
 
-local LabelOpenClose = Instance.new("TextLabel")
-LabelOpenClose.Text = "Close"
-LabelOpenClose.Font = Enum.Font.Cartoon
-LabelOpenClose.TextScaled = true
-LabelOpenClose.BackgroundTransparency = 1
-LabelOpenClose.TextColor3 = Color3.fromRGB(255,255,255)
-LabelOpenClose.Size = UDim2.new(1,0,1,0)
-LabelOpenClose.Parent = OpenClose
-
-local ToggleButton = Instance.new("TextButton")
-ToggleButton.Size = UDim2.new(1,0,1,0)
-ToggleButton.BackgroundTransparency = 1
-ToggleButton.Text = ""
-ToggleButton.Parent = LabelOpenClose
-
--- ===============================
 -- Frame principale della UI
--- ===============================
 local OpenGuiFrame = Instance.new("Frame")
-OpenGuiFrame.Size = UDim2.new(0, 621,0, 266)
-OpenGuiFrame.Position = UDim2.new(0.432, 0,0.478, 0)
-OpenGuiFrame.AnchorPoint = Vector2.new(0.5,0.5)
-OpenGuiFrame.BackgroundColor3 = Color3.fromRGB(50,50,50)
-OpenGuiFrame.BackgroundTransparency = 0.5
+OpenGuiFrame.Size = UDim2.new(0, 500, 0, 300)
+OpenGuiFrame.Position = UDim2.new(0.25, 0, 0.25, 0)
+OpenGuiFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+OpenGuiFrame.BackgroundTransparency = 0.3
 OpenGuiFrame.Parent = Gui
 
--- Aggiungi angoli arrotondati
 local UiCorner = Instance.new("UICorner")
 UiCorner.Parent = OpenGuiFrame
 
--- ===============================
--- Lista delle GUI
--- ===============================
+-- ScrollingFrame per la lista delle GUI
 local GuisList = Instance.new("ScrollingFrame")
-GuisList.Name = "GuisList"
-GuisList.Size = UDim2.new(0, 150,0, 186)
-GuisList.Position = UDim2.new(0.01,0,0.1,0)
-GuisList.BackgroundTransparency = 0.5
+GuisList.Size = UDim2.new(0, 150, 0, 250)
+GuisList.Position = UDim2.new(0, 10, 0, 10)
 GuisList.CanvasSize = UDim2.new(0,0,0,0)
 GuisList.ScrollBarThickness = 6
+GuisList.BackgroundColor3 = Color3.fromRGB(40,40,40)
 GuisList.Parent = OpenGuiFrame
 
--- Contenitore interno per i bottoni
-local parentFrame = Instance.new("Frame")
-parentFrame.Size = UDim2.new(1,0,0,0)
-parentFrame.BackgroundTransparency = 1
-parentFrame.Parent = GuisList
+-- Contenitore dei bottoni
+local ButtonsContainer = Instance.new("Frame")
+ButtonsContainer.Size = UDim2.new(1,0,0,0)
+ButtonsContainer.BackgroundTransparency = 1
+ButtonsContainer.Parent = GuisList
 
--- ===============================
--- Altri elementi UI
--- ===============================
-local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0, 200,0, 50)
-CloseBtn.Position = UDim2.new(0.038,0,0.371,0)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
-CloseBtn.TextColor3 = Color3.fromRGB(255,255,255)
-CloseBtn.TextScaled = true
-CloseBtn.Text = "Close"
-CloseBtn.Parent = OpenGuiFrame
+-- TextBox per selezionare GUI
+local TextBox = Instance.new("TextBox")
+TextBox.Size = UDim2.new(0, 200, 0, 30)
+TextBox.Position = UDim2.new(0.35, 0, 0.8, 0)
+TextBox.BackgroundColor3 = Color3.fromRGB(70,70,70)
+TextBox.TextColor3 = Color3.fromRGB(255,255,255)
+TextBox.PlaceholderText = "Inserisci GUI..."
+TextBox.Parent = OpenGuiFrame
 
+-- Pulsanti Open/Close
 local OpenBtn = Instance.new("TextButton")
-OpenBtn.Size = UDim2.new(0, 200,0, 50)
-OpenBtn.Position = UDim2.new(0.038,0,0.593,0)
-OpenBtn.BackgroundColor3 = Color3.fromRGB(50,50,50)
-OpenBtn.TextColor3 = Color3.fromRGB(255,255,255)
-OpenBtn.TextScaled = true
+OpenBtn.Size = UDim2.new(0, 80, 0, 30)
+OpenBtn.Position = UDim2.new(0.35, 0, 0.9, 0)
 OpenBtn.Text = "Open"
 OpenBtn.Parent = OpenGuiFrame
 
-local NameUi = Instance.new("TextLabel")
-NameUi.Size = UDim2.new(0, 233,0, 50)
-NameUi.Position = UDim2.new(0.278,0,0.064,0)
-NameUi.BackgroundTransparency = 1
-NameUi.TextScaled = true
-NameUi.Text = "OpenGui[V3]"
-NameUi.TextColor3 = Color3.fromRGB(255,255,255)
-NameUi.Parent = OpenGuiFrame
-
-local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0, 200,0, 50)
-TextBox.Position = UDim2.new(0.576,0,0.593,0)
-TextBox.BackgroundTransparency = 1
-TextBox.TextColor3 = Color3.fromRGB(255,255,255)
-TextBox.Parent = OpenGuiFrame
+local CloseBtn = Instance.new("TextButton")
+CloseBtn.Size = UDim2.new(0, 80, 0, 30)
+CloseBtn.Position = UDim2.new(0.55, 0, 0.9, 0)
+CloseBtn.Text = "Close"
+CloseBtn.Parent = OpenGuiFrame
 
 -- ===============================
 -- Funzione per creare bottoni lista GUI
 -- ===============================
 local function createButtons()
-    local yOffset = 0
-
-    -- Pulisci lista
-    for _,child in pairs(parentFrame:GetChildren()) do
+    -- Pulisci bottoni esistenti
+    for _, child in pairs(ButtonsContainer:GetChildren()) do
         child:Destroy()
     end
 
-    -- Cicla tutte le ScreenGui del Player
+    local yOffset = 0
     for _, guiChild in pairs(plrGui:GetChildren()) do
         if guiChild:IsA("ScreenGui") then
-            local labelGui = Instance.new("TextButton")
-            labelGui.Size = UDim2.new(1,0,0,30)
-            labelGui.Position = UDim2.new(0,0,0,yOffset)
-            labelGui.BackgroundColor3 = Color3.fromRGB(50,50,50)
-            labelGui.BackgroundTransparency = 0.3
-            labelGui.Font = Enum.Font.SourceSans
-            labelGui.TextSize = 20
-            labelGui.TextXAlignment = Enum.TextXAlignment.Left
-            labelGui.TextColor3 = Color3.fromRGB(255,255,255)
-            labelGui.Text = guiChild.Name
-            labelGui.Parent = parentFrame
+            local btn = Instance.new("TextButton")
+            btn.Size = UDim2.new(1, -10, 0, 30)
+            btn.Position = UDim2.new(0, 5, 0, yOffset)
+            btn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+            btn.TextColor3 = Color3.fromRGB(255,255,255)
+            btn.Text = guiChild.Name
+            btn.Font = Enum.Font.SourceSans
+            btn.TextSize = 18
+            btn.Parent = ButtonsContainer
 
-            labelGui.MouseButton1Click:Connect(function()
-                TextBox.Text = labelGui.Text
+            btn.MouseButton1Click:Connect(function()
+                TextBox.Text = guiChild.Name
             end)
 
             yOffset = yOffset + 35
         end
     end
 
-    -- Aggiorna CanvasSize
-    parentFrame.Size = UDim2.new(1,0,0,yOffset)
+    ButtonsContainer.Size = UDim2.new(1,0,0,yOffset)
     GuisList.CanvasSize = UDim2.new(0,0,0,yOffset)
 end
 
--- ===============================
--- Eventi dinamici
--- ===============================
+-- Aggiorna la lista dinamicamente
 plrGui.ChildAdded:Connect(createButtons)
 plrGui.ChildRemoved:Connect(createButtons)
-
-createButtons() -- iniziale
+createButtons()
 
 -- ===============================
--- Pulsanti Open/Close GUI selezionata
+-- Open/Close GUI selezionata
 -- ===============================
 OpenBtn.MouseButton1Click:Connect(function()
-    local guiName = TextBox.Text
-    local gui = plrGui:FindFirstChild(guiName)
+    local gui = plrGui:FindFirstChild(TextBox.Text)
     if gui then
         gui.Enabled = true
     else
-        warn("Gui not found: "..guiName)
+        warn("GUI non trovata:", TextBox.Text)
     end
 end)
 
 CloseBtn.MouseButton1Click:Connect(function()
-    local guiName = TextBox.Text
-    local gui = plrGui:FindFirstChild(guiName)
+    local gui = plrGui:FindFirstChild(TextBox.Text)
     if gui then
         gui.Enabled = false
     else
-        warn("Gui not found: "..guiName)
+        warn("GUI non trovata:", TextBox.Text)
     end
 end)
 
--- Toggle Open/Close principale
-ToggleButton.MouseButton1Click:Connect(function()
+-- Toggle visibilità della UI
+OpenClose.MouseButton1Click:Connect(function()
+    OpenGuiFrame.Visible = not OpenGuiFrame.Visible
     if OpenGuiFrame.Visible then
-        OpenGuiFrame.Visible = false
-        LabelOpenClose.Text = "Open"
+        OpenClose.Text = "Close"
     else
-        OpenGuiFrame.Visible = true
-        LabelOpenClose.Text = "Close"
+        OpenClose.Text = "Open"
     end
 end)
 
 -- ===============================
--- Funzione drag UI
+-- Drag UI
 -- ===============================
 local dragging = false
-local dragInput, mousePos, framePos
+local dragInput, mouseStart, frameStart
 
 OpenGuiFrame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragging = true
-        mousePos = input.Position
-        framePos = OpenGuiFrame.Position
+        mouseStart = input.Position
+        frameStart = OpenGuiFrame.Position
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragging = false
@@ -223,12 +168,12 @@ end)
 
 game:GetService("UserInputService").InputChanged:Connect(function(input)
     if input == dragInput and dragging then
-        local delta = input.Position - mousePos
+        local delta = input.Position - mouseStart
         OpenGuiFrame.Position = UDim2.new(
-            framePos.X.Scale,
-            framePos.X.Offset + delta.X,
-            framePos.Y.Scale,
-            framePos.Y.Offset + delta.Y
+            frameStart.X.Scale,
+            frameStart.X.Offset + delta.X,
+            frameStart.Y.Scale,
+            frameStart.Y.Offset + delta.Y
         )
     end
 end)
