@@ -38,9 +38,9 @@ UiCorner.Parent = OpenGuiFrame
 local GuisList = Instance.new("ScrollingFrame")
 GuisList.Size = UDim2.new(0, 150, 0, 250)
 GuisList.Position = UDim2.new(0, 10, 0, 10)
-GuisList.CanvasSize = UDim2.new(0,0,0,0)
-GuisList.ScrollBarThickness = 6
 GuisList.BackgroundColor3 = Color3.fromRGB(40,40,40)
+GuisList.ScrollBarThickness = 6
+GuisList.CanvasSize = UDim2.new(0,0,0,0) -- ✅ CanvasSize corretto
 GuisList.Parent = OpenGuiFrame
 
 -- Contenitore dei bottoni
@@ -102,7 +102,7 @@ local function createButtons()
     end
 
     ButtonsContainer.Size = UDim2.new(1,0,0,yOffset)
-    GuisList.CanvasSize = UDim2.new(0,0,0,yOffset)
+    GuisList.CanvasSize = UDim2.new(0,0,0,yOffset) -- ✅ aggiornato correttamente
 end
 
 -- Aggiorna la lista dinamicamente
@@ -134,11 +134,7 @@ end)
 -- Toggle visibilità della UI
 OpenClose.MouseButton1Click:Connect(function()
     OpenGuiFrame.Visible = not OpenGuiFrame.Visible
-    if OpenGuiFrame.Visible then
-        OpenClose.Text = "Close"
-    else
-        OpenClose.Text = "Open"
-    end
+    OpenClose.Text = OpenGuiFrame.Visible and "Close" or "Open"
 end)
 
 -- ===============================
