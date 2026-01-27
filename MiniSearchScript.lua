@@ -12,8 +12,10 @@ local scriptsList = {
 	["Infinite Yield"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
 	["CMD-X"] = "https://pastebin.com/raw/ftTV0FJN",
 	["HD Admin"] = "https://pastebin.com/raw/JTg6nTnR",
-	["Dex Explorer"] = "https://pastebin.com/raw/8h2rT5Zc"
-	-- Puoi aggiungerne altri pubblici
+	["Dex Explorer"] = "https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua",
+	["Ban On Steal(My)"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/IstantSteal.lua",
+	["Chili Hub"] = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
+	["Istant Steal"] = "ttps://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/IstantSteal.lua"
 }
 
 -- CREAZIONE GUI
