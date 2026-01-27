@@ -1,33 +1,36 @@
 -- SERVICES
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local CoreGui = game:GetService("CoreGui")
 
 local plr = Players.LocalPlayer
 
--- STATO
+-- STATE
 local stealingClicked = false
+local stealingEnabled = true
 
--- SCREEN GUI
+if CoreGui:FindFirstChild("StealGui") then
+CoreGui:FindFirstChild("StealGui"):Destroy()
+end
+-- GUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "StealGui"
 gui.ResetOnSpawn = false
-gui.Parent = plr:WaitForChild("PlayerGui")
+gui.Parent = CoreGui
 
--- FRAME (TRASCINABILE)
+-- FRAME
 local frame = Instance.new("Frame")
-frame.Size = UDim2.fromScale(0.25, 0.2)
-frame.Position = UDim2.fromScale(0.4, 0.4)
-frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+frame.Size = UDim2.fromScale(0.25, 0.25)
+frame.Position = UDim2.fromScale(0.4, 0.35)
+frame.BackgroundColor3 = Color3.fromRGB(35,35,35)
 frame.BorderSizePixel = 0
 frame.Parent = gui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = frame
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0,12)
 
--- TITOLO (per trascinare)
+-- TITLE (DRAG)
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0.25, 0)
+title.Size = UDim2.new(1,0,0.2,0)
 title.BackgroundTransparency = 1
 title.Text = "Steal Panel"
 title.TextColor3 = Color3.new(1,1,1)
@@ -35,70 +38,91 @@ title.TextScaled = true
 title.Font = Enum.Font.GothamBold
 title.Parent = frame
 
--- BOTTONE STEALING
+-- STEALING BUTTON
 local stealingBtn = Instance.new("TextButton")
-stealingBtn.Size = UDim2.new(0.9, 0, 0.25, 0)
-stealingBtn.Position = UDim2.new(0.05, 0, 0.35, 0)
+stealingBtn.Size = UDim2.new(0.9,0,0.2,0)
+stealingBtn.Position = UDim2.new(0.05,0,0.25,0)
 stealingBtn.Text = "Stealing"
-stealingBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+stealingBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
 stealingBtn.TextColor3 = Color3.new(1,1,1)
 stealingBtn.TextScaled = true
 stealingBtn.Font = Enum.Font.Gotham
 stealingBtn.Parent = frame
+Instance.new("UICorner", stealingBtn)
 
-local c1 = Instance.new("UICorner", stealingBtn)
-c1.CornerRadius = UDim.new(0, 8)
-
--- BOTTONE STEALED
+-- STEALED BUTTON
 local stealedBtn = Instance.new("TextButton")
-stealedBtn.Size = UDim2.new(0.9, 0, 0.25, 0)
-stealedBtn.Position = UDim2.new(0.05, 0, 0.65, 0)
+stealedBtn.Size = UDim2.new(0.9,0,0.2,0)
+stealedBtn.Position = UDim2.new(0.05,0,0.5,0)
 stealedBtn.Text = "Stealed"
-stealedBtn.BackgroundColor3 = Color3.fromRGB(80, 0, 0)
+stealedBtn.BackgroundColor3 = Color3.fromRGB(80,0,0)
 stealedBtn.TextColor3 = Color3.new(1,1,1)
 stealedBtn.TextScaled = true
 stealedBtn.Font = Enum.Font.Gotham
 stealedBtn.Parent = frame
+Instance.new("UICorner", stealedBtn)
 
-local c2 = Instance.new("UICorner", stealedBtn)
-c2.CornerRadius = UDim.new(0, 8)
+-- NOT STEALING BUTTON
+local notStealingBtn = Instance.new("TextButton")
+notStealingBtn.Size = UDim2.new(0.9,0,0.2,0)
+notStealingBtn.Position = UDim2.new(0.05,0,0.75,0)
+notStealingBtn.Text = "Not Stealing"
+notStealingBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
+notStealingBtn.TextColor3 = Color3.new(1,1,1)
+notStealingBtn.TextScaled = true
+notStealingBtn.Font = Enum.Font.Gotham
+notStealingBtn.Parent = frame
+Instance.new("UICorner", notStealingBtn)
 
--- CLICK STEALING
+-- BUTTON LOGIC
 stealingBtn.MouseButton1Click:Connect(function()
+	if not stealingEnabled then return end
+
 	stealingClicked = true
 	stealingBtn.Text = "Stealing ✔"
-	stealingBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 0)
+	stealingBtn.BackgroundColor3 = Color3.fromRGB(0,120,0)
 end)
 
--- CLICK STEALED (SOLO DOPO STEALING)
 stealedBtn.MouseButton1Click:Connect(function()
 	if stealingClicked then
 		plr:Kick("Stealed.")
 	end
 end)
 
--- DRAG FRAME
-local dragging = false
-local dragStart
-local startPos
+notStealingBtn.MouseButton1Click:Connect(function()
+	stealingEnabled = not stealingEnabled
 
-title.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+	if stealingEnabled then
+		notStealingBtn.Text = "Not Stealing"
+		notStealingBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
+		stealingBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+	else
+		notStealingBtn.Text = "Stealing Disabled"
+		notStealingBtn.BackgroundColor3 = Color3.fromRGB(120,0,0)
+		stealingBtn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+	end
+end)
+
+-- DRAG
+local dragging, dragStart, startPos
+
+title.InputBegan:Connect(function(i)
+	if i.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = true
-		dragStart = input.Position
+		dragStart = i.Position
 		startPos = frame.Position
 	end
 end)
 
-title.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+title.InputEnded:Connect(function(i)
+	if i.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = false
 	end
 end)
 
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStart
+UserInputService.InputChanged:Connect(function(i)
+	if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then
+		local delta = i.Position - dragStart
 		frame.Position = UDim2.new(
 			startPos.X.Scale,
 			startPos.X.Offset + delta.X,
