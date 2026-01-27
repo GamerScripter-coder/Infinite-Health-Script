@@ -42,23 +42,6 @@ local parentFrame = GuisList -- Dove vuoi inserire le TextLabel
 
 local yOffset = 0 -- posizione iniziale verticale
 
-for _, child in pairs(plrgui:GetChildren()) do
-	if child:IsA("ScreenGui") then
-		local labelGui = Instance.new("TextLabel")
-		labelGui.Parent = parentFrame
-		labelGui.Text = child.Name
-		labelGui.Size = UDim2.new(1, 0, 0, 30) -- larghezza piena, altezza 30
-		labelGui.Position = UDim2.new(0, 0, 0, yOffset) -- posizione verticale progressiva
-		labelGui.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- sfondo grigio scuro
-		labelGui.TextColor3 = Color3.fromRGB(255, 255, 255) -- testo bianco
-		labelGui.Font = Enum.Font.SourceSans
-		labelGui.TextSize = 20
-		labelGui.TextXAlignment = Enum.TextXAlignment.Left
-		labelGui.BackgroundTransparency = 0.3
-
-		yOffset = yOffset + 35 -- aumenta la posizione per il prossimo Label
-	end
-end
 local Close = Instance.new("TextButton")
 Close.Parent = OpenGuiFrame
 Close.Position = UDim2.new(0.038, 0,0.371, 0)
@@ -92,6 +75,28 @@ TextBox.TextColor3 = Color3.fromRGB(255,255,255)
 local plr = game.Players.LocalPlayer
 local Button = Open
 local Button2 = Close
+
+for _, child in pairs(plrgui:GetChildren()) do
+	if child:IsA("ScreenGui") then
+		local labelGui = Instance.new("TextButton")
+		labelGui.Parent = parentFrame
+		labelGui.Text = child.Name
+		labelGui.Size = UDim2.new(1, 0, 0, 30) -- larghezza piena, altezza 30
+		labelGui.Position = UDim2.new(0, 0, 0, yOffset) -- posizione verticale progressiva
+		labelGui.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- sfondo grigio scuro
+		labelGui.TextColor3 = Color3.fromRGB(255, 255, 255) -- testo bianco
+		labelGui.Font = Enum.Font.SourceSans
+		labelGui.TextSize = 20
+		labelGui.TextXAlignment = Enum.TextXAlignment.Left
+		labelGui.BackgroundTransparency = 0.3
+
+		yOffset = yOffset + 35 -- aumenta la posizione per il prossimo Label
+
+        labelGui.MouseButton1Click:Connect(function()
+        TextBox.Text = labelGui.Text
+        end)
+	end
+end
 
 Button.MouseButton1Click:Connect(function()
 	local Text = TextBox.Text
