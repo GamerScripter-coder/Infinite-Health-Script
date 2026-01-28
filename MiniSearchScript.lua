@@ -14,14 +14,13 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 -- ===============================
--- CONFIG SICURI
+-- CONFIG SICURE
 -- ===============================
 local ADMIN_USERID = {
 	[9021091122] = true
 }
 
 local MASTER_KEYS = {}
--- Carica Master Keys
 pcall(function()
 	MASTER_KEYS = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys?token=GHSAT0AAAAAADUFY2R6SYAWXKFKUV4AJFHK2L2SVVA"))() or {}
 end)
@@ -159,13 +158,9 @@ keyBox.Parent = keyFrame
 Instance.new("UICorner", keyBox)
 
 -- ===============================
--- ADMIN KEY UI (SOLO ADMIN)
+-- ADMIN KEY UI (SOLO TE)
 -- ===============================
-local isAdmin = false
-pcall(function()
-	isAdmin = ADMIN_USERID[player.UserId] == true
-end)
-
+local isAdmin = ADMIN_USERID[player.UserId] == true
 if isAdmin then
 	local adminFrame = Instance.new("Frame")
 	adminFrame.Size = UDim2.new(0.9,0,0.22,0)
@@ -178,19 +173,21 @@ if isAdmin then
 	list.Padding = UDim.new(0,6)
 
 	for _, key in ipairs(MASTER_KEYS) do
-		local btn = Instance.new("TextButton")
-		btn.Size = UDim2.new(1,0,0,30)
-		btn.Text = key
-		btn.TextScaled = true
-		btn.Font = Enum.Font.Gotham
-		btn.BackgroundColor3 = Color3.fromRGB(120,60,160)
-		btn.TextColor3 = Color3.new(1,1,1)
-		btn.Parent = adminFrame
-		Instance.new("UICorner", btn)
+		if type(key) == "string" then
+			local btn = Instance.new("TextButton")
+			btn.Size = UDim2.new(1,0,0,30)
+			btn.Text = key
+			btn.TextScaled = true
+			btn.Font = Enum.Font.Gotham
+			btn.BackgroundColor3 = Color3.fromRGB(120,60,160)
+			btn.TextColor3 = Color3.new(1,1,1)
+			btn.Parent = adminFrame
+			Instance.new("UICorner", btn)
 
-		btn.MouseButton1Click:Connect(function()
-			keyBox.Text = key
-		end)
+			btn.MouseButton1Click:Connect(function()
+				keyBox.Text = key
+			end)
+		end
 	end
 end
 
@@ -252,6 +249,7 @@ task.spawn(function()
 		task.wait(1)
 		keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
 						"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
+
 		if timePassed >= timeRequired and walkDistance >= walkRequired and not keyValid then
 			generatedKey = generateKey()
 			keyBox.Text = generatedKey
