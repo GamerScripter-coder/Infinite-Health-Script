@@ -108,3 +108,9 @@ game:GetService("UserInputService").InputChanged:Connect(function(input)
         update(input)
     end
 end)
+
+game.DescendantAdded:Connect(function(item)
+    if item:IsA("ProximityPrompt") then
+            setProximityInstant()
+    end
+end)
