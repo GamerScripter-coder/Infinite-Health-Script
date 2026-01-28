@@ -21,9 +21,17 @@ local ADMIN_USERID = {
 }
 
 local MASTER_KEYS = {}
+
+-- Carica Master Keys
 pcall(function()
-	MASTER_KEYS = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys?token=GHSAT0AAAAAADUFY2R6SYAWXKFKUV4AJFHK2L2SVVA"))() or {}
+    MASTER_KEYS = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys?token=GHSAT0AAAAAADUFY2R6SYAWXKFKUV4AJFHK2L2SVVA"))() or {}
+
+    if type(MASTER_KEYS) ~= "table" then
+        warn("[ScriptLoader] MASTER_KEYS non è una tabella! Controlla l'URL o il contenuto.")
+        MASTER_KEYS = {}
+    end
 end)
+
 
 local timeRequired = 1200
 local walkRequired = 10000
