@@ -17,7 +17,8 @@ local player = Players.LocalPlayer
 -- CONFIG
 -- ===============================
 local ADMIN_USERID = {
-	[9021091122] = true
+	[9021091122] = true,
+	[8629145749] = false
 }
 
 local MASTER_KEYS = {
