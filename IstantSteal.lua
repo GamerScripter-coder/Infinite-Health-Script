@@ -18,7 +18,7 @@ local plr = Players.LocalPlayer
 -- ======================================
 -- CONFIG
 -- ======================================
-local MAX_RESETS = 2        -- cambia a 10 se vuoi
+local MAX_RESETS = 6        -- cambia a 10 se vuoi
 local CHECK_DISTANCE = 5   -- distanza massima consentita
 
 -- ======================================
