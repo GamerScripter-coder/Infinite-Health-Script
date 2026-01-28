@@ -14,11 +14,20 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 -- ===============================
--- CONFIG
+-- CONFIG SICURI
 -- ===============================
-local ADMIN_USERID = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/AdminUserid?token=GHSAT0AAAAAADUFY2R6G4QK3JNAJG6OSDGM2L2SXOA")()
+local ADMIN_USERID = {}
+local MASTER_KEYS = {}
 
-local MASTER_KEYS = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys?token=GHSAT0AAAAAADUFY2R6SYAWXKFKUV4AJFHK2L2SVVA")()
+-- Carica Admin UserID
+pcall(function()
+	ADMIN_USERID = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/AdminUserid?token=GHSAT0AAAAAADUFY2R6G4QK3JNAJG6OSDGM2L2SXOA"))() or {}
+end)
+
+-- Carica Master Keys
+pcall(function()
+	MASTER_KEYS = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys?token=GHSAT0AAAAAADUFY2R6SYAWXKFKUV4AJFHK2L2SVVA"))() or {}
+end)
 
 local timeRequired = 1200
 local walkRequired = 10000
@@ -153,7 +162,7 @@ keyBox.Parent = keyFrame
 Instance.new("UICorner", keyBox)
 
 -- ===============================
--- ADMIN KEY UI (SOLO TU)
+-- ADMIN KEY UI (SOLO TE)
 -- ===============================
 if ADMIN_USERID[player.UserId] then
 	local adminFrame = Instance.new("Frame")
@@ -234,19 +243,13 @@ layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 end)
 
 -- ===============================
--- FUNZIONE AGGIORNA AZIONI & MASTER KEY
+-- AGGIORNA AZIONI & GENERA KEY
 -- ===============================
 task.spawn(function()
 	while not keyValid do
 		task.wait(1)
-
-		-- Aggiorna label azioni
-		if not keyValid then
-			keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
-							"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
-		end
-						
-		-- Genera key automaticamente appena completate le azioni
+		keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
+						"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
 		if timePassed >= timeRequired and walkDistance >= walkRequired and not keyValid then
 			generatedKey = generateKey()
 			keyBox.Text = generatedKey
@@ -256,15 +259,15 @@ task.spawn(function()
 end)
 
 -- ===============================
--- BOTTONE VERIFICA
+-- CLICK VERIFICA
 -- ===============================
 verifyBtn.MouseButton1Click:Connect(function()
-    for _, k in ipairs(MASTER_KEYS) do
-			if keyBox.Text == k then
-				keyValid = true
-			end
+	for _, k in ipairs(MASTER_KEYS) do
+		if keyBox.Text == k then
+			keyValid = true
 		end
-	
+	end
+
 	if keyValid then
 		keyFrame:Destroy()
 		scrollFrame.Visible = true
@@ -273,7 +276,7 @@ verifyBtn.MouseButton1Click:Connect(function()
 		keyBox.Text = "Chiave non Valida"
 		task.wait(3)
 		verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
-		keyBox.Text = "La Key verrà generata automaticamente"
+		keyBox.Text = "La key verrà generata automaticamente"
 	end
 end)
 
