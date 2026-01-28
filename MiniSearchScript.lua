@@ -16,13 +16,11 @@ local player = Players.LocalPlayer
 -- ===============================
 -- CONFIG SICURI
 -- ===============================
-local ADMIN_USERID = {}
-local MASTER_KEYS = {}
+local ADMIN_USERID = {
+	[9021091122] = true
+}
 
--- Carica Admin UserID
-pcall(function()
-	ADMIN_USERID = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/AdminUserid?token=GHSAT0AAAAAADUFY2R6G4QK3JNAJG6OSDGM2L2SXOA"))() or {}
-end)
+local MASTER_KEYS = {}
 
 -- Carica Master Keys
 pcall(function()
