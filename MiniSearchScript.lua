@@ -101,7 +101,8 @@ local scriptsList = {
 	["OpenGui[V3]"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/OpenGui%5BV3%5D",
 	["Rejoin Script"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/RejoinScript.lua",
 	["Instant Prompts"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/IstantPrompts.lua",
-	["Fly Hack"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/FlyHack.lua"
+	["Fly Hack"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/FlyHack.lua",
+	["Freecam"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/Freecam.lua"
 }
 
 -- ===============================
