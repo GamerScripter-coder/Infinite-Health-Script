@@ -2,7 +2,7 @@
 -- PULIZIA GUI
 -- ===============================
 pcall(function()
-	game:GetService("CoreGui"):FindFirstChild("ScriptLoaderGui"):Destroy()
+    game:GetService("CoreGui"):FindFirstChild("ScriptLoaderGui"):Destroy()
 end)
 
 -- ===============================
@@ -16,15 +16,17 @@ local player = Players.LocalPlayer
 -- ===============================
 -- CONFIG SICURI
 -- ===============================
-local ADMIN_USERID = {
-	[9021091122] = true
-}
-
+local ADMIN_USERID = {}
 local MASTER_KEYS = {}
 
--- Carica Master Keys
+-- Carica Admin UserId da remoto
 pcall(function()
-	MASTER_KEYS = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys?token=GHSAT0AAAAAADUFY2R6SYAWXKFKUV4AJFHK2L2SVVA"))() or {}
+    ADMIN_USERID = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/AdminUserid"))() or {}
+end)
+
+-- Carica Master Keys da remoto
+pcall(function()
+    MASTER_KEYS = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys"))() or {}
 end)
 
 local timeRequired = 1200
@@ -42,44 +44,44 @@ local walkDistance = 0
 -- FUNZIONE GENERA KEY
 -- ===============================
 local function generateKey()
-	local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}<>"
-	local key = {}
-	for i = 1, 32 do
-		local r = math.random(1, #chars)
-		key[i] = chars:sub(r,r)
-	end
-	return table.concat(key)
+    local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}<>"
+    local key = {}
+    for i = 1, 32 do
+        local r = math.random(1, #chars)
+        key[i] = chars:sub(r,r)
+    end
+    return table.concat(key)
 end
 
 -- ===============================
 -- TRACK TEMPO
 -- ===============================
 task.spawn(function()
-	while not keyValid do
-		task.wait(1)
-		timePassed += 1
-	end
+    while not keyValid do
+        task.wait(1)
+        timePassed += 1
+    end
 end)
 
 -- ===============================
 -- TRACK MOVIMENTO
 -- ===============================
 local function trackCharacter(char)
-	local humanoid = char:WaitForChild("Humanoid")
-	local root = char:WaitForChild("HumanoidRootPart")
-	local lastPos = root.Position
+    local humanoid = char:WaitForChild("Humanoid")
+    local root = char:WaitForChild("HumanoidRootPart")
+    local lastPos = root.Position
 
-	humanoid.Running:Connect(function(speed)
-		if speed > 0 then
-			local newPos = root.Position
-			walkDistance += (newPos - lastPos).Magnitude
-			lastPos = newPos
-		end
-	end)
+    humanoid.Running:Connect(function(speed)
+        if speed > 0 then
+            local newPos = root.Position
+            walkDistance += (newPos - lastPos).Magnitude
+            lastPos = newPos
+        end
+    end)
 end
 
 if player.Character then
-	trackCharacter(player.Character)
+    trackCharacter(player.Character)
 end
 player.CharacterAdded:Connect(trackCharacter)
 
@@ -87,18 +89,18 @@ player.CharacterAdded:Connect(trackCharacter)
 -- LISTA SCRIPT
 -- ===============================
 local scriptsList = {
-	["Infinite Yield"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
-	["CMD-X"] = "https://pastebin.com/raw/ftTV0FJN",
-	["HD Admin"] = "https://pastebin.com/raw/JTg6nTnR",
-	["Dex Explorer"] = "https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua",
-	["Ban On Steal(My)"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/BanOnSteal.lua",
-	["Chili Hub"] = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
-	["Istant Steal"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/IstantSteal.lua",
-	["OpenGui[V3]"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/OpenGui%5BV3%5D",
-	["Rejoin Script"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/RejoinScript.lua",
-	["Instant Prompts"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/IstantPrompts.lua",
-	["Fly Hack"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/FlyHack.lua",
-	["Freecam"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/Freecam.lua"
+    ["Infinite Yield"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
+    ["CMD-X"] = "https://pastebin.com/raw/ftTV0FJN",
+    ["HD Admin"] = "https://pastebin.com/raw/JTg6nTnR",
+    ["Dex Explorer"] = "https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua",
+    ["Ban On Steal(My)"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/BanOnSteal.lua",
+    ["Chili Hub"] = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
+    ["Istant Steal"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/IstantSteal.lua",
+    ["OpenGui[V3]"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/OpenGui%5BV3%5D",
+    ["Rejoin Script"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/RejoinScript.lua",
+    ["Instant Prompts"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/IstantPrompts.lua",
+    ["Fly Hack"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/FlyHack.lua",
+    ["Freecam"] = "https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/Freecam.lua"
 }
 
 -- ===============================
@@ -160,34 +162,34 @@ keyBox.Parent = keyFrame
 Instance.new("UICorner", keyBox)
 
 -- ===============================
--- ADMIN KEY UI (SOLO TE)
+-- ADMIN KEY UI (SOLO ADMIN)
 -- ===============================
 if ADMIN_USERID[player.UserId] then
-	local adminFrame = Instance.new("Frame")
-	adminFrame.Size = UDim2.new(0.9,0,0.22,0)
-	adminFrame.Position = UDim2.new(0.05,0,0.5,0)
-	adminFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
-	adminFrame.Parent = keyFrame
-	Instance.new("UICorner", adminFrame)
+    local adminFrame = Instance.new("Frame")
+    adminFrame.Size = UDim2.new(0.9,0,0.22,0)
+    adminFrame.Position = UDim2.new(0.05,0,0.5,0)
+    adminFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
+    adminFrame.Parent = keyFrame
+    Instance.new("UICorner", adminFrame)
 
-	local list = Instance.new("UIListLayout", adminFrame)
-	list.Padding = UDim.new(0,6)
+    local list = Instance.new("UIListLayout", adminFrame)
+    list.Padding = UDim.new(0,6)
 
-	for _, key in ipairs(MASTER_KEYS) do
-		local btn = Instance.new("TextButton")
-		btn.Size = UDim2.new(1,0,0,30)
-		btn.Text = key
-		btn.TextScaled = true
-		btn.Font = Enum.Font.Gotham
-		btn.BackgroundColor3 = Color3.fromRGB(120,60,160)
-		btn.TextColor3 = Color3.new(1,1,1)
-		btn.Parent = adminFrame
-		Instance.new("UICorner", btn)
+    for _, key in ipairs(MASTER_KEYS) do
+        local btn = Instance.new("TextButton")
+        btn.Size = UDim2.new(1,0,0,30)
+        btn.Text = key
+        btn.TextScaled = true
+        btn.Font = Enum.Font.Gotham
+        btn.BackgroundColor3 = Color3.fromRGB(120,60,160)
+        btn.TextColor3 = Color3.new(1,1,1)
+        btn.Parent = adminFrame
+        Instance.new("UICorner", btn)
 
-		btn.MouseButton1Click:Connect(function()
-			keyBox.Text = key
-		end)
-	end
+        btn.MouseButton1Click:Connect(function()
+            keyBox.Text = key
+        end)
+    end
 end
 
 -- ===============================
@@ -219,63 +221,64 @@ local layout = Instance.new("UIListLayout", scrollFrame)
 layout.Padding = UDim.new(0,6)
 
 for name, url in pairs(scriptsList) do
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(1,0,0,44)
-	btn.Text = name
-	btn.TextScaled = true
-	btn.Font = Enum.Font.Gotham
-	btn.BackgroundColor3 = Color3.fromRGB(0,100,180)
-	btn.TextColor3 = Color3.new(1,1,1)
-	btn.Parent = scrollFrame
-	Instance.new("UICorner", btn)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1,0,0,44)
+    btn.Text = name
+    btn.TextScaled = true
+    btn.Font = Enum.Font.Gotham
+    btn.BackgroundColor3 = Color3.fromRGB(0,100,180)
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.Parent = scrollFrame
+    Instance.new("UICorner", btn)
 
-	btn.MouseButton1Click:Connect(function()
-		if keyValid then
-			loadstring(game:HttpGet(url,true))()
-		end
-	end)
+    btn.MouseButton1Click:Connect(function()
+        if keyValid then
+            loadstring(game:HttpGet(url,true))()
+        end
+    end)
 end
 
 layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-	scrollFrame.CanvasSize = UDim2.new(0,0,0,layout.AbsoluteContentSize.Y)
+    scrollFrame.CanvasSize = UDim2.new(0,0,0,layout.AbsoluteContentSize.Y)
 end)
 
 -- ===============================
 -- AGGIORNA AZIONI & GENERA KEY
 -- ===============================
 task.spawn(function()
-	while not keyValid do
-		task.wait(1)
-		keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
-						"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
-		if timePassed >= timeRequired and walkDistance >= walkRequired and not keyValid then
-			generatedKey = generateKey()
-			keyBox.Text = generatedKey
-			keyValid = true
-		end
-	end
+    while not keyValid do
+        task.wait(1)
+        keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
+                        "\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
+
+        if timePassed >= timeRequired and walkDistance >= walkRequired and not keyValid then
+            generatedKey = generateKey()
+            keyBox.Text = generatedKey
+            keyValid = true
+        end
+    end
 end)
 
 -- ===============================
 -- CLICK VERIFICA
 -- ===============================
 verifyBtn.MouseButton1Click:Connect(function()
-	for _, k in ipairs(MASTER_KEYS) do
-		if keyBox.Text == k then
-			keyValid = true
-		end
-	end
+    for _, k in ipairs(MASTER_KEYS) do
+        if keyBox.Text == k then
+            keyValid = true
+        end
+    end
 
-	if keyValid then
-		keyFrame:Destroy()
-		scrollFrame.Visible = true
-	else
-		verifyBtn.BackgroundColor3 = Color3.fromRGB(170,0,0)
-		keyBox.Text = "Chiave non Valida"
-		task.wait(3)
-		verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
-		keyBox.Text = "La key verrà generata automaticamente"
-	end
+    if keyValid then
+        keyFrame:Destroy()
+        scrollFrame.Visible = true
+    else
+        verifyBtn.BackgroundColor3 = Color3.fromRGB(170,0,0)
+        keyBox.Text = "Chiave non Valida"
+        task.wait(3)
+        verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
+        keyBox.Text = "La key verrà generata automaticamente"
+    end
 end)
 
 -- ===============================
@@ -284,27 +287,27 @@ end)
 local dragging, dragStart, startPos = false
 
 title.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = input.Position
-		startPos = frame.Position
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+    end
 end)
 
 title.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = false
-	end
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
 end)
 
 UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStart
-		frame.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
 end)
