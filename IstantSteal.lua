@@ -18,7 +18,7 @@ local plr = Players.LocalPlayer
 -- ======================================
 -- CONFIG
 -- ======================================
-local MAX_RESETS = 5        -- cambia a 10 se vuoi
+local MAX_RESETS = 2        -- cambia a 10 se vuoi
 local CHECK_DISTANCE = 5   -- distanza massima consentita
 
 -- ======================================
@@ -131,8 +131,6 @@ RunService.Heartbeat:Connect(function()
 
 		if resetCount >= MAX_RESETS then
 			monitoring = false
-			tpBtn.Text = "Stopped (Limit)"
-			tpBtn.BackgroundColor3 = Color3.fromRGB(120,0,0)
 			return
 		end
 
