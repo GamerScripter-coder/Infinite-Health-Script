@@ -34,7 +34,7 @@ local timePassed = 0
 local walkDistance = 0
 
 -- ===============================
--- GENERA KEY
+-- FUNZIONE GENERA KEY
 -- ===============================
 local function generateKey()
 	local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}<>"
@@ -190,7 +190,7 @@ end
 local verifyBtn = Instance.new("TextButton")
 verifyBtn.Size = UDim2.new(0.6,0,0.16,0)
 verifyBtn.Position = UDim2.new(0.2,0,0.75,0)
-verifyBtn.Text = "Apri Script" -- <-- testo personalizzabile
+verifyBtn.Text = "Apri Script"
 verifyBtn.TextScaled = true
 verifyBtn.Font = Enum.Font.GothamBold
 verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
@@ -235,16 +235,27 @@ layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 end)
 
 -- ===============================
--- FUNZIONE AGGIORNA AZIONI & GENERA KEY AUTOMATICAMENTE
+-- FUNZIONE AGGIORNA AZIONI & MASTER KEY
 -- ===============================
 task.spawn(function()
 	while not keyValid do
 		task.wait(1)
-		keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
-						"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
+		
+		-- Controllo MASTER KEY
+		for _, k in ipairs(MASTER_KEYS) do
+			if keyBox.Text == k then
+				keyValid = true
+			end
+		end
+
+		-- Aggiorna label azioni
+		if not keyValid then
+			keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
+							"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
+		end
 						
 		-- Genera key automaticamente appena completate le azioni
-		if timePassed >= timeRequired and walkDistance >= walkRequired then
+		if timePassed >= timeRequired and walkDistance >= walkRequired and not keyValid then
 			generatedKey = generateKey()
 			keyBox.Text = generatedKey
 			keyValid = true
@@ -260,10 +271,10 @@ verifyBtn.MouseButton1Click:Connect(function()
 		keyFrame:Destroy()
 		scrollFrame.Visible = true
 	else
-		keyBox.BackgroundColor3 = Color3.fromRGB(170,0,0)
+		verifyBtn.BackgroundColor3 = Color3.fromRGB(170,0,0)
 		keyBox.Text = "Chiave non Valida"
 		task.wait(3)
-		keyBox.BackgroundColor3 = Color3.fromRGB(0,170,0)
+		verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
 		keyBox.Text = "La Key verrà generata automaticamente"
 	end
 end)
