@@ -14,27 +14,38 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 -- ===============================
--- CONFIG ADMIN
+-- CONFIG
 -- ===============================
 local ADMIN_USERID = 9021091122
 
--- LISTA MASTER KEYS (SOLO TUE)
 local MASTER_KEYS = {
-	"ld|p61K<sy*9)-T_;H#%:deYBZE<E04r*yA:F2ZJ",
-	-- se vuoi aggiungerne altre:
-	-- "KEY-2-QUI",
-	-- "KEY-3-QUI"
+	"ld|p61K<sy*9)-T_;H#%:deYBZE<E04r*yA:F2ZJ"
 }
 
 -- ===============================
 -- KEY SYSTEM
 -- ===============================
 local keyValid = false
-local timeRequired = 20
-local walkRequired = 100
+local generatedKey = nil
+
+local timeRequired = 60
+local walkRequired = 200
 
 local timePassed = 0
 local walkDistance = 0
+
+-- ===============================
+-- GENERA KEY
+-- ===============================
+local function generateKey()
+	local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}<>"
+	local key = {}
+	for i = 1, 32 do
+		local r = math.random(1, #chars)
+		key[i] = chars:sub(r, r)
+	end
+	return table.concat(key)
+end
 
 -- ===============================
 -- TRACK TEMPO
@@ -69,7 +80,7 @@ end
 player.CharacterAdded:Connect(trackCharacter)
 
 -- ===============================
--- LISTA SCRIPT
+-- LISTA SCRIPT (TUTTI)
 -- ===============================
 local scriptsList = {
 	["Infinite Yield"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
@@ -94,20 +105,20 @@ gui.ResetOnSpawn = false
 gui.Parent = CoreGui
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.fromScale(0.32, 0.45)
-frame.Position = UDim2.fromScale(0.34, 0.28)
+frame.Size = UDim2.fromScale(0.32,0.45)
+frame.Position = UDim2.fromScale(0.34,0.28)
 frame.BackgroundColor3 = Color3.fromRGB(40,40,40)
 frame.BorderSizePixel = 0
 frame.Parent = gui
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0,12)
+Instance.new("UICorner", frame)
 
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1,0,0.12,0)
 title.BackgroundTransparency = 1
 title.Text = "Script Loader"
-title.TextColor3 = Color3.new(1,1,1)
 title.TextScaled = true
 title.Font = Enum.Font.GothamBold
+title.TextColor3 = Color3.new(1,1,1)
 title.Parent = frame
 
 -- ===============================
@@ -126,13 +137,13 @@ keyLabel.BackgroundTransparency = 1
 keyLabel.TextScaled = true
 keyLabel.Font = Enum.Font.GothamBold
 keyLabel.TextColor3 = Color3.new(1,1,1)
-keyLabel.Text = "Completa le azioni\noppure inserisci la key"
+keyLabel.Text = "Completa le azioni per generare la key"
 keyLabel.Parent = keyFrame
 
 local keyBox = Instance.new("TextBox")
-keyBox.Size = UDim2.new(0.8,0,0.13,0)
-keyBox.Position = UDim2.new(0.1,0,0.32,0)
-keyBox.PlaceholderText = "Inserisci key"
+keyBox.Size = UDim2.new(0.8,0,0.14,0)
+keyBox.Position = UDim2.new(0.1,0,0.34,0)
+keyBox.PlaceholderText = "La key verrà generata automaticamente"
 keyBox.TextScaled = true
 keyBox.Font = Enum.Font.Gotham
 keyBox.BackgroundColor3 = Color3.fromRGB(35,35,35)
@@ -146,19 +157,18 @@ Instance.new("UICorner", keyBox)
 -- ===============================
 if player.UserId == ADMIN_USERID then
 	local adminFrame = Instance.new("Frame")
-	adminFrame.Size = UDim2.new(0.9,0,0.25,0)
-	adminFrame.Position = UDim2.new(0.05,0,0.47,0)
+	adminFrame.Size = UDim2.new(0.9,0,0.22,0)
+	adminFrame.Position = UDim2.new(0.05,0,0.5,0)
 	adminFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
 	adminFrame.Parent = keyFrame
 	Instance.new("UICorner", adminFrame)
 
-	local uiList = Instance.new("UIListLayout")
-	uiList.Padding = UDim.new(0,6)
-	uiList.Parent = adminFrame
+	local list = Instance.new("UIListLayout", adminFrame)
+	list.Padding = UDim.new(0,6)
 
 	for _, key in ipairs(MASTER_KEYS) do
 		local btn = Instance.new("TextButton")
-		btn.Size = UDim2.new(1,0,0,32)
+		btn.Size = UDim2.new(1,0,0,30)
 		btn.Text = key
 		btn.TextScaled = true
 		btn.Font = Enum.Font.Gotham
@@ -185,56 +195,55 @@ verifyBtn.Parent = keyFrame
 Instance.new("UICorner", verifyBtn)
 
 -- ===============================
--- UI SCRIPT (SECONDA SCHERMATA)
+-- UI PRINCIPALE
 -- ===============================
 local scrollFrame = Instance.new("ScrollingFrame")
 scrollFrame.Size = UDim2.new(0.95,0,0.83,0)
 scrollFrame.Position = UDim2.new(0.025,0,0.14,0)
+scrollFrame.Visible = false
 scrollFrame.BackgroundTransparency = 1
 scrollFrame.ScrollBarThickness = 8
-scrollFrame.Visible = false
 scrollFrame.Parent = frame
 
-local uiListLayout = Instance.new("UIListLayout")
-uiListLayout.Padding = UDim.new(0,6)
-uiListLayout.Parent = scrollFrame
+local layout = Instance.new("UIListLayout", scrollFrame)
+layout.Padding = UDim.new(0,6)
 
 for name, url in pairs(scriptsList) do
 	local btn = Instance.new("TextButton")
 	btn.Size = UDim2.new(1,0,0,44)
-	btn.BackgroundColor3 = Color3.fromRGB(0,100,180)
-	btn.TextColor3 = Color3.new(1,1,1)
+	btn.Text = name
 	btn.TextScaled = true
 	btn.Font = Enum.Font.Gotham
-	btn.Text = name
+	btn.BackgroundColor3 = Color3.fromRGB(0,100,180)
+	btn.TextColor3 = Color3.new(1,1,1)
 	btn.Parent = scrollFrame
 	Instance.new("UICorner", btn)
 
 	btn.MouseButton1Click:Connect(function()
 		if keyValid then
-			pcall(function()
-				loadstring(game:HttpGet(url,true))()
-			end)
+			loadstring(game:HttpGet(url,true))()
 		end
 	end)
 end
 
-uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-	scrollFrame.CanvasSize = UDim2.new(0,0,0,uiListLayout.AbsoluteContentSize.Y)
+layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+	scrollFrame.CanvasSize = UDim2.new(0,0,0,layout.AbsoluteContentSize.Y)
 end)
 
 -- ===============================
--- VERIFICA KEY
+-- VERIFICA / GENERA KEY
 -- ===============================
 verifyBtn.MouseButton1Click:Connect(function()
-	for _, key in ipairs(MASTER_KEYS) do
-		if keyBox.Text == key then
+
+	for _, k in ipairs(MASTER_KEYS) do
+		if keyBox.Text == k then
 			keyValid = true
-			break
 		end
 	end
 
 	if not keyValid and timePassed >= timeRequired and walkDistance >= walkRequired then
+		generatedKey = generateKey()
+		keyBox.Text = generatedKey
 		keyValid = true
 	end
 
@@ -243,8 +252,7 @@ verifyBtn.MouseButton1Click:Connect(function()
 		scrollFrame.Visible = true
 	else
 		keyLabel.Text =
-			"Azioni mancanti:\n" ..
-			"Tempo: "..math.floor(timePassed).."/"..timeRequired..
+			"Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
 			"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
 	end
 end)
