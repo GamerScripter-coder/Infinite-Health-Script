@@ -22,8 +22,8 @@ local MASTER_KEYS = {
 	"ld|p61K<sy*9)-T_;H#%:deYBZE<E04r*yA:F2ZJ"
 }
 
-local timeRequired = 120
-local walkRequired = 350
+local timeRequired = 1200
+local walkRequired = 10000
 
 -- ===============================
 -- VARIABILI
