@@ -22,8 +22,8 @@ local MASTER_KEYS = {
 	"ld|p61K<sy*9)-T_;H#%:deYBZE<E04r*yA:F2ZJ"
 }
 
-local timeRequired = 20
-local walkRequired = 100
+local timeRequired = 120
+local walkRequired = 350
 
 -- ===============================
 -- VARIABILI
@@ -143,7 +143,7 @@ keyLabel.Parent = keyFrame
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(0.8,0,0.14,0)
 keyBox.Position = UDim2.new(0.1,0,0.34,0)
-keyBox.PlaceholderText = "La key verrà generata automaticamente"
+keyBox.Text = "La key verrà generata automaticamente"
 keyBox.TextScaled = false
 keyBox.TextSize = 18
 keyBox.Font = Enum.Font.Gotham
@@ -185,12 +185,12 @@ if player.UserId == ADMIN_USERID then
 end
 
 -- ===============================
--- BOTTONE VERIFICA (puoi cambiare testo qui)
+-- BOTTONE VERIFICA
 -- ===============================
 local verifyBtn = Instance.new("TextButton")
 verifyBtn.Size = UDim2.new(0.6,0,0.16,0)
 verifyBtn.Position = UDim2.new(0.2,0,0.75,0)
-verifyBtn.Text = "Controlla Key" -- <-- qui puoi scrivere quello che vuoi
+verifyBtn.Text = "Apri Script" -- <-- testo personalizzabile
 verifyBtn.TextScaled = true
 verifyBtn.Font = Enum.Font.GothamBold
 verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
@@ -235,35 +235,36 @@ layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 end)
 
 -- ===============================
--- FUNZIONE AGGIORNA AZIONI
+-- FUNZIONE AGGIORNA AZIONI & GENERA KEY AUTOMATICAMENTE
 -- ===============================
 task.spawn(function()
 	while not keyValid do
 		task.wait(1)
 		keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
 						"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
+						
+		-- Genera key automaticamente appena completate le azioni
+		if timePassed >= timeRequired and walkDistance >= walkRequired then
+			generatedKey = generateKey()
+			keyBox.Text = generatedKey
+			keyValid = true
+		end
 	end
 end)
 
 -- ===============================
--- VERIFICA / GENERA KEY
+-- BOTTONE VERIFICA
 -- ===============================
 verifyBtn.MouseButton1Click:Connect(function()
-	for _, k in ipairs(MASTER_KEYS) do
-		if keyBox.Text == k then
-			keyValid = true
-		end
-	end
-
-	if not keyValid and timePassed >= timeRequired and walkDistance >= walkRequired then
-		generatedKey = generateKey()
-		keyBox.Text = generatedKey
-		keyValid = true
-	end
-
 	if keyValid then
 		keyFrame:Destroy()
 		scrollFrame.Visible = true
+	else
+		keyBox.BackgroundColor3 = Color3.fromRGB(170,0,0)
+		keyBox.Text = "Chiave non Valida"
+		task.wait(3)
+		keyBox.BackgroundColor3 = Color3.fromRGB(0,170,0)
+		keyBox.Text = "La Key verrà generata automaticamente"
 	end
 end)
 
