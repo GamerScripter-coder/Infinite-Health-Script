@@ -22,15 +22,14 @@ local MASTER_KEYS = {
 	"ld|p61K<sy*9)-T_;H#%:deYBZE<E04r*yA:F2ZJ"
 }
 
+local timeRequired = 20
+local walkRequired = 100
+
 -- ===============================
--- KEY SYSTEM
+-- VARIABILI
 -- ===============================
 local keyValid = false
 local generatedKey = nil
-
-local timeRequired = 60
-local walkRequired = 200
-
 local timePassed = 0
 local walkDistance = 0
 
@@ -42,7 +41,7 @@ local function generateKey()
 	local key = {}
 	for i = 1, 32 do
 		local r = math.random(1, #chars)
-		key[i] = chars:sub(r, r)
+		key[i] = chars:sub(r,r)
 	end
 	return table.concat(key)
 end
@@ -80,7 +79,7 @@ end
 player.CharacterAdded:Connect(trackCharacter)
 
 -- ===============================
--- LISTA SCRIPT (TUTTI)
+-- LISTA SCRIPT
 -- ===============================
 local scriptsList = {
 	["Infinite Yield"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
@@ -134,17 +133,19 @@ Instance.new("UICorner", keyFrame)
 local keyLabel = Instance.new("TextLabel")
 keyLabel.Size = UDim2.new(1,0,0.28,0)
 keyLabel.BackgroundTransparency = 1
-keyLabel.TextScaled = true
-keyLabel.Font = Enum.Font.GothamBold
-keyLabel.TextColor3 = Color3.new(1,1,1)
 keyLabel.Text = "Completa le azioni per generare la key"
+keyLabel.TextSize = 18
+keyLabel.TextWrapped = true
+keyLabel.Font = Enum.Font.Gotham
+keyLabel.TextColor3 = Color3.new(1,1,1)
 keyLabel.Parent = keyFrame
 
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(0.8,0,0.14,0)
 keyBox.Position = UDim2.new(0.1,0,0.34,0)
 keyBox.PlaceholderText = "La key verrà generata automaticamente"
-keyBox.TextScaled = true
+keyBox.TextScaled = false
+keyBox.TextSize = 18
 keyBox.Font = Enum.Font.Gotham
 keyBox.BackgroundColor3 = Color3.fromRGB(35,35,35)
 keyBox.TextColor3 = Color3.new(1,1,1)
@@ -183,10 +184,13 @@ if player.UserId == ADMIN_USERID then
 	end
 end
 
+-- ===============================
+-- BOTTONE VERIFICA (puoi cambiare testo qui)
+-- ===============================
 local verifyBtn = Instance.new("TextButton")
 verifyBtn.Size = UDim2.new(0.6,0,0.16,0)
 verifyBtn.Position = UDim2.new(0.2,0,0.75,0)
-verifyBtn.Text = "Verifica"
+verifyBtn.Text = "Controlla Key" -- <-- qui puoi scrivere quello che vuoi
 verifyBtn.TextScaled = true
 verifyBtn.Font = Enum.Font.GothamBold
 verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
@@ -231,10 +235,20 @@ layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
 end)
 
 -- ===============================
+-- FUNZIONE AGGIORNA AZIONI
+-- ===============================
+task.spawn(function()
+	while not keyValid do
+		task.wait(1)
+		keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
+						"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
+	end
+end)
+
+-- ===============================
 -- VERIFICA / GENERA KEY
 -- ===============================
 verifyBtn.MouseButton1Click:Connect(function()
-
 	for _, k in ipairs(MASTER_KEYS) do
 		if keyBox.Text == k then
 			keyValid = true
@@ -250,10 +264,6 @@ verifyBtn.MouseButton1Click:Connect(function()
 	if keyValid then
 		keyFrame:Destroy()
 		scrollFrame.Visible = true
-	else
-		keyLabel.Text =
-			"Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
-			"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
 	end
 end)
 
