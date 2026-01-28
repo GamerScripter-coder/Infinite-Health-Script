@@ -11,7 +11,7 @@ end
 -- ===============================
 local Gui = Instance.new("ScreenGui")
 Gui.Name = "OpenGui[V3]"
-Gui.DisplayOrder = 100000
+Gui.DisplayOrder = 10000000
 Gui.Parent = plrGui
 
 -- Toggle button per apri/chiudi rapido
@@ -21,9 +21,17 @@ OpenClose.Position = UDim2.new(0.9, 0, 0.9, 0)
 OpenClose.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 OpenClose.TextColor3 = Color3.fromRGB(255, 255, 255)
 OpenClose.Text = "Close"
+OpenClose.Font = Enum.Font.GothamBold
+OpenClose.TextSize = 16
 OpenClose.Parent = Gui
 
+local toggleCorner = Instance.new("UICorner")
+toggleCorner.CornerRadius = UDim.new(0, 8)
+toggleCorner.Parent = OpenClose
+
+-- ===============================
 -- Frame principale della UI
+-- ===============================
 local OpenGuiFrame = Instance.new("Frame")
 OpenGuiFrame.Size = UDim2.new(0, 500, 0, 300)
 OpenGuiFrame.Position = UDim2.new(0.25, 0, 0.25, 0)
@@ -34,48 +42,99 @@ OpenGuiFrame.Parent = Gui
 local UiCorner = Instance.new("UICorner")
 UiCorner.Parent = OpenGuiFrame
 
+-- ===============================
 -- ScrollingFrame per la lista delle GUI
+-- ===============================
 local GuisList = Instance.new("ScrollingFrame")
 GuisList.Size = UDim2.new(0, 150, 0, 250)
 GuisList.Position = UDim2.new(0, 10, 0, 10)
 GuisList.BackgroundColor3 = Color3.fromRGB(40,40,40)
 GuisList.ScrollBarThickness = 6
-GuisList.CanvasSize = UDim2.new(0,0,0,0) -- ✅ CanvasSize corretto
+GuisList.CanvasSize = UDim2.new(0,0,0,0)
 GuisList.Parent = OpenGuiFrame
 
--- Contenitore dei bottoni
 local ButtonsContainer = Instance.new("Frame")
 ButtonsContainer.Size = UDim2.new(1,0,0,0)
 ButtonsContainer.BackgroundTransparency = 1
 ButtonsContainer.Parent = GuisList
 
+-- ===============================
 -- TextBox per selezionare GUI
+-- ===============================
 local TextBox = Instance.new("TextBox")
 TextBox.Size = UDim2.new(0, 200, 0, 30)
 TextBox.Position = UDim2.new(0.35, 0, 0.8, 0)
-TextBox.BackgroundColor3 = Color3.fromRGB(70,70,70)
+TextBox.BackgroundColor3 = Color3.fromRGB(30,30,30)
 TextBox.TextColor3 = Color3.fromRGB(255,255,255)
 TextBox.PlaceholderText = "Inserisci GUI..."
+TextBox.PlaceholderColor3 = Color3.fromRGB(150,150,150)
+TextBox.TextSize = 18
+TextBox.Font = Enum.Font.Gotham
+TextBox.ClearTextOnFocus = false
 TextBox.Parent = OpenGuiFrame
 
+local tbCorner = Instance.new("UICorner")
+tbCorner.CornerRadius = UDim.new(0, 10)
+tbCorner.Parent = TextBox
+
+local tbShadow = Instance.new("UIStroke")
+tbShadow.Thickness = 1.5
+tbShadow.Color = Color3.fromRGB(0,0,0)
+tbShadow.Transparency = 0.5
+tbShadow.Parent = TextBox
+
+-- ===============================
 -- Pulsanti Open/Close
+-- ===============================
 local OpenBtn = Instance.new("TextButton")
 OpenBtn.Size = UDim2.new(0, 80, 0, 30)
 OpenBtn.Position = UDim2.new(0.35, 0, 0.9, 0)
 OpenBtn.Text = "Open"
+OpenBtn.BackgroundColor3 = Color3.fromRGB(60, 120, 200)
+OpenBtn.TextColor3 = Color3.fromRGB(255,255,255)
+OpenBtn.Font = Enum.Font.GothamBold
+OpenBtn.TextSize = 18
 OpenBtn.Parent = OpenGuiFrame
+
+local openCorner = Instance.new("UICorner")
+openCorner.CornerRadius = UDim.new(0, 10)
+openCorner.Parent = OpenBtn
 
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Size = UDim2.new(0, 80, 0, 30)
 CloseBtn.Position = UDim2.new(0.55, 0, 0.9, 0)
 CloseBtn.Text = "Close"
+CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+CloseBtn.TextColor3 = Color3.fromRGB(255,255,255)
+CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.TextSize = 18
 CloseBtn.Parent = OpenGuiFrame
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 10)
+closeCorner.Parent = CloseBtn
+
+-- ===============================
+-- Funzione hover effect
+-- ===============================
+local function applyHoverEffect(button)
+    local originalColor = button.BackgroundColor3
+    button.MouseEnter:Connect(function()
+        button.BackgroundColor3 = originalColor:Lerp(Color3.fromRGB(100,100,100),0.5)
+    end)
+    button.MouseLeave:Connect(function()
+        button.BackgroundColor3 = originalColor
+    end)
+end
+
+applyHoverEffect(OpenBtn)
+applyHoverEffect(CloseBtn)
+applyHoverEffect(OpenClose)
 
 -- ===============================
 -- Funzione per creare bottoni lista GUI
 -- ===============================
 local function createButtons()
-    -- Pulisci bottoni esistenti
     for _, child in pairs(ButtonsContainer:GetChildren()) do
         child:Destroy()
     end
@@ -89,9 +148,15 @@ local function createButtons()
             btn.BackgroundColor3 = Color3.fromRGB(60,60,60)
             btn.TextColor3 = Color3.fromRGB(255,255,255)
             btn.Text = guiChild.Name
-            btn.Font = Enum.Font.SourceSans
-            btn.TextSize = 18
+            btn.Font = Enum.Font.Gotham
+            btn.TextSize = 16
             btn.Parent = ButtonsContainer
+
+            local btnCorner = Instance.new("UICorner")
+            btnCorner.CornerRadius = UDim.new(0, 8)
+            btnCorner.Parent = btn
+
+            applyHoverEffect(btn)
 
             btn.MouseButton1Click:Connect(function()
                 TextBox.Text = guiChild.Name
@@ -102,10 +167,9 @@ local function createButtons()
     end
 
     ButtonsContainer.Size = UDim2.new(1,0,0,yOffset)
-    GuisList.CanvasSize = UDim2.new(0,0,0,yOffset) -- ✅ aggiornato correttamente
+    GuisList.CanvasSize = UDim2.new(0,0,0,yOffset)
 end
 
--- Aggiorna la lista dinamicamente
 plrGui.ChildAdded:Connect(createButtons)
 plrGui.ChildRemoved:Connect(createButtons)
 createButtons()
