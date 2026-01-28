@@ -14,7 +14,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
 -- ===============================
--- CONFIG SICURE
+-- CONFIG SICURI
 -- ===============================
 local ADMIN_USERID = {
 	[9021091122] = true
@@ -22,16 +22,23 @@ local ADMIN_USERID = {
 
 local MASTER_KEYS = {}
 
--- Carica Master Keys
-pcall(function()
-    MASTER_KEYS = loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys?token=GHSAT0AAAAAADUFY2R6SYAWXKFKUV4AJFHK2L2SVVA"))() or {}
+-- Carica Master Keys con controllo
+do
+	local success, result = pcall(function()
+		return loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Secrets/refs/heads/main/MasterKeys?token=GHSAT0AAAAAADUFY2R6SYAWXKFKUV4AJFHK2L2SVVA"))()
+	end)
 
-    if type(MASTER_KEYS) ~= "table" then
-        warn("[ScriptLoader] MASTER_KEYS non è una tabella! Controlla l'URL o il contenuto.")
-        MASTER_KEYS = {}
-    end
-end)
-
+	if success then
+		MASTER_KEYS = result or {}
+		if type(MASTER_KEYS) ~= "table" then
+			warn("[ScriptLoader] MASTER_KEYS caricata ma NON è una tabella!")
+			print("Contenuto ricevuto:", MASTER_KEYS)
+			MASTER_KEYS = {}
+		end
+	else
+		warn("[ScriptLoader] Errore nel caricamento delle MASTER_KEYS:", result)
+	end
+end
 
 local timeRequired = 1200
 local walkRequired = 10000
@@ -115,206 +122,4 @@ gui.Name = "ScriptLoaderGui"
 gui.ResetOnSpawn = false
 gui.Parent = CoreGui
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.fromScale(0.32,0.45)
-frame.Position = UDim2.fromScale(0.34,0.28)
-frame.BackgroundColor3 = Color3.fromRGB(40,40,40)
-frame.BorderSizePixel = 0
-frame.Parent = gui
-Instance.new("UICorner", frame)
-
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1,0,0.12,0)
-title.BackgroundTransparency = 1
-title.Text = "Script Loader"
-title.TextScaled = true
-title.Font = Enum.Font.GothamBold
-title.TextColor3 = Color3.new(1,1,1)
-title.Parent = frame
-
--- ===============================
--- KEY UI
--- ===============================
-local keyFrame = Instance.new("Frame")
-keyFrame.Size = UDim2.fromScale(1,0.88)
-keyFrame.Position = UDim2.fromScale(0,0.12)
-keyFrame.BackgroundColor3 = Color3.fromRGB(25,25,25)
-keyFrame.Parent = frame
-Instance.new("UICorner", keyFrame)
-
-local keyLabel = Instance.new("TextLabel")
-keyLabel.Size = UDim2.new(1,0,0.28,0)
-keyLabel.BackgroundTransparency = 1
-keyLabel.Text = "Completa le azioni per generare la key"
-keyLabel.TextSize = 18
-keyLabel.TextWrapped = true
-keyLabel.Font = Enum.Font.Gotham
-keyLabel.TextColor3 = Color3.new(1,1,1)
-keyLabel.Parent = keyFrame
-
-local keyBox = Instance.new("TextBox")
-keyBox.Size = UDim2.new(0.8,0,0.14,0)
-keyBox.Position = UDim2.new(0.1,0,0.34,0)
-keyBox.Text = "La key verrà generata automaticamente"
-keyBox.TextScaled = false
-keyBox.TextSize = 18
-keyBox.Font = Enum.Font.Gotham
-keyBox.BackgroundColor3 = Color3.fromRGB(35,35,35)
-keyBox.TextColor3 = Color3.new(1,1,1)
-keyBox.ClearTextOnFocus = false
-keyBox.Parent = keyFrame
-Instance.new("UICorner", keyBox)
-
--- ===============================
--- ADMIN KEY UI (SOLO TE)
--- ===============================
-local isAdmin = ADMIN_USERID[player.UserId] == true
-if isAdmin then
-	local adminFrame = Instance.new("Frame")
-	adminFrame.Size = UDim2.new(0.9,0,0.22,0)
-	adminFrame.Position = UDim2.new(0.05,0,0.5,0)
-	adminFrame.BackgroundColor3 = Color3.fromRGB(30,30,30)
-	adminFrame.Parent = keyFrame
-	Instance.new("UICorner", adminFrame)
-
-	local list = Instance.new("UIListLayout", adminFrame)
-	list.Padding = UDim.new(0,6)
-
-	for _, key in ipairs(MASTER_KEYS) do
-		if type(key) == "string" then
-			local btn = Instance.new("TextButton")
-			btn.Size = UDim2.new(1,0,0,30)
-			btn.Text = key
-			btn.TextScaled = true
-			btn.Font = Enum.Font.Gotham
-			btn.BackgroundColor3 = Color3.fromRGB(120,60,160)
-			btn.TextColor3 = Color3.new(1,1,1)
-			btn.Parent = adminFrame
-			Instance.new("UICorner", btn)
-
-			btn.MouseButton1Click:Connect(function()
-				keyBox.Text = key
-			end)
-		end
-	end
-end
-
--- ===============================
--- BOTTONE VERIFICA
--- ===============================
-local verifyBtn = Instance.new("TextButton")
-verifyBtn.Size = UDim2.new(0.6,0,0.16,0)
-verifyBtn.Position = UDim2.new(0.2,0,0.75,0)
-verifyBtn.Text = "Apri Script"
-verifyBtn.TextScaled = true
-verifyBtn.Font = Enum.Font.GothamBold
-verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
-verifyBtn.TextColor3 = Color3.new(1,1,1)
-verifyBtn.Parent = keyFrame
-Instance.new("UICorner", verifyBtn)
-
--- ===============================
--- UI PRINCIPALE
--- ===============================
-local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(0.95,0,0.83,0)
-scrollFrame.Position = UDim2.new(0.025,0,0.14,0)
-scrollFrame.Visible = false
-scrollFrame.BackgroundTransparency = 1
-scrollFrame.ScrollBarThickness = 8
-scrollFrame.Parent = frame
-
-local layout = Instance.new("UIListLayout", scrollFrame)
-layout.Padding = UDim.new(0,6)
-
-for name, url in pairs(scriptsList) do
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(1,0,0,44)
-	btn.Text = name
-	btn.TextScaled = true
-	btn.Font = Enum.Font.Gotham
-	btn.BackgroundColor3 = Color3.fromRGB(0,100,180)
-	btn.TextColor3 = Color3.new(1,1,1)
-	btn.Parent = scrollFrame
-	Instance.new("UICorner", btn)
-
-	btn.MouseButton1Click:Connect(function()
-		if keyValid then
-			loadstring(game:HttpGet(url,true))()
-		end
-	end)
-end
-
-layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-	scrollFrame.CanvasSize = UDim2.new(0,0,0,layout.AbsoluteContentSize.Y)
-end)
-
--- ===============================
--- AGGIORNA AZIONI & GENERA KEY
--- ===============================
-task.spawn(function()
-	while not keyValid do
-		task.wait(1)
-		keyLabel.Text = "Azioni mancanti:\nTempo: "..math.floor(timePassed).."/"..timeRequired..
-						"\nCamminata: "..math.floor(walkDistance).."/"..walkRequired
-
-		if timePassed >= timeRequired and walkDistance >= walkRequired and not keyValid then
-			generatedKey = generateKey()
-			keyBox.Text = generatedKey
-			keyValid = true
-		end
-	end
-end)
-
--- ===============================
--- CLICK VERIFICA
--- ===============================
-verifyBtn.MouseButton1Click:Connect(function()
-	for _, k in ipairs(MASTER_KEYS) do
-		if keyBox.Text == k then
-			keyValid = true
-		end
-	end
-
-	if keyValid then
-		keyFrame:Destroy()
-		scrollFrame.Visible = true
-	else
-		verifyBtn.BackgroundColor3 = Color3.fromRGB(170,0,0)
-		keyBox.Text = "Chiave non Valida"
-		task.wait(3)
-		verifyBtn.BackgroundColor3 = Color3.fromRGB(0,170,0)
-		keyBox.Text = "La key verrà generata automaticamente"
-	end
-end)
-
--- ===============================
--- DRAG
--- ===============================
-local dragging, dragStart, startPos = false
-
-title.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = input.Position
-		startPos = frame.Position
-	end
-end)
-
-title.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = false
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStart
-		frame.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
-end)
+l
