@@ -48,14 +48,18 @@ local btnRestore = createButton("Ripristina", 70)
 -- MEMORIZZAZIONE VALORI ORIGINALI
 local originalHoldTimes = {}
 
-local function setProximityInstant()
-    for _, prompt in pairs(workspace:GetDescendants()) do
+local function setProximityInstant(prox)
+    if prox then
+    prox.HoldDuration = 0
+    else
+       for _, prompt in pairs(workspace:GetDescendants()) do
         if prompt:IsA("ProximityPrompt") then
             if originalHoldTimes[prompt] == nil then
                 originalHoldTimes[prompt] = prompt.HoldDuration
             end
             prompt.HoldDuration = 0
         end
+    end 
     end
 end
 
@@ -111,6 +115,6 @@ end)
 
 game.DescendantAdded:Connect(function(item)
     if item:IsA("ProximityPrompt") then
-            setProximityInstant()
+            setProximityInstant(item)
     end
 end)
