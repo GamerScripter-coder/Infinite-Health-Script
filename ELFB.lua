@@ -1,4 +1,4 @@
--- FULL CLIENT ADMIN PANEL (LOCAL ONLY)
+-- FULL CLIENT ADMIN PANEL (LOCAL ONLY + FAKE DUPE)
 
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
@@ -23,8 +23,8 @@ gui.Name = "ClientAdminPanel"
 gui.ResetOnSpawn = false
 
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 760, 0, 460)
-main.Position = UDim2.new(0.5, -380, 0.5, -230)
+main.Size = UDim2.new(0, 800, 0, 480)
+main.Position = UDim2.new(0.5, -400, 0.5, -240)
 main.BackgroundColor3 = Color3.fromRGB(18,18,18)
 main.Active = true
 main.Draggable = true
@@ -40,7 +40,7 @@ title.BackgroundTransparency = 1
 
 -- ================= TAB BAR =================
 local tabBar = Instance.new("Frame", main)
-tabBar.Size = UDim2.new(0,160,1,-40)
+tabBar.Size = UDim2.new(0,170,1,-40)
 tabBar.Position = UDim2.new(0,0,0,40)
 tabBar.BackgroundColor3 = Color3.fromRGB(22,22,22)
 
@@ -59,14 +59,15 @@ end
 
 local playerTabBtn = tabButton("PLAYER",10)
 local tpTabBtn     = tabButton("TELEPORTS",60)
-local camTabBtn    = tabButton("CAMERA",110)
+local toolTabBtn   = tabButton("TOOLS",110)
+local camTabBtn    = tabButton("CAMERA",160)
 
 -- ================= PAGES =================
 local function page()
 	local f = Instance.new("ScrollingFrame", main)
-	f.Position = UDim2.new(0,170,0,50)
-	f.Size = UDim2.new(1,-180,1,-60)
-	f.CanvasSize = UDim2.new(0,0,0,800)
+	f.Position = UDim2.new(0,180,0,50)
+	f.Size = UDim2.new(1,-190,1,-60)
+	f.CanvasSize = UDim2.new(0,0,0,900)
 	f.Visible = false
 	f.BackgroundTransparency = 1
 	return f
@@ -74,18 +75,21 @@ end
 
 local playerPage = page()
 local tpPage = page()
+local toolPage = page()
 local camPage = page()
 playerPage.Visible = true
 
 local function switch(p)
 	playerPage.Visible = false
 	tpPage.Visible = false
+	toolPage.Visible = false
 	camPage.Visible = false
 	p.Visible = true
 end
 
 playerTabBtn.MouseButton1Click:Connect(function() switch(playerPage) end)
 tpTabBtn.MouseButton1Click:Connect(function() switch(tpPage) end)
+toolTabBtn.MouseButton1Click:Connect(function() switch(toolPage) end)
 camTabBtn.MouseButton1Click:Connect(function() switch(camPage) end)
 
 -- ================= UI HELPERS =================
@@ -98,6 +102,7 @@ local function box(parent,text,y)
 	t.TextColor3 = Color3.new(1,1,1)
 	t.Font = Enum.Font.Gotham
 	t.TextSize = 14
+	t.ClearTextOnFocus = false
 	Instance.new("UICorner", t).CornerRadius = UDim.new(0,8)
 	return t
 end
@@ -128,19 +133,15 @@ btn(playerPage,"SET JUMP",155).MouseButton1Click:Connect(function()
 	if v then hum.JumpPower = v end
 end)
 
--- Infinite Jump
 local infJump = false
 btn(playerPage,"INFINITE JUMP",210).MouseButton1Click:Connect(function()
 	infJump = not infJump
 end)
 
 UIS.JumpRequest:Connect(function()
-	if infJump then
-		hum:ChangeState(Enum.HumanoidStateType.Jumping)
-	end
+	if infJump then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
 end)
 
--- Noclip
 local noclip = false
 btn(playerPage,"NOCLIP",260).MouseButton1Click:Connect(function()
 	noclip = not noclip
@@ -149,14 +150,11 @@ end)
 RunService.Stepped:Connect(function()
 	if noclip and char then
 		for _,p in ipairs(char:GetDescendants()) do
-			if p:IsA("BasePart") then
-				p.CanCollide = false
-			end
+			if p:IsA("BasePart") then p.CanCollide = false end
 		end
 	end
 end)
 
--- HRP LOCK
 local hrpLock = false
 btn(playerPage,"LOCK HRP",310).MouseButton1Click:Connect(function()
 	hrpLock = not hrpLock
@@ -176,7 +174,6 @@ RunService.Stepped:Connect(function()
 	end
 end)
 
--- CLICK TELEPORT
 local clickTP = false
 btn(playerPage,"CLICK TELEPORT",360).MouseButton1Click:Connect(function()
 	clickTP = not clickTP
@@ -197,43 +194,37 @@ end)
 local teleportSlots = {}
 local slotCount = 0
 
-local addSlotBtn = btn(tpPage,"+ ADD SLOT",10)
+btn(tpPage,"+ ADD SLOT",10).MouseButton1Click:Connect(function()
+	slotCount += 1
+	local y = 60 + (slotCount-1)*110
 
-local function createSlot(index)
-	local y = 60 + (index-1)*110
-
-	local saveBtn = btn(tpPage,"SAVE SLOT "..index, y)
-	local tpBtn = btn(tpPage,"TP SLOT "..index, y+45)
+	local saveBtn = btn(tpPage,"SAVE SLOT "..slotCount, y)
+	local tpBtn   = btn(tpPage,"TP SLOT "..slotCount, y+45)
 
 	local keyBox = box(tpPage,"Keybind (es. Z)", y+90)
 	keyBox.Size = UDim2.new(0.4,0,0,35)
 	keyBox.Position = UDim2.new(0.55,0,0,y+90)
 
-	teleportSlots[index] = {cframe=nil, key=nil}
+	teleportSlots[slotCount] = {cframe=nil, key=nil}
 
 	saveBtn.MouseButton1Click:Connect(function()
-		teleportSlots[index].cframe = hrp.CFrame
+		teleportSlots[slotCount].cframe = hrp.CFrame
 	end)
 
 	tpBtn.MouseButton1Click:Connect(function()
-		if teleportSlots[index].cframe then
-			hrp.CFrame = teleportSlots[index].cframe
+		if teleportSlots[slotCount].cframe then
+			hrp.CFrame = teleportSlots[slotCount].cframe
 		end
 	end)
 
 	keyBox.FocusLost:Connect(function()
 		local k = keyBox.Text:upper()
 		if Enum.KeyCode[k] then
-			teleportSlots[index].key = Enum.KeyCode[k]
+			teleportSlots[slotCount].key = Enum.KeyCode[k]
 		end
 	end)
 
-	tpPage.CanvasSize = UDim2.new(0,0,0,y+150)
-end
-
-addSlotBtn.MouseButton1Click:Connect(function()
-	slotCount += 1
-	createSlot(slotCount)
+	tpPage.CanvasSize = UDim2.new(0,0,0,y+160)
 end)
 
 UIS.InputBegan:Connect(function(input,gp)
@@ -241,6 +232,45 @@ UIS.InputBegan:Connect(function(input,gp)
 	for _,slot in pairs(teleportSlots) do
 		if slot.key and slot.cframe and input.KeyCode == slot.key then
 			hrp.CFrame = slot.cframe
+		end
+	end
+end)
+
+-- ================= TOOLS PAGE (FAKE DUPE) =================
+local toolNameBox = box(toolPage,"Nome Tool (es. Sword)",10)
+
+btn(toolPage,"DUPE TOOL (BACKPACK)",55).MouseButton1Click:Connect(function()
+	local name = toolNameBox.Text
+	if name == "" then return end
+	local bp = player:WaitForChild("Backpack")
+	local tool = bp:FindFirstChild(name)
+	if tool and tool:IsA("Tool") then
+		tool:Clone().Parent = bp
+	end
+end)
+
+btn(toolPage,"DUPE EQUIPPED TOOL",110).MouseButton1Click:Connect(function()
+	if not char then return end
+	for _,obj in ipairs(char:GetChildren()) do
+		if obj:IsA("Tool") then
+			obj:Clone().Parent = player.Backpack
+			break
+		end
+	end
+end)
+
+local amountBox = box(toolPage,"Quantità (es. 5)",160)
+
+btn(toolPage,"DUPE xN (EQUIPPED)",205).MouseButton1Click:Connect(function()
+	local n = tonumber(amountBox.Text)
+	if not n or n < 1 then return end
+	if not char then return end
+	for _,obj in ipairs(char:GetChildren()) do
+		if obj:IsA("Tool") then
+			for i = 1, n do
+				obj:Clone().Parent = player.Backpack
+			end
+			break
 		end
 	end
 end)
