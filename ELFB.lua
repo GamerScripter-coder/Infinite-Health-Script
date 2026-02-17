@@ -5,7 +5,7 @@ local RunService = game:GetService("RunService")
 local Player = Players.LocalPlayer
 local Mouse = Player:GetMouse()
 
---// CHARACTER
+--// CHARACTER UTILS
 local function Char()
 	return Player.Character or Player.CharacterAdded:Wait()
 end
@@ -23,7 +23,7 @@ local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 
 local Window = Rayfield:CreateWindow({
 	Name = "FULL CLIENT ADMIN PANEL V5",
-	LoadingTitle = "Client Panel",
+	LoadingTitle = "Client Admin",
 	LoadingSubtitle = "Client-only",
 	ConfigurationSaving = {Enabled = false}
 })
@@ -38,7 +38,7 @@ local MiscTab = Window:CreateTab("Misc", 4483362458)
 -------------------------------------------------
 PlayerTab:CreateSlider({
 	Name = "WalkSpeed",
-	Range = {0, 200},
+	Range = {0, 250},
 	Increment = 1,
 	CurrentValue = 16,
 	Callback = function(v)
@@ -48,7 +48,7 @@ PlayerTab:CreateSlider({
 
 PlayerTab:CreateSlider({
 	Name = "JumpPower",
-	Range = {0, 300},
+	Range = {0, 350},
 	Increment = 5,
 	CurrentValue = 50,
 	Callback = function(v)
@@ -93,15 +93,17 @@ RunService.Stepped:Connect(function()
 end)
 
 -------------------------------------------------
--- FLY (WITH WARNING)
+-- FLY (WITH WARNING + CONFIRM)
 -------------------------------------------------
 local flying = false
 local flyBV, flyBG
+local flyConn
 
 local function stopFly()
+	flying = false
+	if flyConn then flyConn:Disconnect() end
 	if flyBV then flyBV:Destroy() end
 	if flyBG then flyBG:Destroy() end
-	flying = false
 end
 
 PlayerTab:CreateButton({
@@ -109,10 +111,10 @@ PlayerTab:CreateButton({
 	Callback = function()
 		Rayfield:Notify({
 			Title = "WARNING",
-			Content = "Fly può bannarti in giochi con anti-cheat.\nUsala SOLO in giochi senza controlli.",
+			Content = "La FLY può bannarti in giochi con anti-cheat.\nUsala solo in giochi senza controlli.",
 			Duration = 6,
 			Actions = {
-				Ignore = {
+				Confirm = {
 					Name = "OK",
 					Callback = function()
 						if flying then stopFly() return end
@@ -124,10 +126,10 @@ PlayerTab:CreateButton({
 						flyBG = Instance.new("BodyGyro", HRP())
 						flyBG.MaxTorque = Vector3.new(1e5,1e5,1e5)
 
-						RunService.RenderStepped:Connect(function()
+						flyConn = RunService.RenderStepped:Connect(function()
 							if not flying then return end
 							local cam = workspace.CurrentCamera
-							flyBV.Velocity = cam.CFrame.LookVector * 60
+							flyBV.Velocity = cam.CFrame.LookVector * 65
 							flyBG.CFrame = cam.CFrame
 						end)
 					end
@@ -138,28 +140,28 @@ PlayerTab:CreateButton({
 })
 
 -------------------------------------------------
--- TELEPORT TAB (STABILE, TASTI PERSONALIZZATI)
+-- TELEPORT TAB (STABILE)
 -------------------------------------------------
 local Teleports = {}
-local currentName = ""
-local currentKey = nil
+local tpName = ""
+local tpKey = nil
 
 TeleportTab:CreateInput({
 	Name = "Nome Teleport",
 	PlaceholderText = "Es: Casa",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(t)
-		currentName = t
+		tpName = t
 	end
 })
 
 TeleportTab:CreateInput({
-	Name = "Tasto (es: E, Q, Z)",
+	Name = "Tasto (E, Q, Z...)",
 	PlaceholderText = "KeyCode",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(t)
 		if Enum.KeyCode[t] then
-			currentKey = Enum.KeyCode[t]
+			tpKey = Enum.KeyCode[t]
 		end
 	end
 })
@@ -167,14 +169,14 @@ TeleportTab:CreateInput({
 TeleportTab:CreateButton({
 	Name = "Salva Posizione",
 	Callback = function()
-		if currentName ~= "" and currentKey then
-			Teleports[currentName] = {
+		if tpName ~= "" and tpKey then
+			Teleports[tpName] = {
 				CFrame = HRP().CFrame,
-				Key = currentKey
+				Key = tpKey
 			}
 			Rayfield:Notify({
 				Title = "Teleport",
-				Content = "Salvato: "..currentName.." ("..currentKey.Name..")",
+				Content = "Salvato "..tpName.." ("..tpKey.Name..")",
 				Duration = 3
 			})
 		end
@@ -184,8 +186,8 @@ TeleportTab:CreateButton({
 TeleportTab:CreateButton({
 	Name = "Teletrasportati",
 	Callback = function()
-		if Teleports[currentName] then
-			HRP().CFrame = Teleports[currentName].CFrame
+		if Teleports[tpName] then
+			HRP().CFrame = Teleports[tpName].CFrame
 		end
 	end
 })
@@ -193,7 +195,7 @@ TeleportTab:CreateButton({
 TeleportTab:CreateButton({
 	Name = "Cancella Teleport",
 	Callback = function()
-		Teleports[currentName] = nil
+		Teleports[tpName] = nil
 	end
 })
 
@@ -228,21 +230,21 @@ MiscTab:CreateToggle({
 	end
 })
 
--- OPEN UI
+-- OPEN / CLOSE GUI
 MiscTab:CreateInput({
-	Name = "Apri UI (ScreenGui name)",
-	PlaceholderText = "UI Name",
-	Callback = function(t)
-		local ui = Player.PlayerGui:FindFirstChild(t)
+	Name = "Open / Close GUI",
+	PlaceholderText = "ScreenGui Name",
+	Callback = function(name)
+		local ui = Player.PlayerGui:FindFirstChild(name)
 		if ui then
 			ui.Enabled = not ui.Enabled
 		end
 	end
 })
 
--- LOADSTRING
+-- LOADSTRING EXECUTOR
 MiscTab:CreateInput({
-	Name = "Esegui Script (loadstring)",
+	Name = "Loadstring Script",
 	PlaceholderText = "URL",
 	Callback = function(url)
 		pcall(function()
