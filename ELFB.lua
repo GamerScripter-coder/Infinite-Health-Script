@@ -41,10 +41,11 @@ local Window = Rayfield:CreateWindow({
 ------------------------------------------------------------
 -- TABS
 ------------------------------------------------------------
-local MoveTab   = Window:CreateTab("Movement", 4483362458)
-local UITab     = Window:CreateTab("UI Manager", 4483362458)
-local ScriptTab = Window:CreateTab("Script Loader", 4483362458)
-local MiscTab   = Window:CreateTab("Misc", 4483362458)
+local MoveTab     = Window:CreateTab("Movement", 4483362458)
+local TeleportTab = Window:CreateTab("Teleport", 4483362458)
+local UITab       = Window:CreateTab("UI Manager", 4483362458)
+local ScriptTab   = Window:CreateTab("Script Loader", 4483362458)
+local MiscTab     = Window:CreateTab("Misc", 4483362458)
 
 ------------------------------------------------------------
 -- SPEED & JUMP
@@ -152,6 +153,14 @@ MoveTab:CreateToggle({
 	end
 })
 
+MoveTab:CreateSlider({
+	Name = "Fly Speed",
+	Range = {10,200},
+	Increment = 5,
+	CurrentValue = flySpeed,
+	Callback = function(v) flySpeed = v end
+})
+
 MoveTab:CreateButton({
 	Name = "CONFIRM FLY (OK)",
 	Callback = function()
@@ -218,7 +227,7 @@ MoveTab:CreateToggle({
 })
 
 ------------------------------------------------------------
--- CLICK TELEPORT
+-- CLICK TELEPORT (semplice)
 ------------------------------------------------------------
 local clickTP = false
 MoveTab:CreateToggle({
@@ -232,6 +241,100 @@ UIS.InputBegan:Connect(function(i,gp)
 		local mouse = player:GetMouse()
 		if mouse.Hit then
 			HRP().CFrame = mouse.Hit + Vector3.new(0,3,0)
+		end
+	end
+end)
+
+------------------------------------------------------------
+-- NOCLIP (CLIENT)
+------------------------------------------------------------
+local noclip = false
+local noclipConn
+
+local function setNoclip(state)
+	noclip = state
+	if state then
+		noclipConn = RunService.Stepped:Connect(function()
+			for _,v in ipairs(Char():GetDescendants()) do
+				if v:IsA("BasePart") then
+					v.CanCollide = false
+				end
+			end
+		end)
+	else
+		if noclipConn then noclipConn:Disconnect() end
+	end
+end
+
+MoveTab:CreateToggle({
+	Name = "Noclip",
+	Callback = function(v)
+		setNoclip(v)
+	end
+})
+
+------------------------------------------------------------
+-- TELEPORT TAB
+------------------------------------------------------------
+local teleportPoints = {}
+local selectedTP
+local tpDropdown
+
+local function refreshTP()
+	local list = {}
+	for k,_ in pairs(teleportPoints) do
+		table.insert(list, k)
+	end
+
+	if tpDropdown then tpDropdown:Destroy() end
+	tpDropdown = TeleportTab:CreateDropdown({
+		Name = "Saved Positions",
+		Options = list,
+		Callback = function(opt)
+			selectedTP = opt
+		end
+	})
+end
+
+TeleportTab:CreateButton({
+	Name = "➕ Save Current Position",
+	Callback = function()
+		local name = "TP_"..tostring(#teleportPoints+1)
+		teleportPoints[name] = HRP().CFrame
+		refreshTP()
+	end
+})
+
+TeleportTab:CreateButton({
+	Name = "Teleport to Selected",
+	Callback = function()
+		if selectedTP and teleportPoints[selectedTP] then
+			HRP().CFrame = teleportPoints[selectedTP]
+		end
+	end
+})
+
+TeleportTab:CreateButton({
+	Name = "🗑 Delete Selected",
+	Callback = function()
+		if selectedTP then
+			teleportPoints[selectedTP] = nil
+			selectedTP = nil
+			refreshTP()
+		end
+	end
+})
+
+refreshTP()
+
+-- HOTKEY 1–9
+UIS.InputBegan:Connect(function(i,gp)
+	if gp then return end
+	local num = tonumber(i.KeyCode.Name:match("%d"))
+	if num then
+		local key = "TP_"..num
+		if teleportPoints[key] then
+			HRP().CFrame = teleportPoints[key]
 		end
 	end
 end)
@@ -253,7 +356,7 @@ local function getUIList()
 	return list
 end
 
-local function createDropdown()
+local function createUIDropdown()
 	if uiDropdown then uiDropdown:Destroy() end
 	uiDropdown = UITab:CreateDropdown({
 		Name = "Select UI",
@@ -262,11 +365,11 @@ local function createDropdown()
 	})
 end
 
-createDropdown()
+createUIDropdown()
 
 UITab:CreateButton({
 	Name = "Refresh UI List",
-	Callback = createDropdown
+	Callback = createUIDropdown
 })
 
 UITab:CreateButton({
