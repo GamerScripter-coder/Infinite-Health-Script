@@ -227,7 +227,7 @@ MoveTab:CreateToggle({
 })
 
 ------------------------------------------------------------
--- CLICK TELEPORT (semplice)
+-- CLICK TELEPORT
 ------------------------------------------------------------
 local clickTP = false
 MoveTab:CreateToggle({
@@ -246,7 +246,7 @@ UIS.InputBegan:Connect(function(i,gp)
 end)
 
 ------------------------------------------------------------
--- NOCLIP (CLIENT)
+-- NOCLIP
 ------------------------------------------------------------
 local noclip = false
 local noclipConn
@@ -274,11 +274,12 @@ MoveTab:CreateToggle({
 })
 
 ------------------------------------------------------------
--- TELEPORT TAB
+-- TELEPORT TAB (FIXED)
 ------------------------------------------------------------
 local teleportPoints = {}
 local selectedTP
 local tpDropdown
+local tpIndex = 0
 
 local function refreshTP()
 	local list = {}
@@ -299,9 +300,22 @@ end
 TeleportTab:CreateButton({
 	Name = "➕ Save Current Position",
 	Callback = function()
-		local name = "TP_"..tostring(#teleportPoints+1)
-		teleportPoints[name] = HRP().CFrame
-		refreshTP()
+		pcall(function()
+			local hrp = HRP()
+			if not hrp then return end
+
+			tpIndex += 1
+			local name = "TP_" .. tpIndex
+			teleportPoints[name] = hrp.CFrame
+
+			refreshTP()
+
+			Rayfield:Notify({
+				Title = "Teleport",
+				Content = "Saved position: " .. name,
+				Duration = 3
+			})
+		end)
 	end
 })
 
@@ -327,12 +341,11 @@ TeleportTab:CreateButton({
 
 refreshTP()
 
--- HOTKEY 1–9
 UIS.InputBegan:Connect(function(i,gp)
 	if gp then return end
 	local num = tonumber(i.KeyCode.Name:match("%d"))
 	if num then
-		local key = "TP_"..num
+		local key = "TP_" .. num
 		if teleportPoints[key] then
 			HRP().CFrame = teleportPoints[key]
 		end
@@ -340,7 +353,7 @@ UIS.InputBegan:Connect(function(i,gp)
 end)
 
 ------------------------------------------------------------
--- UI MANAGER (FIXED)
+-- UI MANAGER
 ------------------------------------------------------------
 local playerGui = player:WaitForChild("PlayerGui")
 local selectedUI
