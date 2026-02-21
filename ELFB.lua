@@ -96,6 +96,32 @@ MoveTab:CreateSlider({
 })
 
 ------------------------------------------------------------
+-- INFINITE JUMP
+------------------------------------------------------------
+local infiniteJump = false
+local jumpConn
+
+MoveTab:CreateToggle({
+	Name = "Infinite Jump",
+	Callback = function(v)
+		infiniteJump = v
+
+		if jumpConn then
+			jumpConn:Disconnect()
+			jumpConn = nil
+		end
+
+		if v then
+			jumpConn = UIS.JumpRequest:Connect(function()
+				if infiniteJump and Humanoid() then
+					Humanoid():ChangeState(Enum.HumanoidStateType.Jumping)
+				end
+			end)
+		end
+	end
+})
+
+------------------------------------------------------------
 -- NOCLIP
 ------------------------------------------------------------
 local noclip = false
@@ -128,14 +154,17 @@ local flySpeed = 70
 local function startFly()
 	local hrp = HRP()
 
-	flyBV = Instance.new("BodyVelocity", hrp)
+	flyBV = Instance.new("BodyVelocity")
 	flyBV.MaxForce = Vector3.new(1e9,1e9,1e9)
+	flyBV.Parent = hrp
 
-	flyBG = Instance.new("BodyGyro", hrp)
+	flyBG = Instance.new("BodyGyro")
 	flyBG.MaxTorque = Vector3.new(1e9,1e9,1e9)
+	flyBG.Parent = hrp
 
 	flyConn = RunService.RenderStepped:Connect(function()
 		local dir = Vector3.zero
+
 		if UIS:IsKeyDown(Enum.KeyCode.W) then dir += camera.CFrame.LookVector end
 		if UIS:IsKeyDown(Enum.KeyCode.S) then dir -= camera.CFrame.LookVector end
 		if UIS:IsKeyDown(Enum.KeyCode.A) then dir -= camera.CFrame.RightVector end
@@ -179,7 +208,7 @@ MoveTab:CreateButton({
 })
 
 ------------------------------------------------------------
--- TELEPORT TAB (TASTI PERSONALIZZATI)
+-- TELEPORT TAB
 ------------------------------------------------------------
 local Teleports = {}
 local tpName = ""
@@ -241,7 +270,7 @@ UIS.InputBegan:Connect(function(input, gp)
 end)
 
 ------------------------------------------------------------
--- UI MANAGER (OPEN / CLOSE UI COME PRIMA)
+-- UI MANAGER
 ------------------------------------------------------------
 local playerGui = player:WaitForChild("PlayerGui")
 local selectedUI = nil
