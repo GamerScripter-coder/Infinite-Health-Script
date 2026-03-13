@@ -279,7 +279,7 @@ local script = G2L["b"];
 	end)
 	
 	SP.MouseButton1Click:Connect(function()
-		if Pos.Value == Vector3.new(0,0,0) then
+		if not workspace:FindFirstChild("SavePosPart") and Pos.Value == Vector3.new(0,0,0) then
 			warn("No position saved")
 			return
 		end
@@ -291,6 +291,9 @@ local script = G2L["b"];
 	
 		-- Assicurati che esista la part di salvataggio
 		local SavedPos = workspace:FindFirstChild("SavePosPart")
+		if Pos.Value == Vector3.new(0,0,0) then
+			Pos.Value = SavedPos.Position
+		end
 		local connection
 	
 		if SavedPos then
