@@ -21,6 +21,34 @@ wait(0.3)
 local G2L = {};
 local SavedPosVector
 
+local PlaceIdData = {
+	[109983668079237] = {
+		Teleport = true,
+		Gravity = false,
+		InfJump = false
+	},
+	[131623223084840] = {
+		Teleport = true,
+		Gravity = false,
+		InfJump = false
+	},
+	[119987266683883] = {
+		Teleport = true,
+		Gravity = false,
+		InfJump = true
+	},
+	[0] = {
+		Teleport = true,
+		Gravity = true,
+		InfJump = true
+	}
+}
+
+local function GetIdStats()
+	local Id = game.PlaceId
+	local IdData = PlaceIdData[Id] or PlaceIdData[0]
+	return IdData
+end
 -- StarterGui.Folder.SAB
 local function CreateUI()
 G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
@@ -221,6 +249,8 @@ local script = G2L["8"];
 	end
 	
 	SP.MouseButton1Click:Connect(function()
+		local IdStats = GetIdStats()
+		if not IdStats.Teleport then return end
 		local PlrChar, hrp = GetChar()
 		
 		Pos.Value = hrp.Position
@@ -281,6 +311,9 @@ local script = G2L["b"];
 	end)
 	
 	SP.MouseButton1Click:Connect(function()
+		local IdStats = GetIdStats()
+		if not IdStats.Teleport then return end
+		
 		if not workspace:FindFirstChild("SavePosPart") and Pos.Value == Vector3.new(0,0,0) then
 			warn("No position saved")
 			return
@@ -359,6 +392,8 @@ local script = G2L["d"];
 	local VectorForce
 	
 	SP.MouseButton1Click:Connect(function()
+		local IdStats = GetIdStats()
+		if not IdStats.Gravity then return end
 		workspace.Gravity = 75
 	end)
 end;
@@ -373,6 +408,8 @@ local script = G2L["f"];
 	local hrp = char:WaitForChild("HumanoidRootPart")
 	
 	SP.MouseButton1Click:Connect(function()
+		local IdStats = GetIdStats()
+		if not IdStats.Gravity then return end
 		workspace.Gravity = 196.2
 	end)
 end;
@@ -393,6 +430,8 @@ local script = G2L["11"];
 	
 	UIS.InputBegan:Connect(function(input, gameProcessed)
 		if gameProcessed then return end
+		local IdStats = GetIdStats()
+		if not IdStats.InfJump then return end
 	
 		local key = Enum.KeyCode[Button]
 		if not key then return end
@@ -401,7 +440,7 @@ local script = G2L["11"];
 			local char = player.Character or player.CharacterAdded:Wait()
 			local hrp = char:WaitForChild("HumanoidRootPart")
 	
-			local jumpVelocity =65 -- default salto normale
+			local jumpVelocity = 65 -- default salto normale
 			
 			if workspace.Gravity == 75 then
 				jumpVelocity = 35 -- salto più alto
