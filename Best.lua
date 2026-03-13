@@ -29,7 +29,6 @@ local G2L = {};
 -- StarterGui.SAB
 G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
 G2L["1"]["Name"] = [[SAB]];
-G2L["1"]["ResetOnSpawn"] = false
 G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
 
 
@@ -237,9 +236,26 @@ local script = G2L["b"];
 	local SP = script.Parent
 	local Pos = SP.Parent.PositionTeleport
 	
+	local UIS = game:GetService("UserInputService")
+	
 	local plr = game.Players.LocalPlayer
 	local char = plr.Character or plr.CharacterAdded:Wait()
 	local hrp = char:WaitForChild("HumanoidRootPart")
+	
+	local PartFolder = Instance.new("Folder")
+	PartFolder.Name = "PartFolder"
+	PartFolder.Parent = workspace
+	
+	local cancelTeleport = false
+	
+	local PlaceData = {
+		[131623223084840] = 55,
+		[109983668079237] = 25
+	}
+	
+	local function GetSpeedWithId()
+		return PlaceData[game.PlaceId] or 25
+	end
 	
 	local function GetChar()
 		char = plr.Character or plr.CharacterAdded:Wait()
@@ -247,25 +263,48 @@ local script = G2L["b"];
 		return char, hrp
 	end
 	
+	
+	-- tasto C cancella teleport
+	UIS.InputBegan:Connect(function(input, gpe)
+		if gpe then return end
+	
+		if input.KeyCode == Enum.KeyCode.C then
+			cancelTeleport = true
+		end
+	end)
+	
+	
 	SP.MouseButton1Click:Connect(function()
 	
-		local PlrChar, hrp = GetChar()
+		cancelTeleport = false
 	
+		local char, hrp = GetChar()
 		local target = Pos.Value
-		local speed = 25 -- più alto = più veloce
+		local speed = GetSpeedWithId()
 	
 		task.spawn(function()
-			while (hrp.Position - target).Magnitude > 2 do
+	
+			while (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
 	
 				local current = hrp.Position
-				local direction = (Vector3.new(target.X, current.Y, target.Z) - current).Unit
+				local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
 	
-				hrp.Velocity = direction * speed + Vector3.new(0, hrp.Velocity.Y, 0)
+				hrp.AssemblyLinearVelocity = direction * speed + Vector3.new(0, hrp.AssemblyLinearVelocity.Y, 0)
+	
+				local LegPart = Instance.new("Part")
+				LegPart.Size = Vector3.new(2.5,1.5,2.5)
+				LegPart.CFrame = hrp.CFrame - Vector3.new(0,4.5,0)
+				LegPart.Anchored = true
+				LegPart.Transparency = 1
+				LegPart.Parent = PartFolder
+	
+				game.Debris:AddItem(LegPart,0.3)
 	
 				task.wait()
 			end
 	
-			hrp.Velocity = Vector3.zero
+			hrp.AssemblyLinearVelocity = Vector3.zero
+	
 		end)
 	
 	end)
