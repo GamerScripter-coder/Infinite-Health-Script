@@ -29,6 +29,7 @@ local G2L = {};
 -- StarterGui.SAB
 G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
 G2L["1"]["Name"] = [[SAB]];
+G2L["1"]["ResetOnSpawn"] = false
 G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
 
 
