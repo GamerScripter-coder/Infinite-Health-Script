@@ -19,6 +19,7 @@ end
 Load()
 wait(0.3)
 local G2L = {};
+local SavedPosVector
 
 -- StarterGui.Folder.SAB
 local function CreateUI()
@@ -223,6 +224,7 @@ local script = G2L["8"];
 		local PlrChar, hrp = GetChar()
 		
 		Pos.Value = hrp.Position
+		SavedPosVector = hrp.Position
 		
 		if workspace:FindFirstChild("SavePosPart") then
 			workspace:FindFirstChild("SavePosPart"):Destroy()
@@ -286,7 +288,7 @@ local script = G2L["b"];
 	
 		cancelTeleport = false
 		local char, hrp = GetChar()
-		local target = Pos.Value
+		local target = SavedPosVector or Pos.Value
 		local speed = GetSpeed()
 	
 		-- Assicurati che esista la part di salvataggio
