@@ -9,30 +9,26 @@
 
 -- Instances: 18 | Scripts: 5 | Modules: 0 | Tags: 0
 local function Load()
-	print("[# SAB]")
+	print("Aspettare per il caricamento di SAB")
 	wait(1)
-	print("[## SAB]")
-	wait(1)
-	print("[### SAB]")
-	wait(1)
-	print("[#### SAB]")
-	wait(1)
-	print("[##### SAB]")
-	wait(1)
-	print("[SAB LOADED]")
+	print("Stiamo Installando i moduli")
+	wait(4)
+	print("Installazione Completa di SAB")
 end
 
 Load()
 wait(0.3)
 local G2L = {};
 
--- StarterGui.SAB
+-- StarterGui.Folder.SAB
+local function CreateUI()
 G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
+G2L["1"]["Enabled"] = true;
 G2L["1"]["Name"] = [[SAB]];
 G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
 
 
--- StarterGui.SAB.Frame
+-- StarterGui.Folder.SAB.Frame
 G2L["2"] = Instance.new("Frame", G2L["1"]);
 G2L["2"]["BorderSizePixel"] = 0;
 G2L["2"]["BackgroundColor3"] = Color3.fromRGB(57, 57, 57);
@@ -42,7 +38,7 @@ G2L["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["2"]["BackgroundTransparency"] = 0.2;
 
 
--- StarterGui.SAB.Frame.Frame
+-- StarterGui.Folder.SAB.Frame.Frame
 G2L["3"] = Instance.new("Frame", G2L["2"]);
 G2L["3"]["BorderSizePixel"] = 0;
 G2L["3"]["BackgroundColor3"] = Color3.fromRGB(106, 106, 106);
@@ -50,7 +46,7 @@ G2L["3"]["Size"] = UDim2.new(0, 351, 0, 51);
 G2L["3"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 
 
--- StarterGui.SAB.Frame.Frame.TextLabel
+-- StarterGui.Folder.SAB.Frame.Frame.TextLabel
 G2L["4"] = Instance.new("TextLabel", G2L["3"]);
 G2L["4"]["TextWrapped"] = true;
 G2L["4"]["BorderSizePixel"] = 0;
@@ -65,12 +61,12 @@ G2L["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["4"]["Text"] = [[NO KEYLESS HUB]];
 
 
--- StarterGui.SAB.Frame.Frame.TextLabel.UIStroke
+-- StarterGui.Folder.SAB.Frame.Frame.TextLabel.UIStroke
 G2L["5"] = Instance.new("UIStroke", G2L["4"]);
 G2L["5"]["Thickness"] = 2;
 
 
--- StarterGui.SAB.Frame.AbuseFrame
+-- StarterGui.Folder.SAB.Frame.AbuseFrame
 G2L["6"] = Instance.new("Frame", G2L["2"]);
 G2L["6"]["BorderSizePixel"] = 0;
 G2L["6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
@@ -81,7 +77,7 @@ G2L["6"]["Name"] = [[AbuseFrame]];
 G2L["6"]["BackgroundTransparency"] = 1;
 
 
--- StarterGui.SAB.Frame.AbuseFrame.SavePos
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.SavePos
 G2L["7"] = Instance.new("TextButton", G2L["6"]);
 G2L["7"]["TextWrapped"] = true;
 G2L["7"]["BorderSizePixel"] = 0;
@@ -97,17 +93,17 @@ G2L["7"]["Name"] = [[SavePos]];
 G2L["7"]["Position"] = UDim2.new(0.04261, 0, 0.04632, 0);
 
 
--- StarterGui.SAB.Frame.AbuseFrame.SavePos.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.SavePos.LocalScript
 G2L["8"] = Instance.new("LocalScript", G2L["7"]);
 
 
 
--- StarterGui.SAB.Frame.AbuseFrame.PositionTeleport
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.PositionTeleport
 G2L["9"] = Instance.new("Vector3Value", G2L["6"]);
 G2L["9"]["Name"] = [[PositionTeleport]];
 
 
--- StarterGui.SAB.Frame.AbuseFrame.TeleportPos
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportPos
 G2L["a"] = Instance.new("TextButton", G2L["6"]);
 G2L["a"]["TextWrapped"] = true;
 G2L["a"]["BorderSizePixel"] = 0;
@@ -123,12 +119,12 @@ G2L["a"]["Name"] = [[TeleportPos]];
 G2L["a"]["Position"] = UDim2.new(0.53125, 0, 0.04632, 0);
 
 
--- StarterGui.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
 G2L["b"] = Instance.new("LocalScript", G2L["a"]);
 
 
 
--- StarterGui.SAB.Frame.AbuseFrame.Gravity
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.Gravity
 G2L["c"] = Instance.new("TextButton", G2L["6"]);
 G2L["c"]["TextWrapped"] = true;
 G2L["c"]["BorderSizePixel"] = 0;
@@ -144,12 +140,12 @@ G2L["c"]["Name"] = [[Gravity]];
 G2L["c"]["Position"] = UDim2.new(0.04261, 0, 0.19346, 0);
 
 
--- StarterGui.SAB.Frame.AbuseFrame.Gravity.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.Gravity.LocalScript
 G2L["d"] = Instance.new("LocalScript", G2L["c"]);
 
 
 
--- StarterGui.SAB.Frame.AbuseFrame.StopGravity
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.StopGravity
 G2L["e"] = Instance.new("TextButton", G2L["6"]);
 G2L["e"]["TextWrapped"] = true;
 G2L["e"]["BorderSizePixel"] = 0;
@@ -165,12 +161,12 @@ G2L["e"]["Name"] = [[StopGravity]];
 G2L["e"]["Position"] = UDim2.new(0.53125, 0, 0.19346, 0);
 
 
--- StarterGui.SAB.Frame.AbuseFrame.StopGravity.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.StopGravity.LocalScript
 G2L["f"] = Instance.new("LocalScript", G2L["e"]);
 
 
 
--- StarterGui.SAB.Frame.AbuseFrame.InfJump
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.InfJump
 G2L["10"] = Instance.new("TextButton", G2L["6"]);
 G2L["10"]["TextWrapped"] = true;
 G2L["10"]["BorderSizePixel"] = 0;
@@ -186,12 +182,12 @@ G2L["10"]["Name"] = [[InfJump]];
 G2L["10"]["Position"] = UDim2.new(0.04261, 0, 0.33787, 0);
 
 
--- StarterGui.SAB.Frame.AbuseFrame.InfJump.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.InfJump.LocalScript
 G2L["11"] = Instance.new("LocalScript", G2L["10"]);
 
 
 
--- StarterGui.SAB.Frame.AbuseFrame.InfJump.TextBox
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.InfJump.TextBox
 G2L["12"] = Instance.new("TextBox", G2L["10"]);
 G2L["12"]["BorderSizePixel"] = 0;
 G2L["12"]["TextWrapped"] = true;
@@ -207,7 +203,7 @@ G2L["12"]["Text"] = [[X]];
 G2L["12"]["BackgroundTransparency"] = 0.2;
 
 
--- StarterGui.SAB.Frame.AbuseFrame.SavePos.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.SavePos.LocalScript
 local function C_8()
 local script = G2L["8"];
 	local SP = script.Parent
@@ -227,90 +223,125 @@ local script = G2L["8"];
 		local PlrChar, hrp = GetChar()
 		
 		Pos.Value = hrp.Position
+		
+		if workspace:FindFirstChild("SavePosPart") then
+			workspace:FindFirstChild("SavePosPart"):Destroy()
+		end
+		
+		local SavePosPart = Instance.new("Part")
+		SavePosPart.Name = "SavePosPart"
+		SavePosPart.Size = Vector3.new(3.5,10000,3.5)
+		SavePosPart.Position = Pos.Value
+		SavePosPart.Anchored = true
+		SavePosPart.Transparency = 0.5
+		SavePosPart.CanCollide = false
+		SavePosPart.Parent = workspace
 	end)
 end;
 task.spawn(C_8);
--- StarterGui.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
 local function C_b()
 local script = G2L["b"];
 	local SP = script.Parent
-	local Pos = SP.Parent.PositionTeleport
-	
+	local Pos = SP.Parent:WaitForChild("PositionTeleport")
 	local UIS = game:GetService("UserInputService")
-	
 	local plr = game.Players.LocalPlayer
-	local char = plr.Character or plr.CharacterAdded:Wait()
-	local hrp = char:WaitForChild("HumanoidRootPart")
-	
-	local PartFolder = Instance.new("Folder")
-	PartFolder.Name = "PartFolder"
-	PartFolder.Parent = workspace
 	
 	local cancelTeleport = false
 	
-	local PlaceData = {
-		[131623223084840] = 55,
-		[109983668079237] = 25
+	-- Cartella per le part create durante il teleport
+	local PartFolder = Instance.new("Folder")
+	PartFolder.Name = "TeleportParts"
+	PartFolder.Parent = workspace
+	
+	-- Velocità diverse per ogni esperienza
+	local PlaceSpeed = {
+		[131623223084840] = 125, -- esempio esperienza 1
+		[109983668079237] = 25   -- esempio esperienza 2
 	}
 	
-	local function GetSpeedWithId()
-		return PlaceData[game.PlaceId] or 25
+	local function GetSpeed()
+		return PlaceSpeed[game.PlaceId] or 35
 	end
 	
 	local function GetChar()
-		char = plr.Character or plr.CharacterAdded:Wait()
-		hrp = char:WaitForChild("HumanoidRootPart")
+		local char = plr.Character or plr.CharacterAdded:Wait()
+		local hrp = char:WaitForChild("HumanoidRootPart")
 		return char, hrp
 	end
 	
-	
-	-- tasto C cancella teleport
+	-- Cancella teleport con C
 	UIS.InputBegan:Connect(function(input, gpe)
 		if gpe then return end
-	
 		if input.KeyCode == Enum.KeyCode.C then
 			cancelTeleport = true
 		end
 	end)
 	
-	
 	SP.MouseButton1Click:Connect(function()
+		if Pos.Value == Vector3.new(0,0,0) then
+			warn("No position saved")
+			return
+		end
 	
 		cancelTeleport = false
-	
 		local char, hrp = GetChar()
 		local target = Pos.Value
-		local speed = GetSpeedWithId()
+		local speed = GetSpeed()
 	
+		-- Assicurati che esista la part di salvataggio
+		local SavedPos = workspace:FindFirstChild("SavePosPart")
+		local connection
+	
+		if SavedPos then
+			-- Connetti Touched una volta sola
+			connection = SavedPos.Touched:Connect(function(hit)
+				if hit:IsDescendantOf(char) then
+					cancelTeleport = true
+				end
+			end)
+		end
+	
+		-- Teleport loop
 		task.spawn(function()
-	
-			while (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
-	
+			while hrp and (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
 				local current = hrp.Position
 				local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
 	
+				-- Muovi player
 				hrp.AssemblyLinearVelocity = direction * speed + Vector3.new(0, hrp.AssemblyLinearVelocity.Y, 0)
 	
+				-- Crea part invisibile sotto i piedi
 				local LegPart = Instance.new("Part")
+				LegPart.Name = "LegPart"
 				LegPart.Size = Vector3.new(2.5,1.5,2.5)
 				LegPart.CFrame = hrp.CFrame - Vector3.new(0,4.5,0)
 				LegPart.Anchored = true
 				LegPart.Transparency = 1
 				LegPart.Parent = PartFolder
 	
-				game.Debris:AddItem(LegPart,0.3)
-	
-				task.wait()
+				task.wait(0.05)
 			end
 	
-			hrp.AssemblyLinearVelocity = Vector3.zero
+			-- Ferma il movimento
+			if hrp then
+				hrp.AssemblyLinearVelocity = Vector3.zero
+			end
 	
+			-- Pulizia part
+			for _,p in pairs(PartFolder:GetChildren()) do
+				p:Destroy()
+			end
+	
+			-- Disconnetti Touched
+			if connection then
+				connection:Disconnect()
+			end
 		end)
-	
 	end)
 end;
 task.spawn(C_b);
--- StarterGui.SAB.Frame.AbuseFrame.Gravity.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.Gravity.LocalScript
 local function C_d()
 local script = G2L["d"];
 	local SP = script.Parent
@@ -327,7 +358,7 @@ local script = G2L["d"];
 	end)
 end;
 task.spawn(C_d);
--- StarterGui.SAB.Frame.AbuseFrame.StopGravity.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.StopGravity.LocalScript
 local function C_f()
 local script = G2L["f"];
 	local SP = script.Parent
@@ -341,7 +372,7 @@ local script = G2L["f"];
 	end)
 end;
 task.spawn(C_f);
--- StarterGui.SAB.Frame.AbuseFrame.InfJump.LocalScript
+-- StarterGui.Folder.SAB.Frame.AbuseFrame.InfJump.LocalScript
 local function C_11()
 local script = G2L["11"];
 	local SP = script.Parent
@@ -383,3 +414,10 @@ end;
 task.spawn(C_11);
 
 return G2L["1"], require;
+end
+
+CreateUI()
+
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+	CreateUI()
+end)
