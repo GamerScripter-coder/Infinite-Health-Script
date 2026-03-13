@@ -275,9 +275,12 @@ local function C_d()
 local script = G2L["d"];
 	local SP = script.Parent
 	local Pos = SP.Parent.PositionTeleport
+	
 	local plr = game.Players.LocalPlayer
 	local char = plr.Character or plr.CharacterAdded:Wait()
 	local hrp = char:WaitForChild("HumanoidRootPart")
+	
+	local VectorForce
 	
 	SP.MouseButton1Click:Connect(function()
 		workspace.Gravity = 75
@@ -313,32 +316,28 @@ local script = G2L["11"];
 	end)
 	
 	UIS.InputBegan:Connect(function(input, gameProcessed)
-	
 		if gameProcessed then return end
 	
 		local key = Enum.KeyCode[Button]
 		if not key then return end
 	
 		if input.KeyCode == key then
-	
 			local char = player.Character or player.CharacterAdded:Wait()
 			local hrp = char:WaitForChild("HumanoidRootPart")
 	
-			-- salto fisico
-			local jumpForce = 65
+			local jumpVelocity =65 -- default salto normale
 			
 			if workspace.Gravity == 75 then
-				jumpForce = 35
+				jumpVelocity = 35 -- salto più alto
 			end
-			
+	
+			-- Applica la velocità verticale per il salto
 			hrp.AssemblyLinearVelocity = Vector3.new(
 				hrp.AssemblyLinearVelocity.X,
-				jumpForce,
+				jumpVelocity,
 				hrp.AssemblyLinearVelocity.Z
 			)
-	
 		end
-	
 	end)
 end;
 task.spawn(C_11);
