@@ -37,6 +37,11 @@ local PlaceIdData = {
 		Gravity = false,
 		InfJump = true
 	},
+	[99606176102979] = {
+		Teleport = true,
+		Gravity = false,
+		InfJump = false
+	},
 	[0] = {
 		Teleport = true,
 		Gravity = true,
