@@ -256,7 +256,7 @@ local script = G2L["b"];
 	
 	-- Velocità diverse per ogni esperienza
 	local PlaceSpeed = {
-		[131623223084840] = 125, -- esempio esperienza 1
+		[131623223084840] = 250, -- esempio esperienza 1
 		[109983668079237] = 25   -- esempio esperienza 2
 	}
 	
