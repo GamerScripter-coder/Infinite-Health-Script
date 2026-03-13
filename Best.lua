@@ -285,6 +285,9 @@ local script = G2L["b"];
 			warn("No position saved")
 			return
 		end
+		if Pos.Value == Vector3.new(0,0,0) then
+			Pos.Value = SavedPosVector
+		end
 	
 		cancelTeleport = false
 		local char, hrp = GetChar()
@@ -293,9 +296,6 @@ local script = G2L["b"];
 	
 		-- Assicurati che esista la part di salvataggio
 		local SavedPos = workspace:FindFirstChild("SavePosPart")
-		if Pos.Value == Vector3.new(0,0,0) then
-			Pos.Value = SavedPos.Position
-		end
 		local connection
 	
 		if SavedPos then
