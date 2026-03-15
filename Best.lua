@@ -555,17 +555,30 @@ local script = G2L["14"];
 		Active = not Active
 		local char = char()
 		local hum = char:WaitForChild("Humanoid")
-		for _,module in pairs(game.ReplicatedStorage:GetDeascendants()) do
-			if module.Name == "Ragdoll" then
+		for _,module in pairs(game.ReplicatedStorage:GetDescendants()) do
+			if module.Name == "Ragdoll" or module.Name == "ragdoll" then
 				module.Enabled = Active
 			end
 		end
-		for _,obj in pairs(game.Players.LocalPlayer.Character:GetDeascendants()) do
+		for _,scriptStorage in pairs(game.ReplicatedStorage:GetDescendants()) do
+			if scriptStorage:IsA("Script") or scriptStorage:IsA("LocalScript") or scriptStorage:IsA("ModuleScript") then
+				if scriptStorage.Name == "Ragdoll" or scriptStorage.Name == "ragdoll" then
+					scriptStorage:Destroy()
+				end
+			end
+		end
+		for _,obj in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
 			if obj:IsA("LocalScript") or obj:IsA("Script") and obj.Name == "RagdollClient" then
 				obj.Enabled = Active
 			end
 		end
-				
+
+		for _,rag in pairs(game.CoreGui:GetDescendants()) do
+			if rag.Name == "Ragdoll" or rag.Name == "ragdoll" then
+				rag:Destroy()
+			end
+		end
+		
 		if Active then
 		connection = RunService.Heartbeat:Connect(function()
 			local state = hum:GetState()
