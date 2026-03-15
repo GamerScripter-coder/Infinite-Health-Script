@@ -555,9 +555,9 @@ local script = G2L["14"];
 		Active = not Active
 		local char = char()
 		local hum = char:WaitForChild("Humanoid")
-		local state = hum:GetState()
 		if Active then
 		connection = RunService.Heartbeat:Connect(function()
+			local state = hum:GetState()
 			if state == Enum.HumanoidStateType.Ragdoll or hum.Ragdoll == true then
 			hum:ChangeState(Enum.HumanoidStateType.GettingUp)
 			elseif state == Enum.HumanoidStateType.FallingDown or hum.FallingDown == true then
