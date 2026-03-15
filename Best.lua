@@ -555,6 +555,11 @@ local script = G2L["14"];
 		Active = not Active
 		local char = char()
 		local hum = char:WaitForChild("Humanoid")
+		for _,module in pairs(game.ReplicatedStorage:GetDeascendants()) do
+			if module.Name == "Ragdoll" then
+				module.Enabled = Active
+			end
+		end
 		if Active then
 		connection = RunService.Heartbeat:Connect(function()
 			local state = hum:GetState()
