@@ -578,7 +578,7 @@ local script = G2L["16"];
 	local Active = false
 	
 	local NORMAL_HIP = 2 -- normale altezza
-	local LOWER_HIP = 0.1 -- altezza abbassata
+	local LOWER_HIP = -3 -- altezza abbassata
 	
 	local function setHipHeight(humanoid, target)
 		-- Interpolazione graduale per evitare scatti
