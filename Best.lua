@@ -423,6 +423,12 @@ local script = G2L["b"];
 		if input.KeyCode == Enum.KeyCode.C then
 			cancelTeleport = true
 		elseif input.KeyCode == Enum.KeyCode.M then
+			if not workspace:FindFirstChild("SavePosPart") and Pos.Value == Vector3.new(0,0,0) then
+			warn("No position saved")
+			return
+		elseif Pos.Value == Vector3.new(0,0,0) then
+			Pos.Value = SavedPosVector
+		end
 			Teleport()
 		end
 	end)
