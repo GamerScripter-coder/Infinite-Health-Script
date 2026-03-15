@@ -560,6 +560,12 @@ local script = G2L["14"];
 				module.Enabled = Active
 			end
 		end
+		for _,obj in pairs(game.Players.LocalPlayer.Character:GetDeascendants()) do
+			if obj:IsA("LocalScript") or obj:IsA("Script") and obj.Name == "RagdollClient" then
+				obj.Enabled = Active
+			end
+		end
+				
 		if Active then
 		connection = RunService.Heartbeat:Connect(function()
 			local state = hum:GetState()
