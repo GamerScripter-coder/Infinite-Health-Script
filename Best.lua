@@ -556,8 +556,8 @@ local script = G2L["14"];
 		local char = char()
 		local hum = char:WaitForChild("Humanoid")
 		for _,module in pairs(game.ReplicatedStorage:GetDescendants()) do
-			if module.Name == "Ragdoll" or module.Name == "ragdoll" then
-				module.Enabled = Active
+			if module.Name == "Ragdoll" or module.Name == "ragdoll" or module.Name == "RagdollController" then
+				module:Destroy()
 			end
 		end
 		for _,scriptStorage in pairs(game.ReplicatedStorage:GetDescendants()) do
@@ -574,7 +574,7 @@ local script = G2L["14"];
 		end
 
 		for _,rag in pairs(game.CoreGui:GetDescendants()) do
-			if rag.Name == "Ragdoll" or rag.Name == "ragdoll" then
+			if rag.Name == "Ragdoll" or rag.Name == "ragdoll" or rag.Name == "RagdollRigging" then
 				rag:Destroy()
 			end
 		end
