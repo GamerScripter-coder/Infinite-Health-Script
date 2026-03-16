@@ -376,9 +376,9 @@ local script = G2L["b"];
 				while hrp and (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
 					local current = hrp.Position
 					local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
-
+                    
 					-- Muovi player
-					hrp.AssemblyLinearVelocity = direction * speed + Vector3.new(0, hrp.AssemblyLinearVelocity.Y, 0)
+					hrp.AssemblyLinearVelocity = direction * speed
 
 					-- Crea part invisibile sotto i piedi
 					local LegPart = Instance.new("Part")
