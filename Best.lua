@@ -625,6 +625,4 @@ end
 
 CreateUI()
 
-game.Players.LocalPlayer.CharacterAdded:Connect(function()
-	CreateUI()
-end)
+game.Players.LocalPlayer.CharacterAdded:Connect(CreateUI)
