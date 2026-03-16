@@ -373,10 +373,10 @@ local script = G2L["b"];
 
 			-- Teleport loop
 			task.spawn(function()
+				local current = hrp.Position
+				local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
+					
 				while hrp and (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
-					local current = hrp.Position
-					local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
-                    
 					-- Muovi player
 					hrp.AssemblyLinearVelocity = direction * speed
 
