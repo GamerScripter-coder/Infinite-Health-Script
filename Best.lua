@@ -621,7 +621,6 @@ local script = G2L["16"];
 end
 task.spawn(C_16);
 
-return G2L["1"], require;
 end
 
 CreateUI()
