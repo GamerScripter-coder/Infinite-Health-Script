@@ -386,7 +386,7 @@ local script = G2L["b"];
 					LegPart.Size = Vector3.new(2.5,1.5,2.5)
 					LegPart.CFrame = hrp.CFrame - Vector3.new(0,4.5,0)
 					LegPart.Anchored = true
-					LegPart.Transparency = 1
+					LegPart.Transparency = 0.5
 					LegPart.Parent = PartFolder
 
 					task.wait(0.05)
