@@ -343,7 +343,7 @@ local script = G2L["b"];
 	}
 	
 	local function GetSpeed()
-		return PlaceSpeed[game.PlaceId] or 35
+		return PlaceSpeed[game.PlaceId] or 45
 	end
 	
 	local function GetChar()
