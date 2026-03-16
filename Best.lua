@@ -56,7 +56,7 @@ local function GetIdStats()
 end
 
 local function CreateUI()
-if game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("SAB") then game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("SAB"):Destroy()
+if game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("SAB") then game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("SAB"):Destroy() end
 
 G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
 G2L["1"]["Enabled"] = true;
