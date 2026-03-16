@@ -329,7 +329,7 @@ local script = G2L["8"];
 		SavePosPart.CanCollide = false
 		SavePosPart.Parent = workspace
 	end)
-end;
+end
 task.spawn(C_8);
 -- ServerStorage.Folder.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
 local function C_b()
@@ -447,7 +447,7 @@ local script = G2L["b"];
 		
 		Teleport()
 	end)
-end;
+end
 task.spawn(C_b);
 -- ServerStorage.Folder.SAB.Frame.AbuseFrame.Gravity.LocalScript
 local function C_d()
@@ -482,7 +482,7 @@ local script = G2L["d"];
 		if not Stats.Gravity then return end
 		workspace.Gravity = 75
 	end)
-end;
+end
 task.spawn(C_d);
 -- ServerStorage.Folder.SAB.Frame.AbuseFrame.StopGravity.LocalScript
 local function C_f()
@@ -498,7 +498,7 @@ local script = G2L["f"];
 		if not Stats.Gravity then return end
 		workspace.Gravity = 196.2
 	end)
-end;
+end
 task.spawn(C_f);
 -- ServerStorage.Folder.SAB.Frame.AbuseFrame.InfJump.LocalScript
 local function C_11()
@@ -540,7 +540,7 @@ local script = G2L["11"];
 			)
 		end
 	end)
-end;
+end
 task.spawn(C_11);
 -- ServerStorage.Folder.SAB.Frame.AbuseFrame.AntiRagdoll.LocalScript
 local function C_14()
@@ -583,7 +583,7 @@ local script = G2L["14"];
 			connection:Disconnect()
 		end
 	end)
-end;
+end
 task.spawn(C_14);
 -- ServerStorage.Folder.SAB.Frame.AbuseFrame.UnderMap.LocalScript
 local function C_16()
@@ -618,7 +618,7 @@ local script = G2L["16"];
 			task.spawn(setHipHeight, humanoid, NORMAL_HIP)
 		end
 	end)
-end;
+end
 task.spawn(C_16);
 
 return G2L["1"], require;
