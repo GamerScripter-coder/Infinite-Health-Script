@@ -563,29 +563,12 @@ local script = G2L["14"];
 		Active = not Active
 		local char = char()
 		local hum = char:WaitForChild("Humanoid")
-		for _,module in pairs(game.ReplicatedStorage:GetDescendants()) do
-			if module.Name == "Ragdoll" or module.Name == "ragdoll" or module.Name == "RagdollController" then
-				module:Destroy()
-			end
-		end
-		for _,scriptStorage in pairs(game.ReplicatedStorage:GetDescendants()) do
-			if scriptStorage:IsA("Script") or scriptStorage:IsA("LocalScript") or scriptStorage:IsA("ModuleScript") then
-				if scriptStorage.Name == "Ragdoll" or scriptStorage.Name == "ragdoll" then
-					scriptStorage:Destroy()
-				end
-			end
-		end
-		for _,obj in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-			if obj:IsA("LocalScript") or obj:IsA("Script") and obj.Name == "RagdollClient" then
-				obj.Enabled = Active
-			end
-		end
-
-		for _,rag in pairs(game.CoreGui:GetDescendants()) do
-			if rag.Name == "Ragdoll" or rag.Name == "ragdoll" or rag.Name == "RagdollRigging" then
-				rag:Destroy()
-			end
-		end
+					
+		game.ReplicatedStorage:FindFirstChild("Controllers"):FindFirstChild("RagdollController").Enabled = Active
+		game.ReplicatedStorage:FindFirstChild("Packages"):FindFirstChild("Ragdoll"):FindFirstChild("Ragdoll"):Destroy()
+		game.ReplicatedStorage:FindFirstChild("Packages"):FindFirstChild("Ragdoll").Enabled = Active
+		game.Players.LocalPlayer.Character:FindFirstChild("RagdollClient").Enabled = Active
+		game.CoreGui:FindFirstChild("RobloxGui"):FindFirstChild("Modules"):FindFirstChild("Common"):FindFirstChild("RagdollRigging").Enabled = Active
 		
 		if Active then
 		connection = RunService.Heartbeat:Connect(function()
