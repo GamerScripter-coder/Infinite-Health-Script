@@ -682,22 +682,18 @@ local script = G2L["18"];
 			connection = SavedPos.Touched:Connect(function(hit)
 				if hit:IsDescendantOf(char) then
 					cancelTeleport = true
-					if plr.Character:FindFirstChild("Bat") then
-					plr.Character:FindFirstChild("Bat").Parent = plr.Backpack
-					end
 				end
 			end)
 		end
 	
 	    local PartFolder = workspace:FindFirstChild("PartFolder")
 		-- Teleport loop
-
-			if plr.Backpack:FindFirstChild("Bat") then
-				char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
-				end
 		task.spawn(function()
 			SP.Parent.Parent.Visible = false
 			SP.Parent.Parent.Parent.TextButton.Text = "Open"
+			if plr.Backpack:FindFirstChild("Bat") then
+				char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
+				end
 			while hrp and (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
 				local current = hrp.Position
 				local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
@@ -731,6 +727,11 @@ local script = G2L["18"];
 			if connection then
 				connection:Disconnect()
 			end
+
+			task.wait(0.1)
+            if plr.Backpack:FindFirstChild("Bat") then
+            char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
+            end
 		end)
 	end
 	
