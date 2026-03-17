@@ -682,12 +682,19 @@ local script = G2L["18"];
 			connection = SavedPos.Touched:Connect(function(hit)
 				if hit:IsDescendantOf(char) then
 					cancelTeleport = true
+					if plr.Character:FindFirstChild("Bat") then
+					plr.Character:FindFirstChild("Bat").Parent = plr.Backpack
+					end
 				end
 			end)
 		end
 	
 	    local PartFolder = workspace:FindFirstChild("PartFolder")
 		-- Teleport loop
+
+			if plr.Backpack:FindFirstChild("Bat") then
+				char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
+				end
 		task.spawn(function()
 			SP.Parent.Parent.Visible = false
 			SP.Parent.Parent.Parent.TextButton.Text = "Open"
@@ -706,10 +713,7 @@ local script = G2L["18"];
 				LegPart.Anchored = true
 				LegPart.Transparency = 0.5
 				LegPart.Parent = PartFolder
-				
-				if plr.Backpack:FindFirstChild("Bat") then
-				char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
-				end
+						
 				task.wait(0.05)
 			end
 	
