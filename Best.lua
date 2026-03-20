@@ -1,3 +1,13 @@
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
+]=]
+
+-- Instances: 27 | Scripts: 9 | Modules: 1 | Tags: 0
 local function Load()
 	print("Aspettare per il caricamento di SAB")
 	wait(1)
@@ -57,8 +67,7 @@ end
 
 local Stats = GetIdStats()
 
-
--- StarterGui.Folder.SAB
+-- ServerStorage.Folder.SAB
 local function CreateUI()
 if game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("SAB") then game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("SAB"):Destroy() end
 G2L["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
@@ -66,7 +75,7 @@ G2L["1"]["Name"] = [[SAB]];
 G2L["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
 
 
--- StarterGui.Folder.SAB.Frame
+-- ServerStorage.Folder.SAB.Frame
 G2L["2"] = Instance.new("Frame", G2L["1"]);
 G2L["2"]["BorderSizePixel"] = 0;
 G2L["2"]["BackgroundColor3"] = Color3.fromRGB(57, 57, 57);
@@ -76,7 +85,7 @@ G2L["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["2"]["BackgroundTransparency"] = 0.2;
 
 
--- StarterGui.Folder.SAB.Frame.Frame
+-- ServerStorage.Folder.SAB.Frame.Frame
 G2L["3"] = Instance.new("Frame", G2L["2"]);
 G2L["3"]["BorderSizePixel"] = 0;
 G2L["3"]["BackgroundColor3"] = Color3.fromRGB(106, 106, 106);
@@ -84,7 +93,7 @@ G2L["3"]["Size"] = UDim2.new(0, 351, 0, 51);
 G2L["3"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 
 
--- StarterGui.Folder.SAB.Frame.Frame.TextLabel
+-- ServerStorage.Folder.SAB.Frame.Frame.TextLabel
 G2L["4"] = Instance.new("TextLabel", G2L["3"]);
 G2L["4"]["TextWrapped"] = true;
 G2L["4"]["BorderSizePixel"] = 0;
@@ -99,12 +108,12 @@ G2L["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["4"]["Text"] = [[NO KEYLESS HUB]];
 
 
--- StarterGui.Folder.SAB.Frame.Frame.TextLabel.UIStroke
+-- ServerStorage.Folder.SAB.Frame.Frame.TextLabel.UIStroke
 G2L["5"] = Instance.new("UIStroke", G2L["4"]);
 G2L["5"]["Thickness"] = 2;
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame
 G2L["6"] = Instance.new("Frame", G2L["2"]);
 G2L["6"]["BorderSizePixel"] = 0;
 G2L["6"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
@@ -115,7 +124,7 @@ G2L["6"]["Name"] = [[AbuseFrame]];
 G2L["6"]["BackgroundTransparency"] = 1;
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.SavePos
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.SavePos
 G2L["7"] = Instance.new("TextButton", G2L["6"]);
 G2L["7"]["TextWrapped"] = true;
 G2L["7"]["BorderSizePixel"] = 0;
@@ -131,17 +140,17 @@ G2L["7"]["Name"] = [[SavePos]];
 G2L["7"]["Position"] = UDim2.new(0.04261, 0, 0.04632, 0);
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.SavePos.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.SavePos.LocalScript
 G2L["8"] = Instance.new("LocalScript", G2L["7"]);
 
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.PositionTeleport
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.PositionTeleport
 G2L["9"] = Instance.new("Vector3Value", G2L["6"]);
 G2L["9"]["Name"] = [[PositionTeleport]];
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportPos
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.TeleportPos
 G2L["a"] = Instance.new("TextButton", G2L["6"]);
 G2L["a"]["TextWrapped"] = true;
 G2L["a"]["BorderSizePixel"] = 0;
@@ -157,12 +166,12 @@ G2L["a"]["Name"] = [[TeleportPos]];
 G2L["a"]["Position"] = UDim2.new(0.53125, 0, 0.04632, 0);
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
 G2L["b"] = Instance.new("LocalScript", G2L["a"]);
 
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.Gravity
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.Gravity
 G2L["c"] = Instance.new("TextButton", G2L["6"]);
 G2L["c"]["TextWrapped"] = true;
 G2L["c"]["BorderSizePixel"] = 0;
@@ -178,12 +187,12 @@ G2L["c"]["Name"] = [[Gravity]];
 G2L["c"]["Position"] = UDim2.new(0.0483, 0, 0.35695, 0);
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.Gravity.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.Gravity.LocalScript
 G2L["d"] = Instance.new("LocalScript", G2L["c"]);
 
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.StopGravity
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.StopGravity
 G2L["e"] = Instance.new("TextButton", G2L["6"]);
 G2L["e"]["TextWrapped"] = true;
 G2L["e"]["BorderSizePixel"] = 0;
@@ -199,12 +208,12 @@ G2L["e"]["Name"] = [[StopGravity]];
 G2L["e"]["Position"] = UDim2.new(0.53125, 0, 0.35695, 0);
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.StopGravity.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.StopGravity.LocalScript
 G2L["f"] = Instance.new("LocalScript", G2L["e"]);
 
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.InfJump
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.InfJump
 G2L["10"] = Instance.new("TextButton", G2L["6"]);
 G2L["10"]["TextWrapped"] = true;
 G2L["10"]["BorderSizePixel"] = 0;
@@ -220,12 +229,12 @@ G2L["10"]["Name"] = [[InfJump]];
 G2L["10"]["Position"] = UDim2.new(0.04261, 0, 0.50954, 0);
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.InfJump.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.InfJump.LocalScript
 G2L["11"] = Instance.new("LocalScript", G2L["10"]);
 
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.InfJump.TextBox
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.InfJump.TextBox
 G2L["12"] = Instance.new("TextBox", G2L["10"]);
 G2L["12"]["BorderSizePixel"] = 0;
 G2L["12"]["TextWrapped"] = true;
@@ -241,7 +250,7 @@ G2L["12"]["Text"] = [[X]];
 G2L["12"]["BackgroundTransparency"] = 0.2;
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.AntiRagdoll
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.AntiRagdoll
 G2L["13"] = Instance.new("TextButton", G2L["6"]);
 G2L["13"]["TextWrapped"] = true;
 G2L["13"]["BorderSizePixel"] = 0;
@@ -257,12 +266,12 @@ G2L["13"]["Name"] = [[AntiRagdoll]];
 G2L["13"]["Position"] = UDim2.new(0.0625, 0, 0.65668, 0);
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.AntiRagdoll.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.AntiRagdoll.LocalScript
 G2L["14"] = Instance.new("LocalScript", G2L["13"]);
 
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.UnderMap
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.UnderMap
 G2L["15"] = Instance.new("TextButton", G2L["6"]);
 G2L["15"]["TextWrapped"] = true;
 G2L["15"]["BorderSizePixel"] = 0;
@@ -278,12 +287,12 @@ G2L["15"]["Name"] = [[UnderMap]];
 G2L["15"]["Position"] = UDim2.new(0.53125, 0, 0.65668, 0);
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.UnderMap.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.UnderMap.LocalScript
 G2L["16"] = Instance.new("LocalScript", G2L["15"]);
 
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportEnemy
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.TeleportEnemy
 G2L["17"] = Instance.new("TextButton", G2L["6"]);
 G2L["17"]["TextWrapped"] = true;
 G2L["17"]["BorderSizePixel"] = 0;
@@ -299,12 +308,12 @@ G2L["17"]["Name"] = [[TeleportEnemy]];
 G2L["17"]["Position"] = UDim2.new(0.28409, 0, 0.18256, 0);
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportEnemy.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.TeleportEnemy.LocalScript
 G2L["18"] = Instance.new("LocalScript", G2L["17"]);
 
 
 
--- StarterGui.Folder.SAB.TextButton
+-- ServerStorage.Folder.SAB.TextButton
 G2L["19"] = Instance.new("TextButton", G2L["1"]);
 G2L["19"]["TextWrapped"] = true;
 G2L["19"]["BorderSizePixel"] = 0;
@@ -320,12 +329,18 @@ G2L["19"]["Text"] = [[Close]];
 G2L["19"]["Position"] = UDim2.new(0.88549, 0, 0.52718, 0);
 
 
--- StarterGui.Folder.SAB.TextButton.LocalScript
+-- ServerStorage.Folder.SAB.TextButton.LocalScript
 G2L["1a"] = Instance.new("LocalScript", G2L["19"]);
 
 
 
--- StarterGui.Folder.SAB.Frame.AbuseFrame.SavePos.LocalScript
+-- ServerStorage.Folder.SAB.ModuleScript
+G2L["1b"] = Instance.new("ModuleScript", G2L["1"]);
+
+
+
+
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.SavePos.LocalScript
 local function C_8()
 local script = G2L["8"];
 	local SP = script.Parent
@@ -346,7 +361,7 @@ local script = G2L["8"];
 		local PlrChar, hrp = GetChar()
 		
 		Pos.Value = hrp.Position
-		SavedPosVector = Pos.Value
+		SavedPosVector = hrp.Position
 		
 		if workspace:FindFirstChild("SavePosPart") then
 			workspace:FindFirstChild("SavePosPart"):Destroy()
@@ -363,7 +378,7 @@ local script = G2L["8"];
 	end)
 end;
 task.spawn(C_8);
--- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.TeleportPos.LocalScript
 local function C_b()
 local script = G2L["b"];
 	local SP = script.Parent
@@ -381,7 +396,7 @@ local script = G2L["b"];
 	-- Velocità diverse per ogni esperienza
 	local PlaceSpeed = {
 		[131623223084840] = 125, -- esempio esperienza 1
-		[109983668079237] = 35  -- esempio esperienza 2
+		[109983668079237] = 25   -- esempio esperienza 2
 	}
 	
 	local function GetSpeed()
@@ -430,7 +445,7 @@ local script = G2L["b"];
 				LegPart.Size = Vector3.new(2.5,1.5,2.5)
 				LegPart.CFrame = hrp.CFrame - Vector3.new(0,4.5,0)
 				LegPart.Anchored = true
-				LegPart.Transparency = 1
+				LegPart.Transparency = 0.5
 				LegPart.Parent = PartFolder
 	
 				task.wait(0.05)
@@ -455,6 +470,7 @@ local script = G2L["b"];
 	
 	UIS.InputBegan:Connect(function(input, gpe)
 		if gpe then return end
+		
 		if input.KeyCode == Enum.KeyCode.C then
 			cancelTeleport = true
 		elseif input.KeyCode == Enum.KeyCode.M then
@@ -471,7 +487,6 @@ local script = G2L["b"];
 	end)
 	
 	SP.MouseButton1Click:Connect(function()
-		if not Stats.Teleport then return end
 		if not workspace:FindFirstChild("SavePosPart") and Pos.Value == Vector3.new(0,0,0) then
 			warn("No position saved")
 			return
@@ -483,7 +498,7 @@ local script = G2L["b"];
 	end)
 end;
 task.spawn(C_b);
--- StarterGui.Folder.SAB.Frame.AbuseFrame.Gravity.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.Gravity.LocalScript
 local function C_d()
 local script = G2L["d"];
 	local SP = script.Parent
@@ -496,12 +511,12 @@ local script = G2L["d"];
 	local VectorForce
 	
 	SP.MouseButton1Click:Connect(function()
-			if not Stats.Gravity then return end
+		if not Stats.Gravity then return end
 		workspace.Gravity = 75
 	end)
 end;
 task.spawn(C_d);
--- StarterGui.Folder.SAB.Frame.AbuseFrame.StopGravity.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.StopGravity.LocalScript
 local function C_f()
 local script = G2L["f"];
 	local SP = script.Parent
@@ -511,12 +526,12 @@ local script = G2L["f"];
 	local hrp = char:WaitForChild("HumanoidRootPart")
 	
 	SP.MouseButton1Click:Connect(function()
-			if not Stats.Gravity then return end
+		if not Stats.Gravity then return end
 		workspace.Gravity = 196.2
 	end)
 end;
 task.spawn(C_f);
--- StarterGui.Folder.SAB.Frame.AbuseFrame.InfJump.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.InfJump.LocalScript
 local function C_11()
 local script = G2L["11"];
 	local SP = script.Parent
@@ -537,7 +552,7 @@ local script = G2L["11"];
 		if not key then return end
 	
 		if input.KeyCode == key then
-				if not Stats.InfJump then return end
+			if not Stats.InfJump then return end
 			local char = player.Character or player.CharacterAdded:Wait()
 			local hrp = char:WaitForChild("HumanoidRootPart")
 	
@@ -557,7 +572,7 @@ local script = G2L["11"];
 	end)
 end;
 task.spawn(C_11);
--- StarterGui.Folder.SAB.Frame.AbuseFrame.AntiRagdoll.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.AntiRagdoll.LocalScript
 local function C_14()
 local script = G2L["14"];
 	local RunService = game:GetService("RunService")
@@ -573,16 +588,18 @@ local script = G2L["14"];
 	end
 	
 	SP.MouseButton1Click:Connect(function()
-			if not Stats.AntiRagdoll then return end
+		if not Stats.AntiRagdoll then return end
 		Active = not Active
 		local char = char()
 		local hum = char:WaitForChild("Humanoid")
 		
-		game.ReplicatedStorage:FindFirstChild("Controllers"):FindFirstChild("RagdollController").Enabled = Active
+		pcall(function()
+		game.ReplicatedStorage:FindFirstChild("Controllers"):FindFirstChild("RagdollController"):Destroy()
 		game.ReplicatedStorage:FindFirstChild("Packages"):FindFirstChild("Ragdoll"):FindFirstChild("Ragdoll"):Destroy()
-		game.ReplicatedStorage:FindFirstChild("Packages"):FindFirstChild("Ragdoll").Enabled = Active
-		game.Players.LocalPlayer.Character:FindFirstChild("RagdollClient").Enabled = Active
-		game.CoreGui:FindFirstChild("RobloxGui"):FindFirstChild("Modules"):FindFirstChild("Common"):FindFirstChild("RagdollRigging").Enabled = Active
+		game.ReplicatedStorage:FindFirstChild("Packages"):FindFirstChild("Ragdoll"):Destroy()
+		game.Players.LocalPlayer.Character:FindFirstChild("RagdollClient"):Destroy()
+		game.CoreGui:FindFirstChild("RobloxGui"):FindFirstChild("Modules"):FindFirstChild("Common"):FindFirstChild("RagdollRigging"):Destroy()
+		end)
 		
 		if Active then
 		connection = RunService.Heartbeat:Connect(function()
@@ -598,56 +615,74 @@ local script = G2L["14"];
 	end)
 end;
 task.spawn(C_14);
--- StarterGui.Folder.SAB.Frame.AbuseFrame.UnderMap.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.UnderMap.LocalScript
 local function C_16()
 local script = G2L["16"];
 	local SP = script.Parent
 	local plr = game.Players.LocalPlayer
 	local Active = false
+	local char = plr.Character or plr.CharacterAdded:Wait()
+	local hrp = char:WaitForChild("HumanoidRootPart")
+	local hum = char:WaitForChild("Humanoid")
+	local floorSize = 1000
+	local floorHeight = hrp.Position.Y - 3
 	
-	local NORMAL_HIP = 2 -- normale altezza
-	local LOWER_HIP = 0.1 -- altezza abbassata
+	local function GetUnderMap()
+			pcall(function()
+				workspace:FindFirstChild("Map").Ground.CanCollide = false
+				workspace:WaitForChild("Map").Ground_Left.CanCollide = false
+				workspace:WaitForChild("Map").Ground_Right.CanCollide = false
+			end)
+		wait(0.275)
+		local floorPart = Instance.new("Part")
+		floorPart.Name = "FloorPart"
+		floorPart.Size = Vector3.new(floorSize, 1, floorSize)
+		floorPart.Anchored = true
+		floorPart.CanCollide = true    -- permette di camminarci sopra
+		floorPart.Transparency = 1     -- invisibile
+		floorPart.Position = hrp.Position - Vector3.new(0,floorHeight,0)
+		floorPart.Parent = workspace
+	end
 	
-	local function setHipHeight(humanoid, target)
-		-- Interpolazione graduale per evitare scatti
-		local step = 0.05
-		while math.abs(humanoid.HipHeight - target) > 0.01 do
-			humanoid.HipHeight = humanoid.HipHeight + (target - humanoid.HipHeight) * step
-			task.wait()
-		end
-		humanoid.HipHeight = target
+	local function RegetMap()
+		pcall(function()
+			workspace:FindFirstChild("Map").Ground.CanCollide = true
+				workspace:WaitForChild("Map").Ground_Left.CanCollide = true
+				workspace:WaitForChild("Map").Ground_Right.CanCollide = true
+		end)
+		wait(0.275)
+		workspace:FindFirstChild("FloorPart"):Destroy()
 	end
 	
 	SP.MouseButton1Click:Connect(function()
-			if not Stats.UnderMap then return end
+		if not Stats.UnderMap then return end
 		Active = not Active
-		local char = plr.Character or plr.CharacterAdded:Wait()
-		local humanoid = char:WaitForChild("Humanoid")
-	
+		
 		if Active then
-			task.spawn(setHipHeight, humanoid, LOWER_HIP)
+			GetUnderMap()
 		else
-			task.spawn(setHipHeight, humanoid, NORMAL_HIP)
+			RegetMap()
 		end
 	end)
 end;
 task.spawn(C_16);
--- StarterGui.Folder.SAB.Frame.AbuseFrame.TeleportEnemy.LocalScript
+-- ServerStorage.Folder.SAB.Frame.AbuseFrame.TeleportEnemy.LocalScript
 local function C_18()
 local script = G2L["18"];
 	local RunService = game:GetService("RunService")
 	local SP = script.Parent
 	local cancelTeleport = false
+	local UIS = game:GetService("UserInputService")
 	
 	local plr = game.Players.LocalPlayer
 	
 	local PlaceSpeed = {
 		[131623223084840] = 250, -- esempio esperienza 1
-		[109983668079237] = 35   -- esempio esperienza 2
+		[109983668079237] = 35.5   -- esempio esperienza 2
 	}
 	
 	local function GetSpeed()
-		return PlaceSpeed[game.PlaceId] or 35
+		return PlaceSpeed[game.PlaceId] or 35.5
 	end
 	
 	local function Getchar()
@@ -657,7 +692,6 @@ local script = G2L["18"];
 	end
 	
 	local function Teleport()
-			if not Stats.Teleport then return end
 		if #game.Players:GetPlayers() ~= 2 then return end
 		cancelTeleport = false
 		local char, hrp = Getchar()
@@ -676,6 +710,7 @@ local script = G2L["18"];
 		-- Assicurati che esista la part di salvataggio
 		local SavedPos = targetchar.HumanoidRootPart
 		local connection
+		local PartFolder = workspace:FindFirstChild("PartFolder")
 	
 		if SavedPos then
 			-- Connetti Touched una volta sola
@@ -686,16 +721,13 @@ local script = G2L["18"];
 			end)
 		end
 	
-	    local PartFolder = workspace:FindFirstChild("PartFolder")
 		-- Teleport loop
 		task.spawn(function()
 			SP.Parent.Parent.Visible = false
 			SP.Parent.Parent.Parent.TextButton.Text = "Open"
-			if plr.Backpack:FindFirstChild("Bat") then
-				char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
-				end
 			while hrp and (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
 				local current = hrp.Position
+				target = SavedPos.Position
 				local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
 	
 				-- Muovi player
@@ -709,7 +741,10 @@ local script = G2L["18"];
 				LegPart.Anchored = true
 				LegPart.Transparency = 0.5
 				LegPart.Parent = PartFolder
-						
+				
+				if plr.Backpack:FindFirstChild("Bat") then
+				char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
+				end
 				task.wait(0.05)
 			end
 	
@@ -727,18 +762,22 @@ local script = G2L["18"];
 			if connection then
 				connection:Disconnect()
 			end
-
-			task.wait(0.1)
-            if plr.Backpack:FindFirstChild("Bat") then
-            char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
-            end
 		end)
 	end
+	
+	UIS.InputBegan:Connect(function(key, gp)
+		if gp then return end
+		
+		if key.KeyCode == Enum.KeyCode.H then
+			if not Stats.Teleport then return end
+			Teleport()
+		end
+	end)
 	
 	SP.MouseButton1Click:Connect(Teleport)
 end;
 task.spawn(C_18);
--- StarterGui.Folder.SAB.TextButton.LocalScript
+-- ServerStorage.Folder.SAB.TextButton.LocalScript
 local function C_1a()
 local script = G2L["1a"];
 	local Button = script.Parent
@@ -761,4 +800,6 @@ end
 
 CreateUI()
 
-game.Players.LocalPlayer.CharacterAdded:Connect(CreateUI)
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+	CreateUI()
+end)
