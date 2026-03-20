@@ -396,11 +396,11 @@ local script = G2L["b"];
 	-- Velocità diverse per ogni esperienza
 	local PlaceSpeed = {
 		[131623223084840] = 125, -- esempio esperienza 1
-		[109983668079237] = 25   -- esempio esperienza 2
+		[109983668079237] = 35.5   -- esempio esperienza 2
 	}
 	
 	local function GetSpeed()
-		return PlaceSpeed[game.PlaceId] or 35
+		return PlaceSpeed[game.PlaceId] or 35.5
 	end
 	
 	local function GetChar()
