@@ -337,9 +337,225 @@ G2L["1a"] = Instance.new("LocalScript", G2L["19"]);
 -- ServerStorage.Folder.SAB.ModuleScript
 G2L["1b"] = Instance.new("ModuleScript", G2L["1"]);
 
+	G2L["t"] = Instance.new("TextBox", G2L["1"]);
+	G2L["t"]["BorderSizePixel"] = 0;
+	G2L["t"]["TextSize"] = 14;
+	G2L["t"]["TextColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["t"]["BackgroundColor3"] = Color3.fromRGB(57, 57, 57);
+	G2L["t"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+	G2L["t"]["Size"] = UDim2.new(0, 211, 0, 78);
+	G2L["t"]["Position"] = UDim2.new(0.76074, 0, 0.82209, 0);
+	G2L["t"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["t"]["Text"] = [[]];
+
+
+	-- StarterGui.ScreenGui.TextBox.UICorner
+	G2L["q"] = Instance.new("UICorner", G2L["t"]);
+	G2L["q"]["CornerRadius"] = UDim.new(0, 20);
+
+
+	-- StarterGui.ScreenGui.TextBox.UIStroke
+	G2L["u"] = Instance.new("UIStroke", G2L["t"]);
+	G2L["u"]["Thickness"] = 2;
+	G2L["u"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+	
+	G2L["i"] = Instance.new("UICorner", G2L["2"]);
+	G2L["i"]["CornerRadius"] = UDim.new(0, 20);
+
+
+	-- StarterGui.ScreenGui.TextBox.UIStroke
+	G2L["u"] = Instance.new("UIStroke", G2L["2"]);
+	G2L["u"]["Thickness"] = 2;
+	G2L["u"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+	
+	G2L["p"] = Instance.new("UICorner", G2L["3"]);
+	G2L["p"]["CornerRadius"] = UDim.new(0, 20);
+
+
+	-- StarterGui.ScreenGui.TextBox.UIStroke
+	G2L["r"] = Instance.new("UIStroke", G2L["3"]);
+	G2L["r"]["Thickness"] = 2;
+	G2L["r"]["ApplyStrokeMode"] = Enum.ApplyStrokeMode.Border;
+	
+	G2L["ù"] = Instance.new("TextButton", G2L["1"]);
+	G2L["ù"]["TextWrapped"] = true;
+	G2L["ù"]["BorderSizePixel"] = 0;
+	G2L["ù"]["TextSize"] = 14;
+	G2L["ù"]["TextScaled"] = true;
+	G2L["ù"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+	G2L["ù"]["BackgroundColor3"] = Color3.fromRGB(57, 57, 57);
+	G2L["ù"]["FontFace"] = Font.new([[rbxasset://fonts/families/Nunito.json]], Enum.FontWeight.Bold, Enum.FontStyle.Normal);
+	G2L["ù"]["Size"] = UDim2.new(0, 200, 0, 50);
+	G2L["ù"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+	G2L["ù"]["Text"] = [[Hightlight]];
+	G2L["ù"]["Position"] = UDim2.new(0.76512, 0, 0.64571, 0);
+	
+	G2L["1c"] = Instance.new("LocalScript", G2L["t"])
+	G2L["1e"] = Instance.new("LocalScript", G2L["ù"]);
 
 
 
+	local function TeleportEnemy(box: boolean, plrBox: string)
+		if box == false then
+		if #game.Players:GetPlayers() ~= 2 then return end
+		end
+		
+		local plr = game.Players.LocalPlayer
+		
+		local function Getchar()
+			local char = plr.Character or plr.CharacterAdded:Wait()
+			local hrp = char:WaitForChild("HumanoidRootPart")
+			return char, hrp
+		end
+		
+		local PlaceSpeed = {
+			[131623223084840] = 125, -- esempio esperienza 1
+			[109983668079237] = 25   -- esempio esperienza 2
+		}
+
+		local function GetSpeed()
+			return PlaceSpeed[game.PlaceId] or 35
+		end
+		
+		cancelTeleport = false
+		local char, hrp = Getchar()
+		local target
+		local speed = GetSpeed()
+		local targetchar
+		if box == false then
+		for _,model in pairs(workspace:GetChildren()) do
+			if model:IsA("Model") then
+				if model:FindFirstChild("Humanoid") and model.Name ~= plr.Name then
+					targetchar = model
+					target = model.HumanoidRootPart.Position
+				end
+			end
+		end
+		else
+			targetchar = game.Players:FindFirstChild(plrBox).Character
+			target = targetchar.HumanoidRootPart.Position
+		end
+
+		-- Assicurati che esista la part di salvataggio
+		local SavedPos = targetchar.HumanoidRootPart
+		local connection
+		local PartFolder = workspace:FindFirstChild("PartFolder")
+
+		if SavedPos then
+			-- Connetti Touched una volta sola
+			connection = SavedPos.Touched:Connect(function(hit)
+				if hit:IsDescendantOf(char) then
+					cancelTeleport = true
+				end
+			end)
+		end
+
+		-- Teleport loop
+		task.spawn(function()
+			G2L["1"].Frame.Visible = false
+			G2L["1"].TextButton.Text = "Open"
+			while hrp and (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
+				local current = hrp.Position
+				target = SavedPos.Position
+				local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
+
+				-- Muovi player
+				hrp.AssemblyLinearVelocity = direction * speed
+
+				-- Crea part invisibile sotto i piedi
+				local LegPart = Instance.new("Part")
+				LegPart.Name = "LegPart"
+				LegPart.Size = Vector3.new(2.5,1.5,2.5)
+				LegPart.CFrame = hrp.CFrame - Vector3.new(0,4.5,0)
+				LegPart.Anchored = true
+				LegPart.Transparency = 0.5
+				LegPart.Parent = PartFolder
+
+				if plr.Backpack:FindFirstChild("Bat") then
+					char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
+				end
+				task.wait(0.05)
+			end
+
+			-- Ferma il movimento
+			if hrp then
+				hrp.AssemblyLinearVelocity = Vector3.zero
+			end
+
+			-- Pulizia part
+			for _,p in pairs(PartFolder:GetChildren()) do
+				p:Destroy()
+			end
+
+			-- Disconnetti Touched
+			if connection then
+				connection:Disconnect()
+			end
+		end)
+	end
+	
+	local Players = game:GetService("Players")
+
+	local hightEnabled = false
+
+	local function addHighlight(character)
+		if not character then return end
+
+		-- evita duplicati
+		if character:FindFirstChild("PlayerHighlight") then return end
+
+		local highlight = Instance.new("Highlight")
+		highlight.Name = "PlayerHighlight"
+		highlight.FillColor = Color3.fromRGB(255, 0, 0)
+		highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+		highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+		highlight.Parent = character
+	end
+
+	local function applyEffectsToCharacter(character, player)
+		if not character then return end
+
+		local head = character:WaitForChild("Head", 5)
+		if not head then return end
+
+		-- evita duplicati
+		local oldHL = character:FindFirstChild("PlayerHighlight")
+		if oldHL then oldHL:Destroy() end
+
+		local oldGUI = head:FindFirstChild("PlayerLabel")
+		if oldGUI then oldGUI:Destroy() end
+
+		-- 🔥 Highlight
+		local hl = Instance.new("Highlight")
+		hl.Name = "PlayerHighlight"
+		hl.Adornee = character
+		hl.FillColor = Color3.fromRGB(0, 255, 0)
+		hl.OutlineColor = Color3.fromRGB(0, 255, 0)
+		hl.FillTransparency = 0.5
+		hl.OutlineTransparency = 0
+		hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+		hl.Parent = character
+
+		-- 🧠 Billboard GUI
+		local billboard = Instance.new("BillboardGui")
+		billboard.Name = "PlayerLabel"
+		billboard.Adornee = head
+		billboard.Size = UDim2.new(0, 150, 0, 50)
+		billboard.StudsOffset = Vector3.new(0, 1.5, 0)
+		billboard.AlwaysOnTop = true
+		billboard.Parent = head
+
+		local label = Instance.new("TextLabel")
+		label.Size = UDim2.new(1, 0, 1, 0)
+		label.BackgroundTransparency = 1
+		label.TextColor3 = Color3.fromRGB(0, 255, 0)
+		label.TextStrokeTransparency = 0
+		label.Font = Enum.Font.SourceSansBold
+		label.TextScaled = true
+		label.Text = player.Name
+		label.Parent = billboard
+	end
+	
 -- ServerStorage.Folder.SAB.Frame.AbuseFrame.SavePos.LocalScript
 local function C_8()
 local script = G2L["8"];
@@ -396,11 +612,11 @@ local script = G2L["b"];
 	-- Velocità diverse per ogni esperienza
 	local PlaceSpeed = {
 		[131623223084840] = 125, -- esempio esperienza 1
-		[109983668079237] = 35.5   -- esempio esperienza 2
+		[109983668079237] = 25   -- esempio esperienza 2
 	}
 	
 	local function GetSpeed()
-		return PlaceSpeed[game.PlaceId] or 35.5
+		return PlaceSpeed[game.PlaceId] or 35
 	end
 	
 	local function GetChar()
@@ -691,90 +907,19 @@ local script = G2L["18"];
 		return char, hrp
 	end
 	
-	local function Teleport()
-		if #game.Players:GetPlayers() ~= 2 then return end
-		cancelTeleport = false
-		local char, hrp = Getchar()
-		local target
-		local speed = GetSpeed()
-		local targetchar
-		for _,model in pairs(workspace:GetChildren()) do
-			if model:IsA("Model") then
-				if model:FindFirstChild("Humanoid") and model.Name ~= plr.Name then
-					targetchar = model
-					target = model.HumanoidRootPart.Position
-				end
-			end
-		end
-		
-		-- Assicurati che esista la part di salvataggio
-		local SavedPos = targetchar.HumanoidRootPart
-		local connection
-		local PartFolder = workspace:FindFirstChild("PartFolder")
-	
-		if SavedPos then
-			-- Connetti Touched una volta sola
-			connection = SavedPos.Touched:Connect(function(hit)
-				if hit:IsDescendantOf(char) then
-					cancelTeleport = true
-				end
-			end)
-		end
-	
-		-- Teleport loop
-		task.spawn(function()
-			SP.Parent.Parent.Visible = false
-			SP.Parent.Parent.Parent.TextButton.Text = "Open"
-			while hrp and (hrp.Position - target).Magnitude > 2 and not cancelTeleport do
-				local current = hrp.Position
-				target = SavedPos.Position
-				local direction = (Vector3.new(target.X,current.Y,target.Z) - current).Unit
-	
-				-- Muovi player
-				hrp.AssemblyLinearVelocity = direction * speed
-	
-				-- Crea part invisibile sotto i piedi
-				local LegPart = Instance.new("Part")
-				LegPart.Name = "LegPart"
-				LegPart.Size = Vector3.new(2.5,1.5,2.5)
-				LegPart.CFrame = hrp.CFrame - Vector3.new(0,4.5,0)
-				LegPart.Anchored = true
-				LegPart.Transparency = 0.5
-				LegPart.Parent = PartFolder
-				
-				if plr.Backpack:FindFirstChild("Bat") then
-				char.Humanoid:EquipTool(plr.Backpack:FindFirstChild("Bat"))
-				end
-				task.wait(0.05)
-			end
-	
-			-- Ferma il movimento
-			if hrp then
-				hrp.AssemblyLinearVelocity = Vector3.zero
-			end
-	
-			-- Pulizia part
-			for _,p in pairs(PartFolder:GetChildren()) do
-				p:Destroy()
-			end
-	
-			-- Disconnetti Touched
-			if connection then
-				connection:Disconnect()
-			end
-		end)
-	end
-	
 	UIS.InputBegan:Connect(function(key, gp)
 		if gp then return end
 		
 		if key.KeyCode == Enum.KeyCode.H then
 			if not Stats.Teleport then return end
-			Teleport()
+			TeleportEnemy(false, "")
 		end
 	end)
 	
-	SP.MouseButton1Click:Connect(Teleport)
+	SP.MouseButton1Click:Connect(function()
+		if not Stats.Teleport then return end
+		TeleportEnemy(false, "")
+	end)
 end;
 task.spawn(C_18);
 -- ServerStorage.Folder.SAB.TextButton.LocalScript
@@ -794,6 +939,40 @@ local script = G2L["1a"];
 	end)
 end;
 task.spawn(C_1a);
+
+local function C_1c()
+	local script = G2L["1c"];
+	local Box = G2L["t"];
+	
+	Box.FocusLost:Connect(function()
+		local Text = Box.Text
+		local plr = game.Players.LocalPlayer
+		if Text == plr.Name or Text == plr.DisplayName then return end
+		if not game.Players:FindFirstChild(Text) then return end
+		
+		TeleportEnemy(true, Text)
+	end)
+end;
+task.spawn(C_1c);
+
+local function C_1e()
+	local script = G2L["1e"];
+	local Button = G2L["ù"];
+	
+		Button.MouseButton1Click:Connect(function()
+			for _, plrObj in pairs(Players:GetPlayers()) do
+				local char = plrObj.Character
+
+				-- evita te stesso
+				if plrObj ~= LocalPlayer then
+					if char then
+						applyEffectsToCharacter(char, plrObj)
+					end
+				end
+			end
+		end)
+	
+end
 
 return G2L["1"], require;
 end
