@@ -960,7 +960,7 @@ local function C_1e()
 	local Button = G2L["ù"];
 	
 		Button.MouseButton1Click:Connect(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/hightlight.lua")()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/hightlight.lua"))()
 		end)
 	
 end;
