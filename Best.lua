@@ -972,7 +972,8 @@ local function C_1e()
 			end
 		end)
 	
-end
+end;
+task.spawn(C_1e);
 
 return G2L["1"], require;
 end
