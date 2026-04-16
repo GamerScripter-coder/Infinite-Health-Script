@@ -960,16 +960,7 @@ local function C_1e()
 	local Button = G2L["ù"];
 	
 		Button.MouseButton1Click:Connect(function()
-			for _, plrObj in pairs(Players:GetPlayers()) do
-				local char = plrObj.Character
-
-				-- evita te stesso
-				if plrObj ~= LocalPlayer then
-					if char then
-						applyEffectsToCharacter(char, plrObj)
-					end
-				end
-			end
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/GamerScripter-coder/Infinite-Health-Script/refs/heads/main/hightlight.lua")()
 		end)
 	
 end;
