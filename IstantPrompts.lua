@@ -1,25 +1,24 @@
 -- SERVICES
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local mouse = player:GetMouse()
+local UserInputService = game:GetService("UserInputService")
 
--- CREAZIONE GUI
+-- GUI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ProximityManagerGui"
 ScreenGui.Parent = player:WaitForChild("PlayerGui")
 
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 200, 0, 100)
+Frame.Size = UDim2.new(0, 220, 0, 160)
 Frame.Position = UDim2.new(0, 50, 0, 50)
 Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 Frame.BorderSizePixel = 0
 Frame.Parent = ScreenGui
-Frame.Active = true  -- Necessario per il drag
+Frame.Active = true
 
--- TITOLO
+-- TITLE
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 25)
-Title.Position = UDim2.new(0, 0, 0, 0)
 Title.BackgroundTransparency = 1
 Title.Text = "Proximity Manager"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -27,64 +26,94 @@ Title.Font = Enum.Font.SourceSansBold
 Title.TextSize = 18
 Title.Parent = Frame
 
--- FUNZIONE PER CREARE PULSANTI
-local function createButton(name, posY)
+-- TEXTBOX DISTANZA
+local DistanceBox = Instance.new("TextBox")
+DistanceBox.Size = UDim2.new(0, 180, 0, 25)
+DistanceBox.Position = UDim2.new(0, 10, 0, 35)
+DistanceBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+DistanceBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+DistanceBox.PlaceholderText = "Distanza (es. 10, 20, 50)"
+DistanceBox.Text = ""
+DistanceBox.ClearTextOnFocus = false
+DistanceBox.Parent = Frame
+
+-- FUNZIONE BOTTONI
+local function createButton(text, y)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 180, 0, 30)
-    btn.Position = UDim2.new(0, 10, 0, posY)
+    btn.Size = UDim2.new(0, 180, 0, 25)
+    btn.Position = UDim2.new(0, 10, 0, y)
     btn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     btn.BorderSizePixel = 0
-    btn.Text = name
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.Font = Enum.Font.SourceSansBold
-    btn.TextSize = 16
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.Parent = Frame
     return btn
 end
 
-local btnInstant = createButton("Attiva Instant", 35)
-local btnRestore = createButton("Ripristina", 70)
+local btnInstant = createButton("Instant Hold", 70)
+local btnRestore = createButton("Ripristina Hold", 100)
+local btnDistance = createButton("Applica Distanza", 130)
 
--- MEMORIZZAZIONE VALORI ORIGINALI
+-- MEMORIA HOLD
 local originalHoldTimes = {}
 
-local function setProximityInstant(prox)
-    if prox then
-    prox.HoldDuration = 0
-    else
-       for _, prompt in pairs(workspace:GetDescendants()) do
+-- PROX FUNCTIONS
+local function setInstant()
+    for _, prompt in pairs(workspace:GetDescendants()) do
         if prompt:IsA("ProximityPrompt") then
             if originalHoldTimes[prompt] == nil then
                 originalHoldTimes[prompt] = prompt.HoldDuration
             end
             prompt.HoldDuration = 0
         end
-    end 
     end
 end
 
-local function restoreProximity()
-    for prompt, holdTime in pairs(originalHoldTimes) do
+local function restore()
+    for prompt, time in pairs(originalHoldTimes) do
         if prompt and prompt.Parent then
-            prompt.HoldDuration = holdTime
+            prompt.HoldDuration = time
         end
     end
 end
 
--- COLLEGAMENTO PULSANTI
-btnInstant.MouseButton1Click:Connect(setProximityInstant)
-btnRestore.MouseButton1Click:Connect(restoreProximity)
+local function setDistance()
+    local value = tonumber(DistanceBox.Text)
+    if not value then return end
 
--- =========================
--- DRAG FUNCTION
--- =========================
+    for _, prompt in pairs(workspace:GetDescendants()) do
+        if prompt:IsA("ProximityPrompt") then
+            prompt.MaxActivationDistance = value
+        end
+    end
+end
+
+-- BUTTONS
+btnInstant.MouseButton1Click:Connect(setInstant)
+btnRestore.MouseButton1Click:Connect(restore)
+btnDistance.MouseButton1Click:Connect(setDistance)
+
+-- NUOVI PROX AUTOMATICI
+workspace.DescendantAdded:Connect(function(item)
+    if item:IsA("ProximityPrompt") then
+        task.wait()
+        local value = tonumber(DistanceBox.Text)
+        if value then
+            item.MaxActivationDistance = value
+        end
+    end
+end)
+
+-- DRAG (FIXED)
 local dragging = false
 local dragInput, mousePos, framePos
 
 local function update(input)
     local delta = input.Position - mousePos
-    Frame.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X,
-                               framePos.Y.Scale, framePos.Y.Offset + delta.Y)
+    Frame.Position = UDim2.new(
+        framePos.X.Scale, framePos.X.Offset + delta.X,
+        framePos.Y.Scale, framePos.Y.Offset + delta.Y
+    )
 end
 
 Frame.InputBegan:Connect(function(input)
@@ -107,14 +136,8 @@ Frame.InputChanged:Connect(function(input)
     end
 end)
 
-game:GetService("UserInputService").InputChanged:Connect(function(input)
+UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
         update(input)
-    end
-end)
-
-game.DescendantAdded:Connect(function(item)
-    if item:IsA("ProximityPrompt") then
-            setProximityInstant(item)
     end
 end)
