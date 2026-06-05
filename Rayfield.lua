@@ -94,4 +94,25 @@ function RM:CI(Tab, InpName, InpFlag, InpHolder, Changefunc)
   CreateInput(Tab, InpName, InpFlag, InpHolder, Changefunc)
 end
 
+function RM:GetInfo(modfunc)
+	if modfunc == "CWAR" then
+		print("Required For CWAR: NameWindow, WindowIcon, WLoadingTitle, WLoadingSubTitle")
+	end
+	if modfunc == "CTAR" then
+		print("Required For CTAR: Window, Name, Img")
+	end
+	if modfunc == "CB" then
+		print("Required For CB: Tab, BtnName, Clickfunc")
+	end
+	if modfunc == "CT" then
+		print("Required For CT: Tab, TogName, TogFlag, Changefunc")
+	end
+	if modfunc == "CS" then
+		print("Required For CS: Tab, SlidName, SlidFlag, CurrentV, Inc, SlidRange, Changefunc")
+	end
+	if modfunc == "CI" then
+		print("Required For CI: Tab, InpName, InpFlag, InpHolder, Changefunc")
+	end
+end
+
 return RM
