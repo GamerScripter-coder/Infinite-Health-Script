@@ -1,5 +1,5 @@
 local RayfieldModule = {}
-local RM = RayfieldModule = {}  
+local RM = RayfieldModule  
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local function CreateWindowAndReturn(NameWindow, WindowIcon, WLoadingTitle, WLoadingSubTitle)
