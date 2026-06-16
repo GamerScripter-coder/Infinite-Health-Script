@@ -108,7 +108,7 @@ function RM:CI(Tab, InpName, InpFlag, InpHolder, Changefunc)
 end
 
 function RM:CDD(Tab, Name, Options, Current, MulOp, F, func)
-	CreateDropDown(Tab, Name, Options, Current, MulOp, F, func)
+	return CreateDropDown(Tab, Name, Options, Current, MulOp, F, func)
 end
 
 function RM:GetInfo(modfunc)
