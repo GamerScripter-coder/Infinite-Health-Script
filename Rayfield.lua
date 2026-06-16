@@ -67,7 +67,7 @@ local function CreateInput(Tab, InpName, InpFlag, InpHolder, Changefunc)
 end
 
 local function CreateDropDown(Tab, Name, Options, Current, MulOp, F, func)
-	return Tab:CreateDropDown({
+	return Tab:CreateDropdown({
 		Name = Name,
         Options = Options,
         CurrentOption = Current,
