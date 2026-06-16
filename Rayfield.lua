@@ -66,6 +66,19 @@ local function CreateInput(Tab, InpName, InpFlag, InpHolder, Changefunc)
 	})
 end
 
+local function CreateDropDown(Tab, Name, Options, Current, MulOp, F, func)
+	return Tab:CreateDropDown({
+		Name = Name,
+        Options = Options,
+        CurrentOption = Current,
+        MultipleOptions = MulOp,
+        Flag = F,
+        Callback = function(Options)
+			func(Options)
+		end
+	})
+end
+
 local function CreateLabel(Tab, Name, Icon)
    Tab:CreateLabel(Name.."(CheaterHub)", Icon, Color3.fromRGB(255,255,255), false)
 end
@@ -94,6 +107,10 @@ function RM:CI(Tab, InpName, InpFlag, InpHolder, Changefunc)
   CreateInput(Tab, InpName, InpFlag, InpHolder, Changefunc)
 end
 
+function RM:CDD(Tab, Name, Options, Current, MulOp, F, func)
+	CreateDropDown(Tab, Name, Options, Current, MulOp, F, func)
+end
+
 function RM:GetInfo(modfunc)
 	if modfunc == "CWAR" then
 		print("Required For CWAR: NameWindow, WindowIcon, WLoadingTitle, WLoadingSubTitle")
@@ -112,6 +129,9 @@ function RM:GetInfo(modfunc)
 	end
 	if modfunc == "CI" then
 		print("Required For CI: Tab, InpName, InpFlag, InpHolder, Changefunc")
+	end
+	if modfunc == "CDD" then
+		print("Required For CDD: Tab, Name, Options, Current, MulOp, F, func")
 	end
 end
 
