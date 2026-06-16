@@ -111,6 +111,10 @@ function RM:CDD(Tab, Name, Options, Current, MulOp, F, func)
 	return CreateDropDown(Tab, Name, Options, Current, MulOp, F, func)
 end
 
+function RM:LoadConfig()
+	Rayfield:LoadConfiguration()
+end
+
 function RM:GetInfo(modfunc)
 	if modfunc == "CWAR" then
 		print("Required For CWAR: NameWindow, WindowIcon, WLoadingTitle, WLoadingSubTitle")
