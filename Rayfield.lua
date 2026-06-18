@@ -112,7 +112,7 @@ function RM:CDD(Tab, Name, Options, Current, MulOp, F, func)
 end
 
 function RM:CL(Tab, Name, Icon)
-	CreateLabel(Tab, Name, Icon)
+	return CreateLabel(Tab, Name, Icon)
 end
 
 function RM:LoadConfig()
